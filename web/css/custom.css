@@ -1,0 +1,18 @@
+.navbar{
+    background-color: rgb(20,80,160) !important;
+}
+.navbar-nav .nav-link {
+    color: #fff !important;
+    font-weight: 400;
+}
+.nav li > form > button.logout {
+    padding-top: 7px;
+    color: #fff !important;
+    font-weight: 400;
+}
+
+@media (min-width: 1200px){
+    .container, .container-sm, .container-md, .container-lg, .container-xl {
+        max-width: 95%;
+    }
+}
