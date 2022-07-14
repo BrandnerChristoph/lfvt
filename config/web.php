@@ -74,6 +74,7 @@ $config = [
             'nullDisplay' => "",    // Standardwert bei leerem Feld
         ],
         'urlManager' => [
+            /*
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
@@ -81,6 +82,8 @@ $config = [
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],
+            */
+            'enablePrettyUrl' => false,
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
