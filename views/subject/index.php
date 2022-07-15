@@ -25,14 +25,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            //['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'name',
+            //'value:decimal',
+            [
+                'attribute' => 'value',
+                'format' => 'raw',
+                'value' => function($model){
+                    return Yii::$app->formatter->asDecimal($model->value, 3);
+                },
+                'contentOptions' => ['style'=>'text-align: right;'],
+            ],
             'updated_at:datetime',
             'created_at:datetime',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}'],
+
         ],
     ]); ?>
 

@@ -108,6 +108,7 @@ $classList = SchoolClass::getArrayHelperList();
                                 echo "<td>";
                                     echo "<div class='row'>";
                                         // create new Item
+                                        /*
                                             echo '<div class="col-log-12  pull-right">';
                                             echo '<a class="showModalButton btn btn-sm btn-success " 
                                                         value="' . Url::to(['create-item', 
@@ -120,6 +121,7 @@ $classList = SchoolClass::getArrayHelperList();
                                                                         . Icon::show('plus') . '<small> ' .  $classSubject->subject . ' (' . $class->id . ')</small>'
                                                                         . '</a>';
                                         echo '</div>';
+                                        */
 
 
                                         // get Model
