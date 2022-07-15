@@ -76,7 +76,7 @@ $config = [
         'urlManager' => [
             
             'enablePrettyUrl' => true,
-            'showScriptName' => true,
+            'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
                 /*
