@@ -74,18 +74,18 @@ $config = [
             'nullDisplay' => "",    // Standardwert bei leerem Feld
         ],
         'urlManager' => [
-            /*
-            'class' => 'yii\web\UrlManager',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
-                
+                // ...
             ],
-            */
-            
+        ],
+        /*
+        'urlManager' => [
             'enablePrettyUrl' => false,
         ],
+        */
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
             //'defaultRoles' => ['guest']
