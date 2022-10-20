@@ -128,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'initial',
+            'initial',            
             [
                 'attribute' => 'Stunden',
                 'format' => 'raw',
@@ -155,14 +155,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     } else {
                         $strReturn = "<center>".$curHours."</center>";
-                    }
+                    }  
                     
                     return $strReturn ;
                 },
             ],
             [
                 'attribute' => 'Wert',
-                'value' => 0,
+                'value' => '0',
             ],
             'name',
             'firstname',
