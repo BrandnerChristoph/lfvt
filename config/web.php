@@ -74,7 +74,7 @@ $config = [
             'nullDisplay' => "",    // Standardwert bei leerem Feld
         ],
         'urlManager' => [
-            'enablePrettyUrl' => true,
+            'enablePrettyUrl' => false, // BN: true does not work on production server
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
