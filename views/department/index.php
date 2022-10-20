@@ -25,12 +25,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            //['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'name',
             'head_of_department',
             'default_color',
+            [
+                'attribute' => 'Schüler',
+                'format' => 'raw',
+                'value' => function ($model) {                    
+                    return $model->getNumberOfPupils(); 
+                },
+            ],
             //'updated_at:datetime',
             //'created_at',
 
