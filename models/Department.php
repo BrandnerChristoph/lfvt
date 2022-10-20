@@ -63,7 +63,14 @@ class Department extends \yii\db\ActiveRecord
      */
     public function getSchoolClasses()
     {
-        return $this->hasMany(SchoolClass::className(), ['departmennt' => 'id']);
+        return $this->hasMany(SchoolClass::className(), ['department' => $this->id]);
+    }
+
+    /**
+     * 
+     */
+    public function getNumberOfPupils(){  
+        return SchoolClass::find()->andFilterWhere(['department' => $this->id])->sum('studentsnumber');  
     }
 
     /**
