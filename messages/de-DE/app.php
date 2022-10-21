@@ -24,7 +24,12 @@ $lang = [
     'Phone' => 'Telefon',
     'Mobile' => 'Mobilnummer',
     'Update Teacher: ' => 'Lehrer aktualisieren:',
-    
+
+    // Lehrer Favoriten
+    'Teacher Fav' => 'Lehrer-Favoriten',
+    'Teachers Fav' => 'Lehrer-Favoriten',
+    'Create Teacher Fav' => 'Lehrer-Favoriten erstellen',
+
     // Abteilungen
     'Department' => 'Abteilung',
     'Departments' => 'Abteilungen',

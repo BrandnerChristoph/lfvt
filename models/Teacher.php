@@ -99,6 +99,22 @@ class Teacher extends \yii\db\ActiveRecord
         return $this->hasMany(TeacherWishlist::className(), ['teacher_id' => 'id']);
     }
 
+    
+    /**
+     * Gets query for [[ClassSubjects]].
+     *
+     * @return \yii\db\ActiveQuery|ClassSubjectQuery
+     */
+    public function getFav($type = null)
+    {
+        if(is_null($type))
+            return $this->hasMany(TeacherFav::className(), ['teacher' => $this->id])->orderBy(['value' => SORT_ASC]);
+        else
+            return $this->hasMany(TeacherFav::className(), ['teacher' => $this->id, 'type' => $type])->orderBy(['value' => SORT_ASC]);
+    
+    }
+
+
     /**
      * return the number of teaching-hours
      */
