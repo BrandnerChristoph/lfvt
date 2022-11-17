@@ -133,7 +133,8 @@ class ClassSubjectController extends Controller
             
             if ($this->request->isPost && $model->load($this->request->post()) && $model->save(false)) {
                 Yii::$app->session->setFlash('success', "Aktualisierung für die ".$model->class." wurde gespeichert.");
-                return $this->redirect(Yii::$app->request->referrer);
+                $anchorLink = !empty($model->subject) ? $model->subject : "";
+                return $this->redirect(Yii::$app->request->referrer. "#". $anchorLink);
             }
 
             return $this->renderAjax('_form', [

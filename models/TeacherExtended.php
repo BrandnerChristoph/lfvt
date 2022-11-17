@@ -50,6 +50,18 @@ class TeacherExtended extends Teacher
      * @return array
      */
     public static function getAllTeachersArrayMap(){
+
+/*
+        SELECT teacher.id, NAME, firstname, titel,
+            CASE
+            WHEN teacher_fav.id IS NOT null THEN 'Favoriten'
+            ELSE 'Lehrer'
+            END AS sort_order
+        FROM teacher 
+            LEFT JOIN teacher_fav ON teacher.id = teacher_fav.value
+        ORDER BY sort_order, teacher.id;
+
+*/
         return ArrayHelper::map(Teacher::find()
                                                 ->orderBy('name asc, firstname asc')
                                                 ->all(), 'id', 

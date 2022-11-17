@@ -102,7 +102,9 @@ $classList = SchoolClass::getArrayHelperList();
                             echo $classSubject->subject;
                             if (!empty($classSubject->subjectItem->value))
                                 echo "<br /><small>".Yii::$app->formatter->asDecimal($classSubject->subjectItem->value,3) ."</small>";
-                        echo "</center></td>";
+                        echo "</center>
+                                <div id='".$classSubject->subject."' style='margin-top: -190px;'></div>
+                            </td>";
 
                         
                             foreach($classes as $class){
