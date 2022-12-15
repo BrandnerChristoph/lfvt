@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         
                         $list[] = $listItem['info'];
                     }
-                    return $strHours  . implode(', ', $list) . "<br /><a href='" . Url::to(['teacher-wishlist/index', 'TeacherWishlistSearch[teacher_id]' => $model->id]) . "'>zur Wusnchliste</a>";; 
+                    return $strHours  . implode(', ', $list) . "<br /><a href='" . Url::to(['teacher-wishlist/index', 'TeacherWishlistSearch[teacher_id]' => $model->id]) . "'>zur Wunschliste</a>";; 
                 },
             ],
             [
