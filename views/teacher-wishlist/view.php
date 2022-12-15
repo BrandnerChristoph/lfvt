@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\Teacher;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\TeacherWishlist */
@@ -31,6 +33,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'teacher_id',
+            [
+                'attribute' => 'teacher_id', 
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $objTeacher = Teacher::findOne($model->teacher_id);
+                    if(!is_null($objTeacher)){
+                        return "<a href='" . Url::to(['teacher/view', 'id' => $model->teacher_id]) . "'>" . trim($objTeacher->firstname . " " . $objTeacher->name . " (" . $model->teacher_id . ")") . "</a>";
+                    }
+                    return $model->teacher_id;
+                }
+            ],
             'period',
             'info:ntext',
             'updated_at:datetime',

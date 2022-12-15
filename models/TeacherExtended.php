@@ -2,8 +2,11 @@
 
 namespace app\models;
 
+use mdm\admin\models\searchs\User as SearchsUser;
+use mdm\admin\models\User as ModelsUser;
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\web\User;
 
 /**
  * This is the model class for table "teacher".
@@ -12,6 +15,7 @@ use yii\helpers\ArrayHelper;
  */
 class TeacherExtended extends Teacher
 {
+    public $sort_order;
         
         
     /**
@@ -52,16 +56,34 @@ class TeacherExtended extends Teacher
     public static function getAllTeachersArrayMap(){
 
 /*
-        SELECT teacher.id, NAME, firstname, titel,
-            CASE
-            WHEN teacher_fav.id IS NOT null THEN 'Favoriten'
-            ELSE 'Lehrer'
-            END AS sort_order
-        FROM teacher 
-            LEFT JOIN teacher_fav ON teacher.id = teacher_fav.value
-        ORDER BY sort_order, teacher.id;
+        SELECT distinct(teacher.id), `NAME`, `firstname`, `titel`, `teacher_fav`.`sort_helper` AS `sort_order` 
+        FROM `teacher` LEFT JOIN `teacher_fav` ON `teacher`.`id`= `teacher_fav`.`value` AND `teacher_fav`.`user_id` = "BN" 
+        ORDER BY `sort_order` DESC, `teacher`.`id`
 
 */
+
+//        $objUser = ModelsUser::find(Yii::$app->user->id);
+
+        $arrReturn =  ArrayHelper::map(TeacherExtended::find()
+                                        ->select('distinct(teacher.id) as id, name, firstname, initial as initial,  titel,  teacher_fav.sort_helper AS sort_order')
+                                        //->select(['CASE WHEN teacher_fav.id IS NOT null THEN "Favoriten" ELSE "Lehrer" END AS sort_order'])
+                                        //->leftJoin('teacher_fav','`teacher`.`id`= `teacher_fav`.`value` AND `teacher_fav`.`user_id` = "'.$objUser->username.'"')
+                                        ->leftJoin('teacher_fav','`teacher`.`id`= `teacher_fav`.`value` AND `teacher_fav`.`user_id` = "BN"')
+                                        ->orderBy('sort_order desc, teacher.id asc')
+                                        ->all(), 'id', 
+                                    function($model, $defaultValue){
+                                        $additionalInfo = "";
+                                        
+                                        if ($model->sort_order > 0)
+                                            $additionalInfo = " *";
+                                        
+                                        return trim($model->name . " " . $model->firstname . " (" . $model->initial . ") " . $additionalInfo );
+                                    }
+                                );
+
+        //print_r($arrReturn);
+        return $arrReturn;
+
         return ArrayHelper::map(Teacher::find()
                                                 ->orderBy('name asc, firstname asc')
                                                 ->all(), 'id', 

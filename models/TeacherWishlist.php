@@ -33,8 +33,9 @@ class TeacherWishlist extends \yii\db\ActiveRecord
     {
         return [
             [['id', 'teacher_id'], 'required'],
-            [['teacher_id', 'updated_at', 'created_at'], 'integer'],
+            [[ 'updated_at', 'created_at'], 'integer'],
             [['info'], 'string'],
+            [['teacher_id'], 'string', 'max' => 20],
             [['id'], 'string', 'max' => 50],
             [['period'], 'string', 'max' => 10],            
             [['hours_min', 'hours_max'], 'number', 'min' => 0, 'max' => 100],

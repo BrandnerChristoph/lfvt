@@ -18,7 +18,8 @@ class TeacherWishlistSearch extends TeacherWishlist
     {
         return [
             [['id', 'period', 'info'], 'safe'],
-            [['teacher_id', 'updated_at', 'created_at'], 'integer'],
+            [['updated_at', 'created_at'], 'integer'],
+            [['teacher_id'], 'string'],
         ];
     }
 

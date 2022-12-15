@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use app\models\Teacher;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\TeacherWishlistSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -27,10 +28,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             'teacher_id',
-            'period',
+            //'period',
             'info:ntext',
+            'hours_min',
+            'hours_max',
+            [
+                'label' => 'aktuelle Stunden',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    
+                    $objTeacher = Teacher::findOne($model->teacher_id);
+                    if (!is_null($objTeacher))
+                        return "<center>".$objTeacher->hours."</center>";
+                    
+                    return "" ;
+                },
+            ],
             //'updated_at:datetime',
             //'created_at:datetime',
 

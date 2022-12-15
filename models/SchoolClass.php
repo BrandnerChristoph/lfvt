@@ -40,12 +40,12 @@ class SchoolClass extends \yii\db\ActiveRecord
     {
         return [
             [['id', 'classname', 'department', 'period', 'class_head'], 'required'],
-            [['period', 'class_head', 'studentsnumber', 'updated_at', 'created_at'], 'integer'],
+            [['period', 'studentsnumber', 'updated_at', 'created_at'], 'integer'],
             [['annual_value'], 'number'],
             [['id'], 'string', 'max' => 50],
-            [['classname'], 'string', 'max' => 10],
+            [['class_head'], 'string', 'max' => 20],
             [['department'], 'string', 'max' => 5],
-            [['info'], 'string', 'max' => 225],
+            [['info','classname'], 'string', 'max' => 225],
             [['id'], 'unique'],
             [['department'], 'exist', 'skipOnError' => true, 'targetClass' => Department::className(), 'targetAttribute' => ['department' => 'id']],
             [['class_head'], 'exist', 'skipOnError' => true, 'targetClass' => Teacher::className(), 'targetAttribute' => ['class_head' => 'id']],

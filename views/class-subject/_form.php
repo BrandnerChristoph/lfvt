@@ -4,10 +4,25 @@ use yii\helpers\Html;
 use app\models\TeacherExtended;
 use kartik\select2\Select2;
 use kartik\widgets\ActiveForm;
+use yii\web\JsExpression;
+use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\ClassSubject */
 /* @var $form yii\widgets\ActiveForm */
+/*
+if (!state.id) return state.text; // optgroup
+    src = '$url' +  state.id.toLowerCase() + '.png'
+    return '<img class="flag" src="' + src + '"/>' + state.text;
+*/
+
+$format = <<< SCRIPT
+function format(state) {
+    return state.text + '<i class="glyphicon glyphicon-star"></i>';
+}
+SCRIPT;
+$escape = new JsExpression("function(m) { return m; }");
+$this->registerJs($format, View::POS_HEAD);
 ?>
 
 <div class="class-subject-form" id="class-subject-form">
@@ -40,7 +55,10 @@ use kartik\widgets\ActiveForm;
                                 'pluginOptions' => [
                                     'allowClear' => false,
                                     'multiple' => false,
-                                ]
+                                    'templateResult' => new JsExpression('format'),
+                                    'templateSelection' => new JsExpression('format'),
+                                    'escapeMarkup' => $escape,
+                                ],
                             ])->label("Lehrer")
                 ?>
             </div>

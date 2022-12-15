@@ -108,16 +108,23 @@ class ClassSubjectController extends Controller
             if ($this->request->isPost && $model->load($this->request->post())){
                 if($model->save(false)) {
                     Yii::$app->session->setFlash('success', "Erstellung für die ".$model->class." wurde gespeichert.");
-                    return $this->redirect(Yii::$app->request->referrer);
+                    
+                    $anchorLink = !empty($model->subject) ? $model->subject : "";
+                    return $this->redirect(Yii::$app->request->referrer. "#". $anchorLink);
+                    //return $this->redirect(Yii::$app->request->referrer);
+
                 }
             } 
 
             return $this->renderAjax('_form', [
                 'model' => $model,
             ]);
-        }catch(Exception $ex){
+        } catch(Exception $ex){
             Yii::$app->session->setFlash('error', "<b>Erstellung für die ".$model->class." wurde NICHT vorgenommen.</b><br />" . $ex->getMessage());
-            return $this->redirect(Yii::$app->request->referrer);
+            
+            $anchorLink = !empty($model->subject) ? $model->subject : "";
+            return $this->redirect(Yii::$app->request->referrer. "#". $anchorLink);
+            //return $this->redirect(Yii::$app->request->referrer);
         }
     }
 
@@ -239,9 +246,13 @@ class ClassSubjectController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $anchorLink = !empty($model->subject) ? $model->subject : "";
         
-        return $this->redirect(Yii::$app->request->referrer);
+        $model->delete();
+
+        return $this->redirect(Yii::$app->request->referrer. "#". $anchorLink);
+        //return $this->redirect(Yii::$app->request->referrer);
         /*
 
         $class = $model->class;

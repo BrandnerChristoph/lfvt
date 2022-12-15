@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use kartik\export\ExportMenu;
 use yii\bootstrap\ButtonDropdown;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Teacher */
@@ -43,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         
                         $list[] = $listItem['info'];
                     }
-                    return $strHours  . implode(', ', $list); 
+                    return $strHours  . implode(', ', $list) . "<br /><a href='" . Url::to(['teacher-wishlist/index', 'TeacherWishlistSearch[teacher_id]' => $model->id]) . "'>zur Wusnchliste</a>";; 
                 },
             ],
             [

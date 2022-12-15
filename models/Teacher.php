@@ -156,6 +156,11 @@ class Teacher extends \yii\db\ActiveRecord
         return new TeacherQuery(get_called_class());
     }
 
+    public static function findFav()
+    {
+        return new TeacherQuery(get_called_class());
+    }
+
     /**
      * getArrayMap
      *
