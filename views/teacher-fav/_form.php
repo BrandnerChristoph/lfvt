@@ -13,7 +13,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     
-    <?= $form->field($model, 'user_id')->textInput(['maxlength' => true, 'readonly' => true]) ?>
+    <?= $form->field($model, 'user_id')->textInput(['maxlength' => true, 'readonly' => Yii::$app->user->can("Superadmin")]) ?>
     
     <?= $form->field($model, 'type')->textInput(['maxlength' => true]) ?>
     
