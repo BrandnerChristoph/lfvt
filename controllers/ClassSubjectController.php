@@ -12,6 +12,8 @@ use app\models\DepartmentExtended;
 use yii\web\NotFoundHttpException;
 use app\models\search\ClassSubjectSearch;
 use app\models\Subject;
+use app\models\TeacherFav;
+use mdm\admin\models\User;
 use Exception;
 
 /**
@@ -181,13 +183,23 @@ class ClassSubjectController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateDepartment($department = 'IT', $class = null)
+    public function actionUpdateDepartment($department = null, $class = null)
     {
-        //if(is_null($department)){
-            $objDepartment = Department::findOne($department); //->orderBy('id asc')->One();
-            if(!is_null($objDepartment))
-                $department = $objDepartment->id;
-        //}
+        if(is_null($department)){
+            $objUser = User::findOne(Yii::$app->user->id);
+
+            $objDefaultDepartment = TeacherFav::find()
+                                                ->andFilterWhere(['type' => 'lfvt_default_department'])
+                                                ->andFilterWhere(['user_id' => $objUser->username])
+                                                ->One();
+            if(!is_null($objDefaultDepartment))
+                $department = $objDefaultDepartment->id;
+            else {
+                $objDepartment = Department::findOne($department)->orderBy('id asc')->One();
+                if(!is_null($objDepartment))
+                    $department = $objDepartment->id;
+            }
+        }
         if(is_null($class)){
             $classes = SchoolClass::find()->andFilterWhere(['department' => $department])->select('id')->distinct();
             
