@@ -51,19 +51,23 @@ class BackupController extends Controller
 
                 $result = Yii::$app->db->createCommand('SELECT * FROM ' . $table)->query();
         
-                $return.= 'DROP TABLE IF EXISTS ' . $table . ';';
+                //$return.= '\nDROP TABLE IF EXISTS ' . $table . ';\n';
         
-                $row2 = Yii::$app->db->createCommand('SHOW CREATE TABLE ' . $table)->queryAll();
-                $return.= "\n\n" . $row2[0]['Create Table'] . ";\n\n";
+                //$row2 = Yii::$app->db->createCommand('SHOW CREATE TABLE ' . $table)->queryAll();
+                //$test = $row2[0]['Create Table'];
+                //echo ($test . "<hr />");
+                //echo($row2);
+                //exit(0);
+                //$return .= htmlentities($test) . ";\n\n";
+                //$return.= $row2[0]['Create Table'] . ";\n\n";
         
                 foreach ($result as $row) {
         
-                    $return.= 'INSERT INTO ' . $table . ' VALUES(';
+                    $return.= 'REPLACE INTO ' . $table . ' VALUES(';
         
                     foreach ($row as $data) {
         
                         $data = addslashes($data);
-        
         
                         // Updated to preg_replace to suit PHP5.3 +
         
@@ -91,7 +95,7 @@ class BackupController extends Controller
 
             Yii::$app->session->setFlash('success', "Voll-Backup wurde erfolgreich vorgenommen.");
         } catch(Exception $ex){
-            Yii::$app->session->setFlash('error', "Voll-Backup fehlgeschlagen. " . $ex->getMessage());
+            Yii::$app->session->setFlash('error', "Voll-Backup fehlgeschlagen. " . $ex->getMessage() . " (Line: " . $ex->getLine() . ")");
         }
         return $this->redirect(Yii::$app->request->referrer);
 
