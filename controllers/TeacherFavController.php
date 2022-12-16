@@ -122,7 +122,7 @@ class TeacherFavController extends Controller
 
         if(!Yii::$app->user->can("Superadmin")){
             $objUser = User::findOne(Yii::$app->user->id);    
-            if($model->user_id != $objUser)
+            if(strtoupper($model->user_id) != strtoupper($objUser->username))
                 throw new Exception("Data can not be processed");
         }
 
@@ -154,7 +154,7 @@ class TeacherFavController extends Controller
         
         if(!Yii::$app->user->can("Superadmin")){
             $objUser = User::findOne(Yii::$app->user->id);    
-            if($objDel->user_id != $objUser)
+            if(strtoupper($objDel->user_id) != strtoupper($objUser->username))
                 throw new Exception("Data can not be deleted");
         }
 
