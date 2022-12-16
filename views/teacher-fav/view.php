@@ -8,7 +8,7 @@ use yii\bootstrap\ButtonDropdown;
 /* @var $this yii\web\View */
 /* @var $model app\models\Teacher */
 
-$this->title = $model->teacher_id . " - " . $model->type;
+$this->title = $model->user_id . " - " . $model->type;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Teachers Fav'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php 
         $cols = [
             'id',
-            'teacher_id',
+            'user_id',
             'type',
             'value',
             'created_at:datetime',

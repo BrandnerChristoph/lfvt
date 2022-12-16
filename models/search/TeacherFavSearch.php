@@ -18,7 +18,7 @@ class TeacherFavSearch extends TeacherFav
     {
         return [
             [['id', 'created_at', 'updated_at'], 'integer'],
-            [['teacher_id', 'type', 'value'], 'safe'],
+            [['user_id', 'type', 'value'], 'safe'],
         ];
     }
 
@@ -60,6 +60,7 @@ class TeacherFavSearch extends TeacherFav
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'user_id' => $this->user_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);

@@ -42,7 +42,7 @@ class TeacherFav extends \yii\db\ActiveRecord
         return [
             [['id'], 'required'],
             [['created_at', 'updated_at'], 'integer'],
-            [['teacher_id', 'id'], 'string', 'max' => 20],
+            [['user_id', 'id'], 'string', 'max' => 20],
             [['type'], 'string', 'max' => 50],
             [['value'], 'string', 'max' => 225],
             [['id'], 'unique'],

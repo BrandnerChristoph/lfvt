@@ -16,9 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
         $cols = [
-            'teacher_id', 
+            'user_id', 
             'type',
             'value',
+            'created_at:datetime',
+            'updated_at:datetime',
         ];
     ?>
 
@@ -27,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'dataProvider' => $dataProvider,
             'filename' => 'Lehrerliste',
             'columnSelectorOptions' => [
-                'icon' => '<i class="glyphicon glyphicon-list"></i>',
+                'icon' => '<i class="fa fa-list"></i>',
             ],
             'dropdownOptions' => [
                 'label' => 'Export',
@@ -45,8 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             //['class' => 'yii\grid\SerialColumn'],
 
-
-            'teacher_id', 
+            'user_id', 
             'type',
             'value',
             ['class' => 'yii\grid\ActionColumn'],

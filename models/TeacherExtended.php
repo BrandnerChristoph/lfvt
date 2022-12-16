@@ -6,7 +6,7 @@ use mdm\admin\models\searchs\User as SearchsUser;
 use mdm\admin\models\User as ModelsUser;
 use Yii;
 use yii\helpers\ArrayHelper;
-use yii\web\User;
+use mdm\admin\models\User;
 
 /**
  * This is the model class for table "teacher".
@@ -64,11 +64,13 @@ class TeacherExtended extends Teacher
 
 //        $objUser = ModelsUser::find(Yii::$app->user->id);
 
+        $objUser = User::findOne(Yii::$app->user->id);
+        
         $arrReturn =  ArrayHelper::map(TeacherExtended::find()
                                         ->select('distinct(teacher.id) as id, name, firstname, initial as initial,  titel,  teacher_fav.sort_helper AS sort_order')
                                         //->select(['CASE WHEN teacher_fav.id IS NOT null THEN "Favoriten" ELSE "Lehrer" END AS sort_order'])
                                         //->leftJoin('teacher_fav','`teacher`.`id`= `teacher_fav`.`value` AND `teacher_fav`.`user_id` = "'.$objUser->username.'"')
-                                        ->leftJoin('teacher_fav','`teacher`.`id`= `teacher_fav`.`value` AND `teacher_fav`.`user_id` = "BN"')
+                                        ->leftJoin('teacher_fav','`teacher`.`id`= `teacher_fav`.`value` AND `teacher_fav`.`user_id` = "'.strtoupper($objUser->username).'"')
                                         ->orderBy('sort_order desc, teacher.id asc')
                                         ->all(), 'id', 
                                     function($model, $defaultValue){

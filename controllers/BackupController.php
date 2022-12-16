@@ -118,6 +118,7 @@ class BackupController extends Controller
 
             if (sizeof($arrDepartment) > 0) {
                 self::actionCreateDepartment($arrDepartment);
+                
                 Yii::$app->session->setFlash('success', "Sicherung der Abteilung(en) <b>" . implode(", ", $arrDepartment) . "</b> vorgenommen."); 
             } else {
                 Yii::$app->session->setFlash('warning', "Es wurde keine Abteilung gewählt."); 
@@ -172,11 +173,11 @@ class BackupController extends Controller
             fwrite($handle, $return);    
             fclose($handle);
 
-            Yii::$app->session->setFlash('success', "Backup der Abteilung(en) <b>" . implode(", ", $arrDepartment) . "</b> wurde vorgenommen.");
+            //Yii::$app->session->setFlash('success', "Backup der Abteilung(en) <b>" . implode(", ", $arrDepartment) . "</b> wurde vorgenommen.");
         } catch(Exception $ex){
             Yii::$app->session->setFlash('error', "Backup fehlgeschlagen. " . $ex->getMessage());
         }
-        return $this->redirect(Yii::$app->request->referrer);        
+        //return $this->redirect(Yii::$app->request->referrer);        
     }
 
     public function actionRestore()

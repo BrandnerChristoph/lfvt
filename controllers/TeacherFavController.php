@@ -12,6 +12,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use app\models\search\TeacherFavSearch;
 use app\models\search\ClassSubjectSearch;
+use mdm\admin\models\User;
 
 /**
  * TeacherController implements the CRUD actions for Teacher model.
@@ -43,7 +44,13 @@ class TeacherFavController extends Controller
     public function actionIndex()
     {
         $searchModel = new TeacherFavSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $params = $this->request->queryParams;
+        if(!Yii::$app->user->can("Superadmin")){
+            $objUser = User::findOne(Yii::$app->user->id);    
+            $params['TeacherFavSearch']['user_id'] = $objUser->username;
+        }
+
+        $dataProvider = $searchModel->search($params);
         
 
         return $this->render('index', [
@@ -75,10 +82,22 @@ class TeacherFavController extends Controller
     {
         $model = new TeacherFav();
         $model->id = uniqid();
+        $objUser = User::findOne(Yii::$app->user->id);
+        $model->user_id = $objUser->username;
+        $model->type = "teacher_myFavorites";
+        $model->created_at = time();
+        $model->updated_at = time();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())){
+
+                if($model->type == "teacher_myFavorites") $model->sort_helper = 1000;                             // Favoriten des Lehrers
+                if(substr($model->type, 0, 14) == substr("teacher_suggest", 0, 14)) $model->sort_helper = 2000;           // fachspezifische Lehrer
+                
+
+                if($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         } else {
             $model->loadDefaultValues();
@@ -100,8 +119,14 @@ class TeacherFavController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())){
+            $model->updated_at = time();
+            $model->sort_helper = 0;
+            if($model->type == "teacher_myFavorites") $model->sort_helper = 1000;    // Favoriten des Lehrers
+            if(substr($model->type, 0, 14) == substr("teacher_suggest", 0, 14)) $model->sort_helper = 2000;           // fachspezifische Lehrer
+            
+            if($model->save()) 
+                return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
