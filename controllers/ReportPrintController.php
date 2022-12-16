@@ -41,14 +41,12 @@ class ReportPrintController extends Controller
      * Lists all classes and their teachers
      * @return mixed
      */
-    public function actionTeacherInClass($department = null, $class = null)
+    public function actionTeacherInClass()
     {
-
-        
         
         $content = "";
 
-        $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $class])->orderby('department asc, id asc')->All();
+        $schoolClasses = SchoolClass::find()->orderby('department asc, id asc')->All();
         
             foreach($schoolClasses as $objClass){
                 $content .= SchoolClassController::getTeacherListContent($objClass);
