@@ -188,13 +188,13 @@ class ClassSubjectController extends Controller
         if(is_null($department)){
             $objUser = User::findOne(Yii::$app->user->id);
 
-            $objDefaultDepartment = TeacherFav::find()
-                                                ->andFilterWhere(['type' => 'lfvt_default_department'])
-                                                ->andFilterWhere(['user_id' => $objUser->username])
-                                                ->One();
-            if(!is_null($objDefaultDepartment))
-                $department = $objDefaultDepartment->id;
-            else {
+            $objDepartment = TeacherFav::find()
+                                            ->andFilterWhere(['type' => 'lfvt_default_department'])
+                                            ->andFilterWhere(['user_id' => $objUser->username])
+                                            ->One();
+            if(!is_null($objDepartment)){
+                $department = $objDepartment->id;
+            } else {
                 $objDepartment = Department::findOne($department)->orderBy('id asc')->One();
                 if(!is_null($objDepartment))
                     $department = $objDepartment->id;
