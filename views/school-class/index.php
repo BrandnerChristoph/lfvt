@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\SchoolClassSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -14,9 +15,32 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
         <?= Html::a(Yii::t('app', 'Create School Class'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+        <?= ExportMenu::widget([
+            'dataProvider' => $dataProvider,
+            'filename' => 'Klassenliste',
+            'columnSelectorOptions' => [
+                'icon' => '<i class="fa fa-list"></i>',
+            ],
+            'dropdownOptions' => [
+                'label' => 'Export',
+                'class' => 'btn btn-outline-secondary btn-default'
+            ],
+            'columns' => [
+                'id',
+                'classname',
+                'department',
+                //'period',
+                'annual_value',
+                'class_head',
+                'studentsnumber',
+                'info',
+                'updated_at:datetime',
+                'created_at:datetime',
+            
+            ],
+        ]) ?>
+    <p/>
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -30,10 +54,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'classname',
             'department',
-            'period',
+            //'period',
             'annual_value',
-            //'class_head',
-            //'studentsnumber',
+            'class_head',
+            'studentsnumber',
             //'info',
             //'updated_at',
             //'created_at',

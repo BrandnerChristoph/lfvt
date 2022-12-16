@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\SubjectSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -14,19 +15,43 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
         <?= Html::a(Yii::t('app', 'Create Subject'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+        <?= ExportMenu::widget([
+            'dataProvider' => $dataProvider,
+            'filename' => 'Faecher',
+            'columnSelectorOptions' => [
+                'icon' => '<i class="fa fa-list"></i>',
+            ],
+            'dropdownOptions' => [
+                'label' => 'Export',
+                'class' => 'btn btn-outline-secondary btn-default'
+            ],
+            'columns' => [
+                'id',
+                'name',
+                //'value:decimal',
+                [
+                    'attribute' => 'value',
+                    'format' => 'raw',
+                    'value' => function($model){
+                        return Yii::$app->formatter->asDecimal($model->value, 3);
+                    },
+                    'contentOptions' => ['style'=>'text-align: right;'],
+                ],
+                'updated_at:datetime',
+                'created_at:datetime',
+
+            ]
+        ]) ?>
+    <p/>
+
 
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'name',
             //'value:decimal',

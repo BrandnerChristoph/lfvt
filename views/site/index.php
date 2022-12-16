@@ -9,6 +9,13 @@ use kartik\widgets\ActiveForm;
 $this->title = 'LFV - HTL Waidhofen/Ybbs';
 ?>
 <div class="site-index">
+    <script>
+        $("form").submit(function(event){
+            console.log("load fullpage loader");
+            $("#fullpage-loader").show();
+        });
+    </script>
+
     <div class="jumbotron text-center bg-transparent">
         <h1 class="display-4">Lehrfächerverteilung</h1>
 
@@ -17,63 +24,26 @@ $this->title = 'LFV - HTL Waidhofen/Ybbs';
         <p><a class="btn btn-lg btn-success" href="<?= Yii::$app->urlManager->createUrl(['/class-subject/update-department']) ?>">zur Lehrfächerverteilung</a></p>
     </div>
 
-    <?php /*ActiveForm::begin(); ?>
-
-        <?= Html::input('text', 'myTxt') ?>
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
-
-    <?php ActiveForm::end(); */?>
-
-    <script>
-        $("form").submit(function(event){
-            console.log("load fullpage loader");
-            $("#fullpage-loader").show();
-        });
-    </script>
-<?php /*    
-    <div class="jumbotron text-center bg-transparent">
-        <h1 class="display-4">Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
     <div class="body-content">
 
         <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+            <div class="col-lg-4" >
+                <h2>Lehrer</h2>
+                <p>Lehrerverwaltung: erstellen, bearbeiten und löschen von Lehrern sowie die Verwaltung der Lehrerwünsche </p>
+                <p><center><a class="btn btn-warning" href="<?= Yii::$app->urlManager->createUrl(['/teacher/index']) ?>">zur Lehrerverwaltung &raquo;</a></center></p>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
+            <div class="col-lg-4" >
+                <h2>Klassen</h2>
+                <p>Klassenverwaltung: erstellen, bearbeiten und löschen von Schulklassen, dabei können Abteilungszugehörigkeiten sowie Jahreswertigkeiten festgelegt werden. Weiters können die Schüleranzahl und der Klassenvorstand festgelegt werden.</p>
+                <p><center><a class="btn btn-warning" href="<?= Yii::$app->urlManager->createUrl(['/school-class/index']) ?>">zur Klassenverwaltung &raquo;</a></center></p>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+            <div class="col-lg-4" >
+                <h2>Fach</h2>
+                <p>Fächervewaltung: erstellen, bearbeiten und löschen von Fächern, dabei können auch Wertigkeiten festgelegt werden</p>
+                <p><center><a class="btn btn-warning" href="<?= Yii::$app->urlManager->createUrl(['/subject/index']) ?>">zur Fächerverwaltung &raquo;</a></center></p>
             </div>
         </div>
 
     </div>
-*/ ?>
+
 </div>

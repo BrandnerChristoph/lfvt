@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'dataProvider' => $dataProvider,
             'filename' => 'Lehrerliste',
             'columnSelectorOptions' => [
-                'icon' => '<i class="glyphicon glyphicon-list"></i>',
+                'icon' => '<i class="fa fa-list"></i>',
             ],
             'dropdownOptions' => [
                 'label' => 'Export',

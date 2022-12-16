@@ -17,8 +17,8 @@ class SchoolClassSearch extends SchoolClass
     public function rules()
     {
         return [
-            [['id', 'classname', 'department', 'info'], 'safe'],
-            [['period', 'class_head', 'studentsnumber', 'updated_at', 'created_at'], 'integer'],
+            [['id', 'classname', 'department', 'info', 'class_head'], 'safe'],
+            [['period', 'studentsnumber', 'updated_at', 'created_at'], 'integer'],
             [['annual_value'], 'number'],
         ];
     }
