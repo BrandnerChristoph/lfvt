@@ -43,6 +43,67 @@ class ReportPrintController extends Controller
      */
     public function actionTeacherInClass($department = null, $class = null)
     {
+
+        
+        
+        $content = "";
+
+        $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $class])->orderby('department asc, id asc')->All();
+        
+            foreach($schoolClasses as $objClass){
+                $content .= SchoolClassController::getTeacherListContent($objClass);
+                $content .= "<pagebreak></pagebreak>";
+            }
+
+            $content = substr($content, 0, strlen($content)-23); // remove last pagebreak
+        
+
+        // setup kartik\mpdf\Pdf component
+        $pdf = new Pdf([
+            // set to use core fonts only
+            'mode' => Pdf::MODE_CORE, 
+            // A4 paper format
+            'format' => Pdf::FORMAT_A4, 
+            // portrait orientation
+            'orientation' => Pdf::ORIENT_PORTRAIT, 
+            // Margin Top
+            'marginTop' => 25, 
+            // stream to browser inline
+            'destination' => Pdf::DEST_BROWSER, 
+            // your html content input
+            'content' => $content,  
+            // format content from your own css file if needed or use the
+            // enhanced bootstrap css built by Krajee for mPDF formatting 
+            'cssFile' => '@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css',
+            // any css to be embedded if required
+            'cssInline' => '.kv-heading-1{font-size:18px}', 
+            // set mPDF properties on the fly
+            'options' => ['title' => 'Unterricht '],
+            // call mPDF methods on the fly
+            'methods' => [ 
+                'SetHeader'=>['<img src="img/htl_logo.png" style="height: 30px;">||HTL Waidhofen/Ybbs<br /><small>3340 Waidhofen an der Ybbs, Im Vogelsang 8</small>'], 
+                //'SetFooter'=>[$id.'||{PAGENO}'],
+                'SetFooter'=>['||'],
+            ]
+        ]);
+
+        
+        // return the pdf output as per the destination setting
+        return $pdf->render(); 
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+
+
         //$teacherList = Teacher::find()->select('id', 'name', 'firstname', 'title')->asArray()->All();
 
         $arrTeacher =  ArrayHelper::map(Teacher::find()

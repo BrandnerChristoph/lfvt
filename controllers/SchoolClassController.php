@@ -277,57 +277,7 @@ class SchoolClassController extends Controller
     {
         $model = $this->findModel($id);
         
-        
-        $content = "<div class='container'><div class='row'>";
-        $content .= "<h2>" . $model->id ."<br /><small>".$model->classname."</small></h2>";
-        
-        $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Klassenvorstand</div> ";
-        $content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . $model->classHead->firstname . " " . $model->classHead->name . " (".$model->class_head.")</b></div>";
-        
-        $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Schüleranzahl</div> ";
-        $content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . $model->studentsnumber . "</b></div>";
-        
-        // Stundentafel
-        $content .= "<h2 style='border-top: 1px solid #1450A0; padding-top: 10;'>Lehrerliste</h2>";
-        
-        $lessons = ClassSubject::find()->select('teacher')->distinct()->orderby('teacher asc')->andFilterWhere(['class' => $id])->all(); //->andFilterWhere(['class' => $id])->distinct('subject')->All();
-        $cntEinheit = 0;
-        $cntWerteinheit = 0;
-
-        // Header
-        $content .= "<div class='col-xs-1' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Kürzel</b></div>";
-        $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Lehrername</b></div>";
-        $content .= "<div class='' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Fächer</b></div>";
-
-        foreach($lessons as $item){
-            $content .= "<div style='border-bottom: 1px solid grey;'>";
-            
-                $content .= "<div class='col-xs-1' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>".$item->teacher;
-                $content .= "</div>";
-                $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>";
-                    if(!empty($item->teacher0->name))
-                        $content .= $item->teacher0->name . " " . $item->teacher0->firstname;
-                    else
-                        $content .= "-";
-                $content .= "</div>";
-                $content .= "<div class='' style='padding:0px 0px 0px 0px; margin: 0px !important;'>";
-                $classSubjects =  ClassSubject::find()->select('subject')->distinct()->orderby('subject asc')
-                                                        ->andFilterWhere(['class' => $id])
-                                                        ->andFilterWhere(['teacher' => $item->teacher])
-                                                        ->all();
-                foreach($classSubjects as $itemClassSub){
-                    $content .= $itemClassSub->subject . ", ";
-                
-                }
-                $content = substr($content, 0, strlen($content)-2);
-
-                $content .= "</div>";
-                
-            $content .= "</div>";                                        
-        }
-
-        
-        $content .= "</div></div>";
+        $content = $this->getTeacherListContent($model);
 
         // setup kartik\mpdf\Pdf component
         $pdf = new Pdf([
@@ -361,6 +311,65 @@ class SchoolClassController extends Controller
         
         // return the pdf output as per the destination setting
         return $pdf->render(); 
+    }
+
+
+    public static function getTeacherListContent($model){
+        $content = "<div class='container'><div class='row'>";
+        $content .= "<h2>" . $model->id ."<br /><small>".$model->classname."</small></h2>";
+        
+        $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Klassenvorstand</div> ";
+        //$content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . $model->classHead->firstname . " " . $model->classHead->name . " (".$model->class_head.")</b></div>";
+        if (empty($model->class_head))
+            $content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>-</b></div>";
+        else
+            $content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . $model->class_head . "</b></div>";
+        
+        $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Schüleranzahl</div> ";
+        $content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . $model->studentsnumber . "</b></div>";
+        
+        // Stundentafel
+        $content .= "<h2 style='border-top: 1px solid #1450A0; padding-top: 10;'>Lehrerliste</h2>";
+        
+        $lessons = ClassSubject::find()->select('teacher')->distinct()->orderby('teacher asc')->andFilterWhere(['class' => $model->id])->all(); //->andFilterWhere(['class' => $id])->distinct('subject')->All();
+        $cntEinheit = 0;
+        $cntWerteinheit = 0;
+
+        // Header
+        $content .= "<div class='col-xs-1' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Kürzel</b></div>";
+        $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Lehrername</b></div>";
+        $content .= "<div class='' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Fächer</b></div>";
+
+        foreach($lessons as $item){
+            $content .= "<div style='border-bottom: 1px solid grey;'>";
+            
+                $content .= "<div class='col-xs-1' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>".$item->teacher;
+                $content .= "</div>";
+                $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>";
+                    if(!empty($item->teacher0->name))
+                        $content .= $item->teacher0->name . " " . $item->teacher0->firstname;
+                    else
+                        $content .= "-";
+                $content .= "</div>";
+                $content .= "<div class='' style='padding:0px 0px 0px 0px; margin: 0px !important;'>";
+                $classSubjects =  ClassSubject::find()->select('subject')->distinct()->orderby('subject asc')
+                                                        ->andFilterWhere(['class' => $model->id])
+                                                        ->andFilterWhere(['teacher' => $item->teacher])
+                                                        ->all();
+                foreach($classSubjects as $itemClassSub){
+                    $content .= $itemClassSub->subject . ", ";
+                
+                }
+                $content = substr($content, 0, strlen($content)-2);
+
+                $content .= "</div>";
+                
+            $content .= "</div>";                                        
+        }
+
+        
+        $content .= "</div></div>";
+        return $content;
     }
 
 }

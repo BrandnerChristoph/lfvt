@@ -64,6 +64,9 @@ $lang = [
     'Hours' => 'Stunden',
     'Classroom' => 'Raum',
 
+    // Report
+    'Report.TeacherByClass' => 'Klassenlehrer',
+
 ];
 
 // load custom language-infos to overwrite default
