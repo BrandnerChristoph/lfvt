@@ -12,6 +12,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use app\models\search\TeacherFavSearch;
 use app\models\search\ClassSubjectSearch;
+use Exception;
 use mdm\admin\models\User;
 
 /**
@@ -119,6 +120,12 @@ class TeacherFavController extends Controller
     {
         $model = $this->findModel($id);
 
+        if(!Yii::$app->user->can("Superadmin")){
+            $objUser = User::findOne(Yii::$app->user->id);    
+            if($model->user_id != $objUser)
+                throw new Exception("Data can not be processed");
+        }
+
         if ($this->request->isPost && $model->load($this->request->post())){
             $model->updated_at = time();
             $model->sort_helper = 0;
@@ -143,7 +150,16 @@ class TeacherFavController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $objDel = $this->findModel($id);
+        
+        if(!Yii::$app->user->can("Superadmin")){
+            $objUser = User::findOne(Yii::$app->user->id);    
+            if($objDel->user_id != $objUser)
+                throw new Exception("Data can not be deleted");
+        }
+
+
+        $objDel->delete();
 
         return $this->redirect(['index']);
     }
