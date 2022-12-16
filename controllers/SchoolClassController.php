@@ -305,7 +305,10 @@ class SchoolClassController extends Controller
                 $content .= "<div class='col-xs-1' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>".$item->teacher;
                 $content .= "</div>";
                 $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>";
-                    $content .= $item->teacher0->name . " " . $item->teacher0->firstname;
+                    if(!empty($item->teacher0->name))
+                        $content .= $item->teacher0->name . " " . $item->teacher0->firstname;
+                    else
+                        $content .= "-";
                 $content .= "</div>";
                 $content .= "<div class='' style='padding:0px 0px 0px 0px; margin: 0px !important;'>";
                 $classSubjects =  ClassSubject::find()->select('subject')->distinct()->orderby('subject asc')
