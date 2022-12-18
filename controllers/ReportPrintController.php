@@ -106,14 +106,16 @@ class ReportPrintController extends Controller
                 $content .= "</div>";
                 $content .= "<div class='col-xs-3' style='padding:0px 0px 0px 0px; margin: 0px !important; text-align: center;'>";
                     $wish = $item->getWishHoursAsArray();
-                    if(isset($wish['min'])){
+                    if(isset($wish['min']) && isset($wish['max'])){
                         $fontColor = "red";
                         if($wish['max'] < $item->hours){
                             $fontColor = "red";
-                        }
-                        if($wish['min'] > $item->hours){
+                        } else if($wish['min'] > $item->hours){
                             $fontColor = "red";
+                        } else if($wish['min'] <= $item->hours && $wish['max'] >= $item->hours){
+                            $fontColor = "green";
                         }
+
 
                         $content .=  "<span style='color:".$fontColor.";'>";
                             $content .= $wish['min'] . " - " . $wish['max'];
