@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use app\models\ClassSubject;
 use yii\web\NotFoundHttpException;
 use app\models\search\SchoolClassSearch;
+use app\models\Teacher;
 
 /**
  * SchoolClassController implements the CRUD actions for SchoolClass model.
@@ -322,8 +323,13 @@ class SchoolClassController extends Controller
         //$content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . $model->classHead->firstname . " " . $model->classHead->name . " (".$model->class_head.")</b></div>";
         if (empty($model->class_head))
             $content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>-</b></div>";
-        else
-            $content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . $model->class_head . "</b></div>";
+        else {
+            $strHead = $model->class_head;
+            $objTeacher = Teacher::findOne($model->class_head);
+            if(!is_null($objTeacher))
+                $strHead = trim($objTeacher->titel . " " . $objTeacher->name . " " . $objTeacher->firstname);
+            $content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . $strHead . "</b></div>";
+        }
         
         $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Schüleranzahl</div> ";
         $content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . $model->studentsnumber . "</b></div>";
