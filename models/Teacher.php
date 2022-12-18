@@ -147,6 +147,22 @@ class Teacher extends \yii\db\ActiveRecord
         return $sum;
     }
 
+    
+    /**
+     * return an array with 
+     */
+    public function getWishHoursAsArray()
+    {
+        $returnArray = array();
+        foreach($this->teacherWishlists as $listItem){
+            if(!empty($listItem['hours_min']))
+                $returnArray['min'] = $listItem['hours_min'];
+            if(!empty($listItem['hours_max']) && ($listItem['hours_min'] != $listItem['hours_max']))
+                $returnArray['max'] = $listItem['hours_max'];
+        }
+        return $returnArray;
+    }
+
     /**
      * {@inheritdoc}
      * @return TeacherQuery the active query used by this AR class.

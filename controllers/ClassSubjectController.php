@@ -183,7 +183,7 @@ class ClassSubjectController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateDepartment($department = null, $class = null)
+    public function actionUpdateDepartment($department = "IT", $class = null)
     {
         if(is_null($department)){
             $objUser = User::findOne(Yii::$app->user->id);
@@ -199,6 +199,8 @@ class ClassSubjectController extends Controller
             $objDepartment = Department::findOne($department); //->orderBy('id asc')->One();
             if(!is_null($objDepartment))
                 $department = $objDepartment->id;
+        } else {
+            $objDepartment = Department::findOne($department);
         }
         if(is_null($class)){
             $classes = SchoolClass::find()->andFilterWhere(['department' => $department])->select('id')->distinct();

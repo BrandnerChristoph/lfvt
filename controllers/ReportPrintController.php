@@ -43,149 +43,122 @@ class ReportPrintController extends Controller
      */
     public function actionTeacherInClass()
     {
-        
         $content = "";
-
         $schoolClasses = SchoolClass::find()->orderby('department asc, id asc')->All();
         
-            foreach($schoolClasses as $objClass){
-                $content .= SchoolClassController::getTeacherListContent($objClass);
-                $content .= "<pagebreak></pagebreak>";
-            }
+        foreach($schoolClasses as $objClass){
+            $content .= SchoolClassController::getTeacherListContent($objClass);
+            $content .= "<pagebreak></pagebreak>";
+        }
 
-            $content = substr($content, 0, strlen($content)-23); // remove last pagebreak
+        $content = substr($content, 0, strlen($content)-23); // remove last pagebreak
         
 
         // setup kartik\mpdf\Pdf component
         $pdf = new Pdf([
-            // set to use core fonts only
             'mode' => Pdf::MODE_CORE, 
-            // A4 paper format
             'format' => Pdf::FORMAT_A4, 
-            // portrait orientation
             'orientation' => Pdf::ORIENT_PORTRAIT, 
-            // Margin Top
             'marginTop' => 25, 
-            // stream to browser inline
             'destination' => Pdf::DEST_BROWSER, 
-            // your html content input
             'content' => $content,  
-            // format content from your own css file if needed or use the
-            // enhanced bootstrap css built by Krajee for mPDF formatting 
             'cssFile' => '@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css',
-            // any css to be embedded if required
             'cssInline' => '.kv-heading-1{font-size:18px}', 
-            // set mPDF properties on the fly
             'options' => ['title' => 'Unterricht '],
-            // call mPDF methods on the fly
             'methods' => [ 
                 'SetHeader'=>['<img src="img/htl_logo.png" style="height: 30px;">||HTL Waidhofen/Ybbs<br /><small>3340 Waidhofen an der Ybbs, Im Vogelsang 8</small>'], 
-                //'SetFooter'=>[$id.'||{PAGENO}'],
                 'SetFooter'=>['||'],
             ]
         ]);
 
-        
         // return the pdf output as per the destination setting
-        return $pdf->render(); 
+        return $pdf->render();  
+   }
 
-
-
-
-
-
-
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////
-
-
-        //$teacherList = Teacher::find()->select('id', 'name', 'firstname', 'title')->asArray()->All();
-
-        $arrTeacher =  ArrayHelper::map(Teacher::find()
-                                        ->select('distinct(teacher.id) as id, name, firstname, initial as initial,  titel,  teacher_fav.sort_helper AS sort_order')
-                                        //->select(['CASE WHEN teacher_fav.id IS NOT null THEN "Favoriten" ELSE "Lehrer" END AS sort_order'])
-                                        //->leftJoin('teacher_fav','`teacher`.`id`= `teacher_fav`.`value` AND `teacher_fav`.`user_id` = "'.$objUser->username.'"')
-                                        ->leftJoin('teacher_fav','`teacher`.`id`= `teacher_fav`.`value` AND `teacher_fav`.`user_id` = "BN"')
-                                        ->orderBy('sort_order desc, teacher.id asc')
-                                        ->all(), 'id', 
-                                    function($model, $defaultValue){
-                                        $additionalInfo = "";
-                                        return trim($model->name . " " . $model->firstname . " " . $model->titel);
-                                    }
-                                );
+   public function actionTeacherWorkload()
+    {
         $content = "";
-        if(!is_null($class))
-            $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $class])->orderby('department asc, id asc')->All();
-        elseif(!is_null($department))
-            $schoolClasses = SchoolClass::find()->andFilterWhere(['department' => $department])->orderby('department asc, id asc')->All();
-        else
-            $schoolClasses = SchoolClass::find()->orderby('department asc, id asc')->All();
+        $teacherList = Teacher::find()->orderby('name asc, firstname asc')->All();
         
-        $content = "<div class='container'>";
-        $content = "<div class='row'>";
-            foreach($schoolClasses as $objClass){
-                $content .= "<h2>".$objClass->id."</h2>";
-                
-                $content .= "<div style='border-bottom: 3px solid black;'>" ;
-                    $content .= "<div class='col-xs-1' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Kürzel</b></div>";
-                    $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Lehrername</b></div>";
-                    $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Fach</b></div>";
-                    $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Stunden</b></div>";      
+        //$content = "<style>/css/font-awesome/font-awesome.min.css</style>";
+        //$content = '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">';
+        $content .= "<div class='container'><div class='row'>";
+        $content .= "<h2>Lehrer Auslastung</h2>"; 
+        
+        // Header
+        $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Lehrer</b></div>";
+        $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important; text-align: right;'><b>Wert&nbsp;&nbsp;&nbsp;&nbsp;</b></div>";
+        $content .= "<div class='col-xs-1' style='padding:0px 0px 0px 0px; margin: 0px !important; text-align: right;'><b>Stunden</b></div>";
+        $content .= "<div class='col-xs-3' style='padding:0px 0px 0px 0px; margin: 0px !important; text-align: center;'><b>Wunsch</b></div>";
+        
+        $content .= "<div class='col-xs-12' style='padding:0px 0px 0px 0px; margin: 0px !important;'></div>";
+
+        foreach($teacherList as $item){
+            $content .= "<div style='border-bottom: 1px solid grey;'>";
+            
+                $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . trim($item->name . " " . $item->firstname . " (" . $item->initial . ")");
                 $content .= "</div>";
-                $lessons = null;
-                $lessons = ClassSubject::find()
-                                ->andFilterWhere(['class' => $objClass->id])
-                                ->orderby('teacher asc, subject asc')->All();
+                $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important; text-align: right;'>";
+                    $content .= Yii::$app->formatter->asDecimal($item->teachingHours, 3);
+                $content .= "&nbsp;&nbsp;&nbsp;&nbsp;</div>";
+                $content .= "<div class='col-xs-1' style='padding:0px 0px 0px 0px; margin: 0px !important; text-align: right;'>";
+                    $content .= Yii::$app->formatter->asDecimal($item->hours, 0);
+                $content .= "</div>";
+                $content .= "<div class='col-xs-3' style='padding:0px 0px 0px 0px; margin: 0px !important; text-align: center;'>";
+                    $wish = $item->getWishHoursAsArray();
+                    if(isset($wish['min'])){
+                        $fontColor = "red";
+                        if($wish['max'] < $item->hours){
+                            $fontColor = "red";
+                        }
+                        if($wish['min'] > $item->hours){
+                            $fontColor = "red";
+                        }
 
-                foreach($lessons as $objLesson){
-                    $content .= "<div style='border-bottom: 1px solid grey;'>" ;
+                        $content .=  "<span style='color:".$fontColor.";'>";
+                            $content .= $wish['min'] . " - " . $wish['max'];
+                        $content .=  "</span>";
+                    }
+                    else {
+                        $content .= "&nbsp;";
+                    }
+                $content .= "</div>";
                 
-                        $content .= "<div class='col-xs-1' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $objLesson->teacher . "</div>";
-                        $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $arrTeacher[$objLesson->teacher] . "</div>";
-                        //$content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $objLesson->teacher0->name . " " . $objLesson->teacher0->firstname . "</div>";
-                        $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $objLesson->subject  . "</div>";
-                        $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . Yii::$app->formatter->asDecimal($objLesson->hours,3)  . "</div>";            
-                    $content .= "</div>";
-                }
+            $content .= "</div>";                                        
+        }
 
-                $content .= "<pagebreak></pagebreak>";
-            }
-        $content .= "</div>";
-        $content .= "</div>";
+        
+        $content .= "</div></div>";
+        //return $content;
+
+
+
+        
+
+        //$content = substr($content, 0, strlen($content)-23); // remove last pagebreak
+        
 
         // setup kartik\mpdf\Pdf component
         $pdf = new Pdf([
-            // set to use core fonts only
             'mode' => Pdf::MODE_CORE, 
-            // A4 paper format
             'format' => Pdf::FORMAT_A4, 
-            // portrait orientation
             'orientation' => Pdf::ORIENT_PORTRAIT, 
-            // Margin Top
-            'marginTop' => 25,
-            // stream to browser inline
+            'marginTop' => 25, 
             'destination' => Pdf::DEST_BROWSER, 
-            // your html content input
             'content' => $content,  
-            // format content from your own css file if needed or use the
-            // enhanced bootstrap css built by Krajee for mPDF formatting 
             'cssFile' => '@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css',
-            // any css to be embedded if required
+            //'cssFile' => 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css',
             'cssInline' => '.kv-heading-1{font-size:18px}', 
-            // set mPDF properties on the fly
             'options' => ['title' => 'Unterricht '],
-            // call mPDF methods on the fly
             'methods' => [ 
                 'SetHeader'=>['<img src="img/htl_logo.png" style="height: 30px;">||HTL Waidhofen/Ybbs<br /><small>3340 Waidhofen an der Ybbs, Im Vogelsang 8</small>'], 
-                //'SetFooter'=>[$id.'||{PAGENO}'],
                 'SetFooter'=>['||'],
             ]
         ]);
 
+        //$pdf->content("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css",1);
+        
         // return the pdf output as per the destination setting
-        return $pdf->render(); 
+        return $pdf->render();  
    }
 }

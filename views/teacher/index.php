@@ -162,7 +162,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'Wert',
-                'value' => '0',
+                'value' => function($model){
+                    return $model->teachingHours;
+                },
             ],
             'name',
             'firstname',

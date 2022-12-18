@@ -9,6 +9,7 @@ use kartik\widgets\ActiveForm;
 $this->title = 'LFV - HTL Waidhofen/Ybbs';
 ?>
 <div class="site-index">
+
     <script>
         $("form").submit(function(event){
             console.log("load fullpage loader");
