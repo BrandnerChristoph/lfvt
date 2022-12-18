@@ -36,6 +36,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             ) ?>
                 </div>
             </div>
+
+            <!--div class="col-lg-3">
+                <div class="box box-body box-success bg-gray-light">
+                    <h4><?= Yii::t("app", "Report.TeacherWorkloadPerDepartment")  ?></h4>
+                    <p>Gesamt-Übersicht der Stunden (Werteinheiten) von Lehrern in einer Abteilung (PDF)</p>
+                        <?= Html::a(Yii::t("app", "Report.TeacherWorkloadPerDepartment") . ' &raquo;', 
+                                    ['#'], 
+                                    [
+                                        'class' => 'btn btn-primary', 
+                                        'target' => '_blank',
+                                        'disabled' => 'disabled',
+                                    ]
+                            ) ?>
+                </div>
+            </div-->
         </div>
         
     </div>
