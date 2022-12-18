@@ -325,9 +325,12 @@ class SchoolClassController extends Controller
             $content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>-</b></div>";
         else {
             $strHead = $model->class_head;
+            
             $objTeacher = Teacher::findOne($model->class_head);
             if(!is_null($objTeacher))
                 $strHead = trim($objTeacher->titel . " " . $objTeacher->name . " " . $objTeacher->firstname);
+
+            if(empty($strHead))  $strHead = $model->class_head;
             $content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . $strHead . "</b></div>";
         }
         
