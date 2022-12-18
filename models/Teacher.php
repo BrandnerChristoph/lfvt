@@ -157,7 +157,7 @@ class Teacher extends \yii\db\ActiveRecord
         foreach($this->teacherWishlists as $listItem){
             if(!empty($listItem['hours_min']))
                 $returnArray['min'] = $listItem['hours_min'];
-            if(!empty($listItem['hours_max']) && ($listItem['hours_min'] != $listItem['hours_max']))
+            if(!empty($listItem['hours_max'])) //&& ($listItem['hours_min'] != $listItem['hours_max']))
                 $returnArray['max'] = $listItem['hours_max'];
         }
         return $returnArray;

@@ -80,8 +80,6 @@ class ReportPrintController extends Controller
         $content = "";
         $teacherList = Teacher::find()->orderby('name asc, firstname asc')->All();
         
-        //$content = "<style>/css/font-awesome/font-awesome.min.css</style>";
-        //$content = '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">';
         $content .= "<div class='container'><div class='row'>";
         $content .= "<h2>Lehrer Auslastung</h2>"; 
         
