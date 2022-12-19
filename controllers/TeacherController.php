@@ -98,7 +98,7 @@ class TeacherController extends Controller
         $model = new Teacher();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post()) && $model->save(false)) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -121,7 +121,7 @@ class TeacherController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save(false)) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
