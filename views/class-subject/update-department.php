@@ -132,8 +132,15 @@ $classList = SchoolClass::getArrayHelperList();
                                             foreach($objList as $obj){                                                    
 
                                                 if(!is_null($obj)){
+                                                    
                                                     echo "<div class='col-lg-12' class='' title='".$obj->teacher0->name." ".$obj->teacher0->firstname."' >";
-                                                            echo $obj->teacher;
+                                                            if($obj->teacher == "?"){
+                                                                echo "<b><span style='color: red;'>";
+                                                            }
+                                                                echo $obj->teacher;
+                                                            if($obj->teacher == "?"){
+                                                                echo "</span></b>";
+                                                            }
                                                             echo "<small>";
                                                                 echo " " . $obj->hours;
                                                                 if($obj->value != 100)
