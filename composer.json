@@ -26,7 +26,8 @@
         "kartik-v/yii2-export": "dev-master",
         "kartik-v/yii2-mpdf": "dev-master",
         "philippfrenzel/yii2fullcalendar": "*",
-        "kartik-v/yii2-icons": "@dev"
+        "kartik-v/yii2-icons": "@dev",
+        "kartik-v/yii2-editable": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
@@ -44,6 +45,9 @@
         "process-timeout": 1800,
         "fxp-asset": {
             "enabled": false
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
         }
     },
     "scripts": {

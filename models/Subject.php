@@ -32,7 +32,7 @@ class Subject extends \yii\db\ActiveRecord
     {
         return [
             [['id', 'name', 'updated_at', 'created_at'], 'required'],
-            [['updated_at', 'created_at'], 'integer'],
+            [['updated_at', 'created_at', 'sortorder'], 'integer'],
             [['id'], 'string', 'max' => 10],
             [['name'], 'string', 'max' => 225],
             [['value'], 'number'],
@@ -49,6 +49,7 @@ class Subject extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name'),
             'value' => Yii::t('app', 'subject_value'),
+            'sortorder' => Yii::t('app', 'sortorder'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'created_at' => Yii::t('app', 'Created At'),
         ];

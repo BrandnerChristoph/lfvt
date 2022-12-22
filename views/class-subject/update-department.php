@@ -11,6 +11,7 @@ use app\models\Department;
 use app\models\SchoolClass;
 use kartik\widgets\Select2;
 use app\models\ClassSubject;
+use kartik\editable\Editable;
 //use kartik\widgets\ActiveForm;
 
 use app\models\TeacherExtended;
@@ -137,7 +138,16 @@ $classList = SchoolClass::getArrayHelperList();
                                                             if($obj->teacher == "?"){
                                                                 echo "<b><span style='color: red;'>";
                                                             }
-                                                                echo $obj->teacher;
+                                                                //echo $obj->teacher;
+                                                                // https://demos.krajee.com/editable
+                                                                echo Editable::widget([
+                                                                    'name'=>'teacher', 
+                                                                    'asPopover' => false,
+                                                                    'value' => $obj->teacher,
+                                                                    //'header' => 'Name',
+                                                                    'size'=>'md',
+                                                                    'options' => ['class'=>'form-control', 'placeholder'=>'Enter person name...']
+                                                                ]);
                                                             if($obj->teacher == "?"){
                                                                 echo "</span></b>";
                                                             }
@@ -158,7 +168,7 @@ $classList = SchoolClass::getArrayHelperList();
                                                                                 [
                                                                                     "class" => "btn btn-sm btn-error",
                                                                                     'data' => [
-                                                                                        'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                                                                                        //'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
                                                                                         'method' => 'post',
                                                                                     ]
                                                                                 ] 

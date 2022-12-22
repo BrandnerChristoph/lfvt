@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\ClassSubject;
 use Yii;
 use app\models\Subject;
 use app\models\search\SubjectSearch;
+use Exception;
+use yii\db\Transaction;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -111,7 +114,20 @@ class SubjectController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            ClassSubject::deleteAll(['subject' => $id]);  
+            $this->findModel($id)->delete();
+            $transaction->commit();
+            
+            Yii::$app->session->setFlash('success', "Element (" . $id . ") wurde gelöscht.");
+        } catch(Exception $ex){
+
+            Yii::$app->session->setFlash('error', $ex->getMessage());
+            $transaction->rollBack();
+        }
 
         return $this->redirect(['index']);
     }

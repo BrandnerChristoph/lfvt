@@ -18,7 +18,7 @@ class SubjectSearch extends Subject
     {
         return [
             [['id', 'name'], 'safe'],
-            [['updated_at', 'created_at'], 'integer'],
+            [['updated_at', 'created_at', 'sortorder'], 'integer'],
         ];
     }
 
@@ -60,6 +60,7 @@ class SubjectSearch extends Subject
         $query->andFilterWhere([
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
+            'sortorder' => $this->sortorder,
         ]);
 
         $query->andFilterWhere(['like', 'id', $this->id])

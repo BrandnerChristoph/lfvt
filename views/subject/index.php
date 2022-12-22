@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'contentOptions' => ['style'=>'text-align: right;'],
                 ],
+                'sortorder',
                 'updated_at:datetime',
                 'created_at:datetime',
 
@@ -63,11 +64,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'contentOptions' => ['style'=>'text-align: right;'],
             ],
+            'sortorder',
             'updated_at:datetime',
             'created_at:datetime',
 
             //['class' => 'yii\grid\ActionColumn'],
-            ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update}'],
+            ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {update} {delete}'],
 
         ],
     ]); ?>
