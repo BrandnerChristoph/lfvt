@@ -183,7 +183,7 @@ class ClassSubjectController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateDepartment($department = "IT", $class = null)
+    public function actionUpdateDepartment($department = null, $class = null)
     {
         if(is_null($department)){
             $objUser = User::findOne(Yii::$app->user->id);
@@ -244,8 +244,12 @@ class ClassSubjectController extends Controller
         return $this->render('update-department', [
             'classSubjects' => $classSubjects, 
             'classes' => is_null($class) ? SchoolClass::find()->andFilterWhere(['department' => $department])->distinct()->All() : SchoolClass::find()->andFilterWhere(['department' => $department])->andFilterWhere(['id' => $class])->distinct()->All(),
-            'subjects' => ClassSubject::find()->select('subject')->distinct('subject')->andFilterWhere(['class' => $classes])->orderBy('subject asc')->All(),
-            //'subjects' => ClassSubject::find()->select('subject')->andFilterWhere(['class' => $classes])->orderBy('subject asc')->All(),
+            //'subjects' => ClassSubject::find()->select('subject')->distinct('subject')->andFilterWhere(['class' => $classes])->orderBy('subject asc')->All(),
+            'subjects' => ClassSubject::find()
+                            ->select('subject')
+                            ->distinct('subject')
+                            ->andFilterWhere(['class' => $classes])
+                            ->orderBy('subject asc')->All(),
             'department' => $department,
             'objDepartment' => $objDepartment,
         ]);
