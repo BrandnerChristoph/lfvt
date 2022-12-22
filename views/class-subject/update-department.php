@@ -130,24 +130,32 @@ $classList = SchoolClass::getArrayHelperList();
 
                                         // get Model
                                         $objList = ClassSubject::find()->andFilterWhere(["subject" => $classSubject->subject])->andFilterWhere(["class" => $class->id])->All();
+                                            echo "<div class='col-lg-9'>";
                                             foreach($objList as $obj){                                                    
 
                                                 if(!is_null($obj)){
                                                     
-                                                    echo "<div class='col-lg-12' class='' title='".$obj->teacher0->name." ".$obj->teacher0->firstname."' >";
+                                                    echo "<div class='' title='".$obj->teacher0->name." ".$obj->teacher0->firstname."' >";
                                                             if($obj->teacher == "?"){
                                                                 echo "<b><span style='color: red;'>";
                                                             }
-                                                                //echo $obj->teacher;
+
+                                                                echo $obj->teacher;
+
+                                                                /*
                                                                 // https://demos.krajee.com/editable
                                                                 echo Editable::widget([
-                                                                    'name'=>'teacher', 
-                                                                    'asPopover' => false,
-                                                                    'value' => $obj->teacher,
+                                                                    'model'=>$obj, 
+                                                                    'attribute' => 'teacher',
+                                                                    //'name'=>'teacher', 
+                                                                    //'asPopover' => false,
+                                                                    //'value' => $obj->teacher,
                                                                     //'header' => 'Name',
                                                                     'size'=>'md',
-                                                                    'options' => ['class'=>'form-control', 'placeholder'=>'Enter person name...']
+                                                                    'options' => ['class'=>'form-control', 'placeholder'=>'Lehrer Kürzel...'],
+                                                                    
                                                                 ]);
+                                                                */
                                                             if($obj->teacher == "?"){
                                                                 echo "</span></b>";
                                                             }
@@ -158,7 +166,9 @@ $classList = SchoolClass::getArrayHelperList();
                                                             echo "</small>";
 
                                                             // edit item
-                                                            echo '<a class="showModalButton btn btn-sm" value="' . Url::to(['update-item', 'id' => $obj->id]) . '" href="#" title="'.$classSubject->subject.' / '.$class->id.'">'
+                                                            echo '<a class="showModalButton btn btn-sm" '
+                                                                        . 'style="font-size: 0.85rem; padding: 0.2rem 0.3rem;" '
+                                                                        . 'value="' . Url::to(['update-item', 'id' => $obj->id]) . '" href="#" title="'.$classSubject->subject.' / '.$class->id.'">'
                                                                         . Icon::show('edit')        
                                                                         . '</a>';
 
@@ -166,7 +176,8 @@ $classList = SchoolClass::getArrayHelperList();
                                                             echo Html::a(Icon::show('trash'), 
                                                                                 ["delete", 'id' => $obj->id], 
                                                                                 [
-                                                                                    "class" => "btn btn-sm btn-error",
+                                                                                    "class" => "btn btn-sm",
+                                                                                    "style" => "font-size: 0.85rem; padding: 0.2rem 0.3rem;" ,
                                                                                     'data' => [
                                                                                         //'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
                                                                                         'method' => 'post',
@@ -176,8 +187,10 @@ $classList = SchoolClass::getArrayHelperList();
                                                         echo "</div>";                                                 
                                                 }                                          
                                             }  
+                                            echo "</div>";
 
                                             // create new Item
+                                            /*
                                             echo '<div class="col-lg-12 text-center">';
                                                 echo '<a class="showModalButton btn btn-sm btn-success" 
                                                             value="' . Url::to(['create-item', 
@@ -188,6 +201,19 @@ $classList = SchoolClass::getArrayHelperList();
                                                             href="#" 
                                                             title="'.$classSubject->subject.' / '.$class->id.'">'
                                                                             . Icon::show('plus') . '<small> ' .  $classSubject->subject . ' (' . $class->id . ')</small>'
+                                                                            . '</a>';
+                                            echo '</div>';
+                                            */
+                                            echo '<div style="text-align: right;">';
+                                                echo '<a class="showModalButton btn btn-sm btn-success" style="font-size:0.5rem;padding: 0.2rem 0.3rem;" 
+                                                            value="' . Url::to(['create-item', 
+                                                                                    'id' => uniqid(), 
+                                                                                    'class' => $class->id, 
+                                                                                    'subject' => $classSubject->subject
+                                                                                    ]) . '" 
+                                                            href="#" 
+                                                            title="+ '.$classSubject->subject.' / '.$class->id.'">'
+                                                                            . Icon::show('plus')
                                                                             . '</a>';
                                             echo '</div>';
                                         $index++;    

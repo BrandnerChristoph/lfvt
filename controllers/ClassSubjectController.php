@@ -185,6 +185,41 @@ class ClassSubjectController extends Controller
      */
     public function actionUpdateDepartment($department = null, $class = null)
     {
+
+        /////////////////////////////////////////////////////
+        
+        // Check if there is an Editable ajax request
+        if (isset($_POST['hasEditable'])) {
+            $model = ClassSubject::findOne($_POST['ClassSubject']['id']);
+            // use Yii's response format to encode output as JSON
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            
+            // store old value of the attribute
+            $oldValue = $model->name;
+            
+            // read your posted model attributes
+            if ($model->load($_POST)) {
+                // read or convert your posted information
+                $value = $model->name;
+                
+                // validate if any errors
+                if ($model->save()) {
+                    // return JSON encoded output in the below format on success with an empty `message`
+                    return ['output' => $value, 'message' => ''];
+                } else {
+                    // alternatively you can return a validation error (by entering an error message in `message` key)
+                    return ['output' => $oldValue, 'message' => 'Incorrect Value! Please reenter.'];
+                }
+            }
+            // else if nothing to do always return an empty JSON encoded output
+            else {
+                return ['output'=>'', 'message'=>''];
+            }
+        }
+
+        /////////////////////////////////////////////////////
+
+
         if(is_null($department)){
             $objUser = User::findOne(Yii::$app->user->id);
 
@@ -202,6 +237,13 @@ class ClassSubjectController extends Controller
         } else {
             $objDepartment = Department::findOne($department);
         }
+
+        if(is_null($objDepartment)){
+            // if no param is provided
+            $objDepartment = Department::find()->One();
+            $department = $objDepartment->id;
+        }
+
         if(is_null($class)){
             $classes = SchoolClass::find()->andFilterWhere(['department' => $department])->select('id')->distinct();
             
