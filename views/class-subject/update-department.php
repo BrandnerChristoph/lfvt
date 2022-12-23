@@ -99,13 +99,20 @@ $classList = SchoolClass::getArrayHelperList();
 
                 foreach($subjects as $classSubject){
                     echo "<tr>";
-                        echo "<td><center>";
-                            echo $classSubject->subject;
-                            if (!empty($classSubject->subjectItem->value))
-                                echo "<br /><small>".Yii::$app->formatter->asDecimal($classSubject->subjectItem->value,3) ."<br /></small>";
-                        echo "</center>
-                                <div id='".$classSubject->subject."' style='margin-top: -190px;'></div>
-                            </td>";
+                        $style = "";
+                        
+                        $classSubject->subjectItem->type == "Allgemeinbildenden Gegenstände" ? $style = "style='border-left: 3px solid green' title='Allgemein bildender Gegenstand'" : null;
+                        $classSubject->subjectItem->type == "Fachtheorie" ? $style = "style='border-left: 3px solid red' title='Fachtheorie'" : null;
+                        $classSubject->subjectItem->type == "Werkstatt" ? $style = "style='border-left: 3px solid blue' title='Werkstatt'" : null;
+
+                        echo "<td ".$style.">";
+                            echo "<center>";
+                                echo $classSubject->subject;
+                                if (!empty($classSubject->subjectItem->value))
+                                    echo "<br /><small>".Yii::$app->formatter->asDecimal($classSubject->subjectItem->value,3) ."<br /></small>";
+                            echo "</center>";
+                            echo "<div id='".$classSubject->subject."' style='margin-top: -190px;'></div>";
+                        echo "</td>";
 
                         
                             foreach($classes as $class){

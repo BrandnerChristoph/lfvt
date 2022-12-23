@@ -53,6 +53,7 @@ $lang = [
     'Create Subject' => 'Fach erstellen',
     'subject_value' => 'Wertigkeit',
     'sortorder' => 'Reihenfolge',
+    'subject_type' => 'Unterrichtstyp',
 
     // Fächerzuteilng
     'Class Subject' => 'Fächerzuweisung',

@@ -17,7 +17,7 @@ class SubjectSearch extends Subject
     public function rules()
     {
         return [
-            [['id', 'name'], 'safe'],
+            [['id', 'name', 'type'], 'safe'],
             [['updated_at', 'created_at', 'sortorder'], 'integer'],
         ];
     }
@@ -64,6 +64,7 @@ class SubjectSearch extends Subject
         ]);
 
         $query->andFilterWhere(['like', 'id', $this->id])
+            ->andFilterWhere(['like', 'type', $this->type])
             ->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;

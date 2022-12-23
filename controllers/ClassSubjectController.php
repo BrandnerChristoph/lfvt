@@ -252,7 +252,11 @@ class ClassSubjectController extends Controller
             $classes = SchoolClass::find()->andFilterWhere(['department' => $department])->andFilterWhere(['id' => $class])->select('id')->distinct();
         }
 
-        $classSubjects = ClassSubject::find()->andFilterWhere(['class' => $classes])->all();
+        $classSubjects = ClassSubject::find()
+                            //->join('left join', 'subject', 'class_subject.subject = subject.id')
+                            ->andFilterWhere(['class_subject.class' => $classes])
+                            //->orderBy('subject.sortorder asc, class_subject.subject')
+                            ->all();
 
         //if (ClassSubject::loadMultiple($classSubjects, Yii::$app->request->post()) && ClassSubject::validateMultiple($classSubjects)) {
         if (ClassSubject::loadMultiple($classSubjects, Yii::$app->request->post()) ) {
@@ -288,10 +292,13 @@ class ClassSubjectController extends Controller
             'classes' => is_null($class) ? SchoolClass::find()->andFilterWhere(['department' => $department])->distinct()->All() : SchoolClass::find()->andFilterWhere(['department' => $department])->andFilterWhere(['id' => $class])->distinct()->All(),
             //'subjects' => ClassSubject::find()->select('subject')->distinct('subject')->andFilterWhere(['class' => $classes])->orderBy('subject asc')->All(),
             'subjects' => ClassSubject::find()
-                            ->select('subject')
+                            ->join('left join', 'subject', 'class_subject.subject = subject.id')
+                            ->select('class_subject.subject, subject.sortorder')
                             ->distinct('subject')
-                            ->andFilterWhere(['class' => $classes])
-                            ->orderBy('subject asc')->All(),
+                            ->andFilterWhere(['class_subject.class' => $classes])
+                            //->orderBy('subject asc')
+                            ->orderBy('subject.sortorder asc, class_subject.subject')
+                            ->All(),
             'department' => $department,
             'objDepartment' => $objDepartment,
         ]);
