@@ -11,6 +11,7 @@ use app\models\ClassSubject;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use app\models\search\TeacherSearch;
+use app\models\SchoolClass;
 use app\models\search\ClassSubjectSearch;
 
 /**
@@ -44,14 +45,55 @@ class TeacherController extends Controller
     {
         $searchModel = new TeacherSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-        
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
     }
-    
+
+    /**
+     * Lists all Teacher models.
+     * @return mixed
+     */
+    public function actionIndexPart($department = null, $class = null, $type = null)
+    {
+        $searchModel = new TeacherSearch();
+        $params = $this->request->queryParams;
+        
+        if(!empty($class)){
+            $teacherList = ClassSubject::find()
+                                ->select('teacher')
+                                ->distinct('teacher')
+                                ->join('left join', "subject", "class_subject.subject = subject.id")
+                                ->andFilterWhere(['class_subject.class' => $class])                                
+                                ->andFilterWhere(['subject.type' => $type]);
+            
+        } else if(!empty($department)){
+            $classes = SchoolClass::find()->andFilterWhere(['department' => $department])->select('id')->distinct();
+            $teacherList = ClassSubject::find()
+                                ->select('teacher')
+                                ->distinct('teacher')
+                                ->join('left join', "subject", "class_subject.subject = subject.id")
+                                ->andFilterWhere(['class' => $classes])                                
+                                ->andFilterWhere(['subject.type' => $type]);
+        } 
+
+        if(!empty($teacherList)){
+            $params["TeacherSearch"]["teacherListPreset"] = $teacherList;
+        }
+
+        $dataProvider = $searchModel->searchWithPreset($params);
+
+        $dataProvider->pagination->pageSize = 500;
+
+        return $this->renderAjax('index-preview', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+        
+    }
+
     /**
      * Lists all Classes by Teacher.
      * @return mixed

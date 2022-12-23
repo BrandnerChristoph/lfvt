@@ -37,6 +37,18 @@ $classList = SchoolClass::getArrayHelperList();
 <div class="class-subject-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
+        <div class="col-lg-12 text-right">
+            <script>
+                function showTeacherInDepartment(){
+                    window.open("<?= Url::to(['/teacher/index-part', 
+                                                'department' => $department
+                                                ])?>",
+                                "Lehrerauslastung",
+                                "directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no,width=700,height=900");
+                }
+            </script>
+            <?= Html::a("Lehrer in der Abteilung", '#', ['onClick' => 'showTeacherInDepartment();']) ?>
+        </div>
     
         <div class="col-lg-12">
             <center>

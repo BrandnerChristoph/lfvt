@@ -11,6 +11,8 @@ use app\models\Teacher;
  */
 class TeacherSearch extends Teacher
 {
+
+    public $teacherListPreset;
     /**
      * {@inheritdoc}
      */
@@ -18,7 +20,7 @@ class TeacherSearch extends Teacher
     {
         return [
             [['id', 'created_at', 'updated_at'], 'integer'],
-            [['initial', 'name', 'firstname', 'email_1', 'email_2', 'phone', 'mobile'], 'safe'],
+            [['initial', 'name', 'firstname', 'email_1', 'email_2', 'phone', 'mobile', 'teacherListPreset'], 'safe'],
         ];
     }
 
@@ -62,10 +64,59 @@ class TeacherSearch extends Teacher
             'id' => $this->id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            //'initial'=> $this->initial,
         ]);
 
-        $query->andFilterWhere(['like', 'initial', $this->initial])
-            ->andFilterWhere(['like', 'name', $this->name])
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'initial', $this->initial])
+            ->andFilterWhere(['like', 'firstname', $this->firstname])
+            ->andFilterWhere(['like', 'email_1', $this->email_1])
+            ->andFilterWhere(['like', 'email_2', $this->email_2])
+            ->andFilterWhere(['like', 'phone', $this->phone])
+            ->andFilterWhere(['like', 'mobile', $this->mobile]);
+
+        return $dataProvider;
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function searchWithPreset($params)
+    {
+        $query = Teacher::find();
+
+        
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort' => ['defaultOrder'=> ['name' => SORT_ASC, 'firstname' => SORT_ASC, 'initial' => SORT_ASC]]
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere(['initial' => $this->teacherListPreset]);
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            //'initial'=> $this->initial,
+        ]);
+
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'initial', $this->initial])
             ->andFilterWhere(['like', 'firstname', $this->firstname])
             ->andFilterWhere(['like', 'email_1', $this->email_1])
             ->andFilterWhere(['like', 'email_2', $this->email_2])
