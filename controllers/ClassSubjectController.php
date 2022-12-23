@@ -134,6 +134,44 @@ class ClassSubjectController extends Controller
      * Creates a new ClassSubject model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     */    
+    public function actionAddSubjectToDepartment($id)
+    {
+        try {
+            $model = new ClassSubject();
+            $model->id = empty($id) ? uniqid() : $id;
+            $model->class = empty($class) ? null : $class;
+            $model->subject = empty($subject) ? null : $subject;
+            $model->value = 100;
+            $model->created_at = time();
+            $model->updated_at = time();
+
+            if ($this->request->isPost && $model->load($this->request->post())){
+                if($model->save(false)) {
+                    Yii::$app->session->setFlash('success', "Erstellung für die ".$model->class." wurde gespeichert.");
+                    
+                    $anchorLink = !empty($model->subject) ? $model->subject : "";
+                    return $this->redirect(Yii::$app->request->referrer. "#". $anchorLink);
+                    //return $this->redirect(Yii::$app->request->referrer);
+                }
+            } 
+
+            return $this->renderAjax('_form-create', [
+                'model' => $model,
+            ]);
+        } catch(Exception $ex){
+            Yii::$app->session->setFlash('error', "<b>Erstellung für die ".$model->class." wurde NICHT vorgenommen.</b><br />" . $ex->getMessage());
+            
+            $anchorLink = !empty($model->subject) ? $model->subject : "";
+            return $this->redirect(Yii::$app->request->referrer. "#". $anchorLink);
+            //return $this->redirect(Yii::$app->request->referrer);
+        }
+    }
+
+    /**
+     * Creates a new ClassSubject model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
      */
     public function actionUpdateItem($id)
     {

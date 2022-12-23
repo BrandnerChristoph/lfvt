@@ -229,8 +229,22 @@ $classList = SchoolClass::getArrayHelperList();
                                 echo "</td>";
                             }
                     echo "</tr>";
+
                 }
             ?>                
         </tbody>
     </table>
+
+    <div class="col-lg-12 text-center">
+        <a class="showModalButton btn btn-success"  
+            value="<?= Url::to(['add-subject-to-department', 
+                                    'id' => uniqid(), 
+                                    'department' => $department,
+                                    ]) ?>" 
+            href="#" 
+            title="neues Fach in der Abteilung hinzufügen">
+                <?= Icon::show('plus') . " neues Fach in Abteilung hinzufügen" ?>
+            </a>
+        
+    </div>
 </div>
