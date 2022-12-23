@@ -98,7 +98,7 @@ $classList = SchoolClass::getArrayHelperList();
                 $btnIndex = 1000;
 
                 foreach($subjects as $classSubject){
-                    echo "<tr>";
+                    echo "<tr style='height: 65px !important;'>";
                         $style = "";
                         
                         $classSubject->subjectItem->type == "Allgemeinbildenden Gegenstände" ? $style = "style='border-left: 3px solid green' title='".$classSubject->subjectItem->name." - ".$classSubject->subjectItem->type."'" : null;
