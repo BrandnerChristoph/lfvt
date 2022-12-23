@@ -102,7 +102,7 @@ $classList = SchoolClass::getArrayHelperList();
                         echo "<td><center>";
                             echo $classSubject->subject;
                             if (!empty($classSubject->subjectItem->value))
-                                echo "<br /><small>".Yii::$app->formatter->asDecimal($classSubject->subjectItem->value,3) ."</small>";
+                                echo "<br /><small>".Yii::$app->formatter->asDecimal($classSubject->subjectItem->value,3) ."<br /></small>";
                         echo "</center>
                                 <div id='".$classSubject->subject."' style='margin-top: -190px;'></div>
                             </td>";
