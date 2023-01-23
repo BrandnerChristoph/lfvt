@@ -179,9 +179,9 @@ $classList = SchoolClass::getArrayHelperList();
                                                                 echo "</span></b>";
                                                             }
                                                             echo "<small>";
-                                                                echo " " . $obj->hours;
+                                                                echo " " . Yii::$app->formatter->asDecimal($obj->hours, 1);
                                                                 if($obj->value != 100)
-                                                                    echo " (" . Yii::$app->formatter->asDecimal($obj->value, 1) . "%)";
+                                                                    echo " (" . Yii::$app->formatter->asDecimal($obj->value, 0) . "%)";
                                                             echo "</small>";
 
                                                             // edit item
