@@ -153,10 +153,11 @@ $classList = SchoolClass::getArrayHelperList();
                                             foreach($objList as $obj){                                                    
 
                                                 if(!is_null($obj)){
-                                                    
+                                                    echo "<strong>";
                                                     echo "<div class='' title='".$obj->teacher0->name." ".$obj->teacher0->firstname."' >";
                                                             if($obj->teacher == "?"){
-                                                                echo "<b><span style='color: red;'>";
+                                                                //echo "<b>";
+                                                                echo "<span style='color: red;'>";
                                                             }
 
                                                                 echo $obj->teacher;
@@ -176,17 +177,20 @@ $classList = SchoolClass::getArrayHelperList();
                                                                 ]);
                                                                 */
                                                             if($obj->teacher == "?"){
-                                                                echo "</span></b>";
+                                                                echo "</span>";
+                                                                //echo "</b>";
                                                             }
+                                                            echo "</strong>";
                                                             echo "<small>";
-                                                                echo " " . Yii::$app->formatter->asDecimal($obj->hours, 1);
+                                                                echo " <strong>" . Yii::$app->formatter->asDecimal($obj->hours, 1) . "</strong>";
+                                                                
                                                                 if($obj->value != 100)
                                                                     echo " (" . Yii::$app->formatter->asDecimal($obj->value, 0) . "%)";
                                                             echo "</small>";
 
                                                             // edit item
                                                             echo '<a class="showModalButton btn btn-sm" '
-                                                                        . 'style="font-size: 0.85rem; padding: 0.2rem 0.3rem;" '
+                                                                        . 'style="font-size: 0.85rem; color:grey; padding: 0.2rem 0.3rem;" '
                                                                         . 'value="' . Url::to(['update-item', 'id' => $obj->id]) . '" href="#" title="'.$classSubject->subject.' / '.$class->id.'">'
                                                                         . Icon::show('edit')        
                                                                         . '</a>';
@@ -196,7 +200,7 @@ $classList = SchoolClass::getArrayHelperList();
                                                                                 ["delete", 'id' => $obj->id], 
                                                                                 [
                                                                                     "class" => "btn btn-sm",
-                                                                                    "style" => "font-size: 0.85rem; padding: 0.2rem 0.3rem;" ,
+                                                                                    "style" => "font-size: 0.85rem; color:grey; padding: 0.2rem 0.3rem;" ,
                                                                                     'data' => [
                                                                                         //'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
                                                                                         'method' => 'post',
@@ -224,7 +228,8 @@ $classList = SchoolClass::getArrayHelperList();
                                             echo '</div>';
                                             */
                                             echo '<div style="text-align: right;">';
-                                                echo '<a class="showModalButton btn btn-sm btn-success" style="font-size:0.5rem;padding: 0.2rem 0.3rem;" 
+                                                // green button
+                                                echo '<a class="showModalButton btn btn-sm" style="background-color: #90ee90;font-size:0.5rem;padding: 0.2rem 0.3rem;" 
                                                             value="' . Url::to(['create-item', 
                                                                                     'id' => uniqid(), 
                                                                                     'class' => $class->id, 

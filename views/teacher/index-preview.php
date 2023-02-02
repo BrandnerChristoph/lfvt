@@ -44,6 +44,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 
             ]) ?>
     </div>
+
+    <script>
+        function showTeacherOverview(inTeacherId){
+            //alert(inTeacherId);
+            //var callUrl = <?= Url::to(['/teacher/print-lesson'])?>;
+            //var fullUrl = callUrl + "?id=" + inTeacherId;
+            var fullUrl = "index.php?r=teacher/print-lesson&id=" + inTeacherId;
+                                    
+            //alert(fullUrl)
+            window.open(fullUrl,
+                        "Lehrerverwendung",
+                        "directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no,width=750,height=900,top=100, left=200");
+        }
+    </script>
+    
+
     <?php //Pjax::begin(); ?>
 
     <?= GridView::widget([
@@ -59,7 +75,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     $strName = trim ($model->name . " " . $model->firstname);
                     !empty($strName) ? $strName = " <small>(" . $strName . ")</small>" : $strName = "";
-                    return trim("<b>" . $model->initial . "</b>" . $strName);
+                    //return trim("<b>" . $model->initial . "</b>" . $strName);
+
+                    
+                    return Html::a(trim("<b>" . $model->initial . "</b>" . $strName), '#', ['onClick' => 'showTeacherOverview("'.$model->id.'");']);
                 }
             ],
             //'initial',            
