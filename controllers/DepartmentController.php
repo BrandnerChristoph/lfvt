@@ -68,6 +68,8 @@ class DepartmentController extends Controller
     public function actionCreate()
     {
         $model = new Department();
+        $model->created_at = time();
+        $model->updated_at = time();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save(false)) {
