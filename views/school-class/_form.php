@@ -17,7 +17,7 @@ use app\models\DepartmentExtended;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'id')->textInput(['maxlength' => true, 'readonly' => true]) ?>
+    <?= $form->field($model, 'id')->textInput(['maxlength' => true, 'readonly' => !$model->isNewRecord]) ?>
 
     <?= $form->field($model, 'classname')->textInput(['maxlength' => true]) ?>
 
