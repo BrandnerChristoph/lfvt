@@ -204,6 +204,9 @@ class ClassSubjectController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if(empty($model->created_at))
+            $model->created_at = time();
+        $model->updated_at = time();
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
