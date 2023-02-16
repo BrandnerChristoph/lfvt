@@ -31,7 +31,7 @@ $this->registerJs($format, View::POS_HEAD);
         <div class="row">
             <?php // $form->field($model, 'id')->textInput(['maxlength' => true]) ?>
             <div class="col-lg-6">
-                <?= $form->field($model, 'class')->textInput(['maxlength' => true, 'readonly' => true])->label("Klasse") ?>
+                <?= $form->field($model, 'class')->textInput(['maxlength' => true, 'readonly' => false])->label("Klasse") ?>
                 </div>
             <div class="col-lg-6">
                 <?= $form->field($model, 'subject')->textInput(['maxlength' => true, 'readonly' => true]) ?>
