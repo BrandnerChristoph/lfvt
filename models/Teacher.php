@@ -142,11 +142,11 @@ class Teacher extends \yii\db\ActiveRecord
         {
             $objSubject = Subject::findOne($classSubItem->subject);
             $objClass  = SchoolClass::findOne($classSubItem->class);
-            
+
             if(!is_null($objSubject) && !is_null($objClass))
                 $sum = $sum + (($classSubItem->hours * ($classSubItem->value/100))*$objSubject->value * $objClass->annual_value);
         }
-        return $sum;
+        return round($sum, 3);
     }
 
     
