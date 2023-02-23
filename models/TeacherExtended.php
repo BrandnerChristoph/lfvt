@@ -53,7 +53,7 @@ class TeacherExtended extends Teacher
      *
      * @return array
      */
-    public static function getAllTeachersArrayMap(){
+    public static function getAllTeachersArrayMap($showInactive = false){
 
 /*
         SELECT distinct(teacher.id), `NAME`, `firstname`, `titel`, `teacher_fav`.`sort_helper` AS `sort_order` 
@@ -66,7 +66,8 @@ class TeacherExtended extends Teacher
 
         $objUser = User::findOne(Yii::$app->user->id);
         
-        $arrReturn =  ArrayHelper::map(TeacherExtended::find()
+        if($showInactive){
+            $arrReturn =  ArrayHelper::map(TeacherExtended::find()
                                         ->select('distinct(teacher.id) as id, name, firstname, initial as initial,  titel,  teacher_fav.sort_helper AS sort_order')
                                         //->select(['CASE WHEN teacher_fav.id IS NOT null THEN "Favoriten" ELSE "Lehrer" END AS sort_order'])
                                         //->leftJoin('teacher_fav','`teacher`.`id`= `teacher_fav`.`value` AND `teacher_fav`.`user_id` = "'.$objUser->username.'"')
@@ -82,6 +83,25 @@ class TeacherExtended extends Teacher
                                         return trim($model->name . " " . $model->firstname . " (" . $model->initial . ") " . $additionalInfo );
                                     }
                                 );
+            } else {
+                $arrReturn =  ArrayHelper::map(TeacherExtended::find()
+                                        ->select('distinct(teacher.id) as id, name, firstname, initial as initial,  titel,  teacher_fav.sort_helper AS sort_order')
+                                        //->select(['CASE WHEN teacher_fav.id IS NOT null THEN "Favoriten" ELSE "Lehrer" END AS sort_order'])
+                                        //->leftJoin('teacher_fav','`teacher`.`id`= `teacher_fav`.`value` AND `teacher_fav`.`user_id` = "'.$objUser->username.'"')
+                                        ->leftJoin('teacher_fav','`teacher`.`id`= `teacher_fav`.`value` AND `teacher_fav`.`user_id` = "'.strtoupper($objUser->username).'"')
+                                        ->andFilterWhere(['is_active' => 1])
+                                        ->orderBy('sort_order desc, teacher.id asc')
+                                        ->all(), 'id', 
+                                    function($model, $defaultValue){
+                                        $additionalInfo = "";
+                                        
+                                        if ($model->sort_order > 0)
+                                            $additionalInfo = " *";
+                                        
+                                        return trim($model->name . " " . $model->firstname . " (" . $model->initial . ") " . $additionalInfo );
+                                    }
+                                );
+            }
 
         //print_r($arrReturn);
         return $arrReturn;

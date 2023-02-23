@@ -1,8 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+//use yii\grid\GridView;
 use yii\widgets\Pjax;
+use kartik\grid\GridView;
+use yii\helpers\ArrayHelper;
 use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -19,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'initial', 
             'name',
             'firstname',
+            'is_active',
             'email_1:email',
             [
                 'attribute' => 'Stunden',
@@ -190,6 +193,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     return $strHours; 
                 },
+            ],
+            [
+                'attribute' => 'is_active',
+                'format' => "raw",
+                'value' => function($model) {
+                    if($model->is_active == 1)
+                        return "Ja";
+                    return "<span style='color: red;'>nein</span>";                    
+                },
+                'filter' => [1 => 'ja'],
+                'filterType' => GridView::FILTER_SELECT2,
+                'filterWidgetOptions' => [
+                    'options' => ['prompt' => ''],
+                    'pluginOptions' => ['allowClear' => true],
+                ],
             ],
 
             ['class' => 'yii\grid\ActionColumn'],

@@ -6,12 +6,13 @@ use Yii;
 use kartik\mpdf\Pdf;
 use app\models\Teacher;
 use yii\web\Controller;
+use app\models\SchoolClass;
+use kartik\form\ActiveForm;
 use yii\filters\VerbFilter;
 use app\models\ClassSubject;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use app\models\search\TeacherSearch;
-use app\models\SchoolClass;
 use app\models\search\ClassSubjectSearch;
 
 /**
@@ -139,9 +140,19 @@ class TeacherController extends Controller
     {
         $model = new Teacher();
 
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+          }
+
+//        if (Yii::$app->request->isPost && $model->validate()) {
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save(false)) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post()))
+                $model->id = $model->initial;
+                $model->created_at = time();
+                $model->updated_at = time();
+                if($model->save(false)) {
+                    return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();

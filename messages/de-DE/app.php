@@ -16,7 +16,7 @@ $lang = [
     // Lehrer 
     'Teachers' => 'Lehrer',
     'Create Teacher' => 'Lehrer erstellen',
-    'Inital' => 'Initialien',
+    'Initial' => 'Initialien',
     'Name' => 'Name',
     'Firstname' => 'Vorname',
     'Email 1' => 'Email',
@@ -24,6 +24,7 @@ $lang = [
     'Phone' => 'Telefon',
     'Mobile' => 'Mobilnummer',
     'Update Teacher: ' => 'Lehrer aktualisieren:',
+    'Is Active' => 'Aktiv?',
 
     // Lehrer Favoriten
     'Teacher Fav' => 'Lehrer-Favoriten',

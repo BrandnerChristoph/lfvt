@@ -45,7 +45,7 @@ class Teacher extends \yii\db\ActiveRecord
             [['initial'], 'string', 'max' => 5],
             [['name', 'firstname', 'email_1', 'email_2'], 'string', 'max' => 225],
             [['phone', 'mobile'], 'string', 'max' => 25],
-            [['id'], 'unique'],
+            [['id', 'initial'], 'unique'],
         ];
     }
 

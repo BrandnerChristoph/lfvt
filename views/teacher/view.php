@@ -20,10 +20,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php 
         $cols = [
-            'id',
+            //'id',
             'initial',
             'name',
             'firstname',
+            [
+                'attribute' => 'is_active',
+                'value' => function ($model) {
+                    if($model->is_active == 1)
+                        return "Ja";
+                    return "Nein";
+                }
+            ],
             'email_1:email',
             'email_2:email',
             'phone',
