@@ -298,6 +298,8 @@ class TeacherController extends Controller
                 $content .= "<div class=' text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . Yii::$app->formatter->asDecimal($itemSum,3);
                 if($classAnnualValue != 1){
                     $content .= "*";
+                } else {
+                    $content .= "&nbsp;";
                 }
                 $content .= "</b></div>";
             $content .= "</div>";
