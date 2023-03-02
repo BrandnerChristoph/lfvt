@@ -308,7 +308,7 @@ class TeacherController extends Controller
         
         $content .= "</div></div>";
         if ($isAnnualValueNotOne){
-            $content .= "<div>* ... für die Klasse werden Jahres-Prozentwerte verwendet </div>";
+            $content .= "<div><small><br />* ... für die Klasse werden Jahres-Prozentwerte verwendet</small></div>";
         }
 
         // setup kartik\mpdf\Pdf component
