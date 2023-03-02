@@ -243,6 +243,7 @@ class TeacherController extends Controller
     public function actionPrintLesson($id, $period = null)
     {
         $model = $this->findModel($id);
+        $isAnnualValueNotOne = false;
         
         $lessons = ClassSubject::find()->andFilterWhere(['teacher' => $id])->orderby('class asc')->All();
         
@@ -285,14 +286,28 @@ class TeacherController extends Controller
                     $content .= "</div>";
                 $content .= "<div class='col-xs-1 text-center' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $item->hours . " <br /><small>(" . Yii::$app->formatter->asDecimal($item->value,1) . "%)</small>" . "</div>";
                 
-                $itemSum = ($item->hours * $item->value / 100) * $item->subjectItem->value;
+                $classAnnualValue = 1;
+                $objClass = SchoolClass::findOne($item->class);
+                if(!is_null($objClass)){
+                    $classAnnualValue = $objClass->annual_value;
+                    $isAnnualValueNotOne = True;
+                }
 
-                $content .= "<div class=' text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . Yii::$app->formatter->asDecimal($itemSum,3)  . "</b></div>";
+                $itemSum = ($item->hours * $item->value / 100) * $item->subjectItem->value * $classAnnualValue;
+
+                $content .= "<div class=' text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . Yii::$app->formatter->asDecimal($itemSum,3);
+                if($classAnnualValue != 1){
+                    $content .= "*";
+                }
+                $content .= "</b></div>";
             $content .= "</div>";
         }
         
         
         $content .= "</div></div>";
+        if ($isAnnualValueNotOne){
+            $content .= "<div>* ... für die Klasse werden Jahres-Prozentwerte verwendet </div>";
+        }
 
         // setup kartik\mpdf\Pdf component
         $pdf = new Pdf([
