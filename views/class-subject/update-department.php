@@ -46,8 +46,16 @@ $classList = SchoolClass::getArrayHelperList();
                                 "Lehrerauslastung",
                                 "directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no,width=700,height=900");
                 }
+                function showAllTeachers(){
+                    window.open("<?= Url::to(['/teacher/index-part', 
+                                                ])?>",
+                                "Lehrerauslastung (alle Lehrer)",
+                                "directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no,width=700,height=900");
+                }
             </script>
-            <?= Html::a("Lehrer in der Abteilung", '#', ['onClick' => 'showTeacherInDepartment();']) ?>
+            
+            <?= Html::a("alle Lehrer", '#', ['onClick' => 'showAllTeachers();', 'class' =>'btn btn-success']) ?>
+            <?= Html::a("Lehrer in der Abteilung", '#', ['onClick' => 'showTeacherInDepartment();', 'class' =>'btn btn-primary']) ?>
         </div>
     
         <div class="col-lg-12">

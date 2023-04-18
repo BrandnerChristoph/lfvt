@@ -4,6 +4,7 @@ use yii\helpers\Html;
 //use yii\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\grid\GridView;
+
 use yii\helpers\ArrayHelper;
 use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
@@ -196,13 +197,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'is_active',
-                'format' => "raw",
+                'format' => "html",
                 'value' => function($model) {
                     if($model->is_active == 1)
                         return "Ja";
                     return "<span style='color: red;'>nein</span>";                    
                 },
-                'filter' => [1 => 'ja'],
+                'filter' => [1 => 'ja', 0 => 'nein'],
                 'filterType' => GridView::FILTER_SELECT2,
                 'filterWidgetOptions' => [
                     'options' => ['prompt' => ''],

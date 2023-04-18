@@ -28,7 +28,7 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'is_active')->widget(Select2::classname(),[
                             'data' => [1 => 'ja', 0 => 'nein'],
                             'options' => [
-                                'placeholder' => 'Abteilung',
+                                'placeholder' => 'aktiv / inaktiv',
                                 
                             ],
                             'pluginOptions' => [
