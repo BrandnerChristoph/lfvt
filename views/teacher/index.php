@@ -137,9 +137,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'Stunden',
                 'format' => 'raw',
                 'value' => function ($model) {
+
+                    $curHours =  $model->getHours();
+
                     $strReturn = "";
-                    $curHours = $model->hours;
-                    $curTeachingHours = $model->teachingHours;
+                    //$curHours = $model->hours;
+                    //$curTeachingHours = $model->teachingHours;
                     $min = -1;
                     $max = -1;
                     foreach($model->teacherWishlists as $listItem){
