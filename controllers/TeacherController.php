@@ -364,6 +364,6 @@ class TeacherController extends Controller
         if(!empty($id))
             $addInfo = "_".strtoupper($id);
 
-        echo $mpdf->Output('Lehrerzuweisung'.$addInfo.'.pdf', 'O');
+        echo $mpdf->Output('Lehrerzuweisung'.$addInfo.'.pdf', 'I');
     }
 }
