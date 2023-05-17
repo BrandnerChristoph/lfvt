@@ -362,7 +362,7 @@ class SchoolClassController extends Controller
             
             if($annualValueClass != 1){
                 $content .= "<div class='col-xs-12'>";
-                    $content .= "Für die Klasse wird ein Jahres-Prozentwerte von ".$annualValueClass."% verwendet.";
+                    $content .= "<br />Für die Klasse wird ein Jahres-Prozentwerte von ".Yii::$app->formatter->asDecimal($annualValueClass*100, 2)."% verwendet.";
                 $content .= "</div>";  
 
             }
