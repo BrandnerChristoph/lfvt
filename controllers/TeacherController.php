@@ -260,8 +260,8 @@ class TeacherController extends Controller
             //$content .= "<br />" . $model->name . " " . $model->firstname . "</h2>";
             
             $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Einheiten: " . Yii::$app->formatter->asDecimal($model->hours,3) . "</div>";
-            $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Werteinheiten (WE): " . Yii::$app->formatter->asDecimal($model->teachingHours,3) . "</div>";
             $content .= "<div class='col-xs-4 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Realstunden (RST): " . Yii::$app->formatter->asDecimal($model->realHours,2) . "</div>";
+            $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Werteinheiten (WE): " . Yii::$app->formatter->asDecimal($model->teachingHours,3) . "</div>";
             
             $content .= "<h3>Wunschliste</h3>";
             
@@ -297,8 +297,7 @@ class TeacherController extends Controller
                             $content .= ")</small>";
                             $content .= "<br /><small>" . $item->subjectItem->name . "</small>";
                             $content .= "</div>";
-                        $content .= "<div class='col-xs-1 text-center' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $item->hours . " <br /><small>(" . Yii::$app->formatter->asDecimal($item->value,1) . "%)</small>" . "</div>";
-                        
+
                         $classAnnualValue = 1;
                         $objClass = SchoolClass::findOne($item->class);
                         if(!is_null($objClass)){
@@ -306,22 +305,25 @@ class TeacherController extends Controller
                             if($classAnnualValue != 1)
                                 $isAnnualValueNotOne = True;
                         }
+
+                            $content .= "<div class='col-xs-1 text-center' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $item->hours * $classAnnualValue . " <br /><small>(" . Yii::$app->formatter->asDecimal($item->value,1) . "%)</small>" . "</div>";
+                        
+                        
     
-                        // Werteinheiten
-                            $itemSum = ($item->hours * $item->value / 100) * $item->subjectItem->value * $classAnnualValue;
-    
-                            $content .= "<div class='col-xs-1 text-right' style=''><b>" . Yii::$app->formatter->asDecimal($itemSum,3);
+                        // Realstunden
+                            $itemRealSum = ($item->hours * $item->value / 100) * $item->subjectItem->value_real * $classAnnualValue;
+                            $content .= "<div class=' text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . Yii::$app->formatter->asDecimal($itemRealSum,2);
                             if($classAnnualValue != 1){
                                 $content .= "*";
                             } else {
                                 $content .= "&nbsp;";
                             }
                             $content .= "</b></div>";
-                            
-   
-                        // Realstunden
-                            $itemRealSum = ($item->hours * $item->value / 100) * $item->subjectItem->value_real * $classAnnualValue;
-                            $content .= "<div class=' text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . Yii::$app->formatter->asDecimal($itemRealSum,2);
+
+                        // Werteinheiten
+                            $itemSum = ($item->hours * $item->value / 100) * $item->subjectItem->value * $classAnnualValue;
+    
+                            $content .= "<div class='col-xs-1 text-right' style=''><b>" . Yii::$app->formatter->asDecimal($itemSum,3);
                             if($classAnnualValue != 1){
                                 $content .= "*";
                             } else {
@@ -362,6 +364,6 @@ class TeacherController extends Controller
         if(!empty($id))
             $addInfo = "_".strtoupper($id);
 
-        echo $mpdf->Output('Lehrerzuweisung'.$addInfo.'.pdf', 'D');
+        echo $mpdf->Output('Lehrerzuweisung'.$addInfo.'.pdf', 'O');
     }
 }
