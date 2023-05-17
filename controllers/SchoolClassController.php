@@ -275,20 +275,20 @@ class SchoolClassController extends Controller
      */
     public function actionPrintSubjectGroup($id = null, $period = null)
     {
-        if(empty($id)){
-            $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->All();
+        if(is_null($id)){
+            $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->orderBy('id asc')->All();
         } else {
             $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->All();
         }
-
+        $content = "";
         foreach ($schoolClasses as $model){
             $cntEinheit = 0;
             $cntWerteinheit = 0;
             $cntRealWert = 0;
 
-            $model = $this->findModel($id);        
+            //$model = $this->findModel($id);        
             
-            $content = "<div class='container'><div class='row'>";
+            $content .= "<div class='container'><div class='row'>";
             $content .= "<h2>" . $model->id ."<br /><small>".$model->classname."</small></h2>";
             
             $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Klassenvorstand</div> ";
@@ -299,10 +299,8 @@ class SchoolClassController extends Controller
             
             // Stundentafel
             $content .= "<h3 style='border-top: 1px solid #1450A0; padding-top: 10;'>Gegenstände nach Fach sortiert</h3>";
-            
             $lessons = ClassSubject::find()->select('subject')->distinct()->orderby('subject asc')->andFilterWhere(['class' => $id])->all(); //->andFilterWhere(['class' => $id])->distinct('subject')->All();
             
-
             $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Fach</b></div>";
             $content .= "<div class='col-xs-7'>";
                 $content .= "<div class='col-xs-3' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Lehrer</b></div>";
@@ -345,13 +343,6 @@ class SchoolClassController extends Controller
                         }
 
                     $content .= "</div>";
-                    //$content .= "<div class='text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>";
-                    //$content .= $cntItemEinheit;
-                    //$content .= "<br /><small>" . Yii::$app->formatter->asDecimal($cntItemWerteinheit,3) . "</small>";
-                    //$content .= "</div>";
-                    
-                    
-
                 $content .= "</div>";                                        
             }
 
@@ -364,8 +355,7 @@ class SchoolClassController extends Controller
                 
                 $content .= "<div class='col-xs-7 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Realeinheiten</div>";
                 $content .= "<div class='col-xs-5 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>".Yii::$app->formatter->asDecimal($cntRealWert, 3) ."</div>";
-            $content .= "</div>";                   
-
+            $content .= "</div>";     
             
             $content .= "</div></div>";
             $content .= "<pagebreak></pagebreak>";
