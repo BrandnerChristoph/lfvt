@@ -277,12 +277,13 @@ class SchoolClassController extends Controller
      */
     public function actionPrintSubjectGroup($id = null, $period = null)
     {
-        try {
+        
             if(is_null($id)){
                 $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->orderBy('id asc')->All();
                 ini_set('memory_limit', '1024M');
             } else {
                 $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->All();
+                ini_set('memory_limit', '256M');
             }
             $content = "";
             foreach ($schoolClasses as $model){
@@ -409,11 +410,6 @@ class SchoolClassController extends Controller
             
             // return the pdf output as per the destination setting
             return $pdf->render(); 
-        } catch(Exception $ex){
-            echo $ex->getMessage();
-        } finally{
-            ini_set('memory_limit', '256M');
-        }
     }
 
      /**

@@ -247,8 +247,10 @@ class TeacherController extends Controller
         $content = "";
         if(is_null($id)){
             $teachers = Teacher::find()->andWhere('length(id) > 1')->all();
+            ini_set('memory_limit', '1024M');
         } else {
             $teachers = Teacher::find()->andFilterWhere(['id' => $id])->limit(20)->all();
+            ini_set('memory_limit', '256M');
         }
         //$content .= "<link rel='stylesheet' href='@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css'>";
         foreach ($teachers as $model) {
