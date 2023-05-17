@@ -4,15 +4,17 @@ namespace app\controllers;
 
 use Yii;
 use kartik\mpdf\Pdf;
+use app\models\Teacher;
 use yii\web\Controller;
 use app\models\Department;
+use app\models\TeacherFav;
+use mdm\admin\models\User;
+use app\models\SchoolClass;
 use yii\filters\VerbFilter;
 use app\models\ClassSubject;
-use app\models\SchoolClass;
+use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use app\models\search\DepartmentSearch;
-use app\models\Teacher;
-use yii\helpers\ArrayHelper;
 
 /**
  * DepartmentController implements the CRUD actions for Department model.
@@ -68,6 +70,79 @@ class ReportPrintController extends Controller
             'methods' => [ 
                 'SetHeader'=>['<img src="img/htl_logo.png" style="height: 30px;">||HTL Waidhofen/Ybbs<br /><small>3340 Waidhofen an der Ybbs, Im Vogelsang 8</small>'], 
                 'SetFooter'=>['||'],
+            ]
+        ]);
+
+        // return the pdf output as per the destination setting
+        return $pdf->render();  
+   }
+
+   public function actionDepartmentOverview($department = null)
+    {
+        $class = null;
+        if(is_null($department)){
+            $objUser = User::findOne(Yii::$app->user->id);
+
+            $objFavDepartment = TeacherFav::find()
+                                            ->andFilterWhere(['type' => 'lfvt_default_department'])
+                                            ->andFilterWhere(['user_id' => $objUser->username])
+                                            ->One();
+            if(!is_null($objFavDepartment)){
+                $department = $objFavDepartment->value;            
+            }
+
+            $objDepartment = Department::findOne($department); //->orderBy('id asc')->One();
+            if(!is_null($objDepartment))
+                $department = $objDepartment->id;
+        } else {
+            $objDepartment = Department::findOne($department);
+        }
+
+        if(is_null($objDepartment)){
+            // if no param is provided
+            $objDepartment = Department::find()->One();
+            $department = $objDepartment->id;
+        }
+        $classes = SchoolClass::find()->andFilterWhere(['department' => $department])->select('id')->distinct();
+        
+        $classSubjects = ClassSubject::find()
+                            //->join('left join', 'subject', 'class_subject.subject = subject.id')
+                            ->andFilterWhere(['class_subject.class' => $classes])
+                            //->orderBy('subject.sortorder asc, class_subject.subject')
+                            ->all();
+        
+        $content = $this->renderPartial('/report/department-overview', [
+                                'classSubjects' => $classSubjects, 
+                                'classes' => is_null($class) ? SchoolClass::find()->andFilterWhere(['department' => $department])->distinct()->All() : SchoolClass::find()->andFilterWhere(['department' => $department])->andFilterWhere(['id' => $class])->distinct()->All(),
+                                //'subjects' => ClassSubject::find()->select('subject')->distinct('subject')->andFilterWhere(['class' => $classes])->orderBy('subject asc')->All(),
+                                'subjects' => ClassSubject::find()
+                                                ->join('left join', 'subject', 'class_subject.subject = subject.id')
+                                                ->select('class_subject.subject, subject.sortorder')
+                                                ->distinct('subject')
+                                                ->andFilterWhere(['class_subject.class' => $classes])
+                                                //->orderBy('subject asc')
+                                                ->orderBy('subject.sortorder asc, class_subject.subject')
+                                                ->All(),
+                                'department' => $department,
+                                'objDepartment' => $objDepartment,
+                            ]);
+        //$content = $this->render();
+        
+
+        // setup kartik\mpdf\Pdf component
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_CORE, 
+            'format' => Pdf::FORMAT_A4, 
+            'orientation' => Pdf::ORIENT_PORTRAIT, 
+            'marginTop' => 25, 
+            'destination' => Pdf::DEST_BROWSER, 
+            'content' => $content,  
+            'cssFile' => '@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css',
+            'cssInline' => '.kv-heading-1{font-size:18px;}', 
+            'options' => ['title' => 'Abteilung '],
+            'methods' => [ 
+                'SetHeader'=>['<img src="img/htl_logo.png" style="height: 30px;">||HTL Waidhofen/Ybbs<br /><small>3340 Waidhofen an der Ybbs, Im Vogelsang 8</small>'], 
+                'SetFooter'=>['Lehrfächerverteilung||'.$department],
             ]
         ]);
 
