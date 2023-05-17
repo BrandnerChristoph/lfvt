@@ -314,7 +314,13 @@ class SchoolClassController extends Controller
         return $pdf->render(); 
     }
 
-
+    
+    /**
+     * HTML Content for Teacher
+     *
+     * @param  mixed $model
+     * @return void
+     */
     public static function getTeacherListContent($model){
         $content = "<div class='container'><div class='row'>";
         $content .= "<h2>" . $model->id ."<br /><small>".$model->classname."</small></h2>";

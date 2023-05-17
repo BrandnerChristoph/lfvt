@@ -155,6 +155,25 @@ class Teacher extends \yii\db\ActiveRecord
         return round($sum, 3);
     }
 
+    /**
+     * return the sum of teaching-hours (with value of class)
+     */
+    public function getRealHours()
+    {
+        $listClassSub = ClassSubject::find()->andFilterWhere(['teacher'=> $this->id])->all();
+
+        $sum = 0;
+        foreach($listClassSub as $classSubItem)
+        {
+            $objSubject = Subject::findOne($classSubItem->subject);
+            $objClass  = SchoolClass::findOne($classSubItem->class);
+
+            if(!is_null($objSubject) && !is_null($objClass))
+                $sum = $sum + (($classSubItem->hours * ($classSubItem->value/100))*$objSubject->value_real * $objClass->annual_value);
+        }
+        return round($sum, 3);
+    }
+
     
     /**
      * return an array with 

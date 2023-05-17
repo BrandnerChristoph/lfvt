@@ -71,6 +71,7 @@ class SubjectController extends Controller
     public function actionCreate()
     {
         $model = new Subject();
+        $model->value_real = 1;
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save(false)) {
@@ -95,6 +96,7 @@ class SubjectController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->value_real = empty($model->value_real) ? 1 : $model->value_real;
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save(false)) {
             return $this->redirect(['view', 'id' => $model->id]);

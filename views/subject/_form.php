@@ -10,38 +10,54 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="subject-form">
-
+    
     <?php $form = ActiveForm::begin(); ?>
+    
+        <div class="row">
+            <div class="col-lg-3">
+                <?= $form->field($model, 'id')->textInput(['maxlength' => true, 'readonly' => !$model->isNewRecord]) ?>
+            </div>
 
-    <?= $form->field($model, 'id')->textInput(['maxlength' => true, 'readonly' => !$model->isNewRecord]) ?>
+            <div class="col-lg-9">
+                <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+            </div>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'value')->textInput(['maxlength' => true]) ?>
+            </div>
 
-    <?= $form->field($model, 'value')->textInput(['maxlength' => true]) ?>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'value_real')->textInput(['maxlength' => true]) ?>
+            </div>
 
-    <?= $form->field($model, 'type')->widget(Select2::classname(),[
-                        'data' => [
-                                    'Allgemeinbildenden Gegenstände' => 'Allgemeinbildenden Gegenstände', 
-                                    'Fachtheorie' => 'Fachtheorie',
-                                    'Werkstatt' => 'Werkstatt',
-                                ],
-                        'options' => [
-                            'placeholder' => 'Unterrichtstyp',                            
-                        ],
-                        'pluginOptions' => [
-                            'allowClear' => false,
-                            'multiple' => false,
-                        ]
-                    ]) 
-    ?>
+            <div class="col-lg-8">
+                <?= $form->field($model, 'type')->widget(Select2::classname(),[
+                                    'data' => [
+                                                'Allgemeinbildenden Gegenstände' => 'Allgemeinbildenden Gegenstände', 
+                                                'Fachtheorie' => 'Fachtheorie',
+                                                'Werkstatt' => 'Werkstatt',
+                                            ],
+                                    'options' => [
+                                        'placeholder' => 'Unterrichtstyp',                            
+                                    ],
+                                    'pluginOptions' => [
+                                        'allowClear' => false,
+                                        'multiple' => false,
+                                    ]
+                                ]) 
+                ?>
+            </div>
 
-    <?= $form->field($model, 'sortorder')->textInput(['maxlength' => true]) ?>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'sortorder')->textInput(['maxlength' => true]) ?>
+            </div>
 
+            
 
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
-    </div>
+            <div class="form-group col-lg-12 text-center">
+                    <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success text-center']) ?>
+            </div>
 
+        </div>
     <?php ActiveForm::end(); ?>
-
 </div>

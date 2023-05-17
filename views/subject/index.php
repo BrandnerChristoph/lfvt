@@ -38,6 +38,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'contentOptions' => ['style'=>'text-align: right;'],
                 ],
+                [
+                    'attribute' => 'value_real',
+                    'format' => 'raw',
+                    'value' => function($model){
+                        return Yii::$app->formatter->asDecimal($model->value, 3);
+                    },
+                    'contentOptions' => ['style'=>'text-align: right;'],
+                ],
                 'sortorder',
                 'updated_at:datetime',
                 'created_at:datetime',
@@ -61,6 +69,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function($model){
                     return Yii::$app->formatter->asDecimal($model->value, 3);
+                },
+                'contentOptions' => ['style'=>'text-align: right;'],
+            ],
+            [
+                'attribute' => 'value_real',
+                'format' => 'raw',
+                'value' => function($model){
+                    return Yii::$app->formatter->asDecimal($model->value_real, 3);
                 },
                 'contentOptions' => ['style'=>'text-align: right;'],
             ],

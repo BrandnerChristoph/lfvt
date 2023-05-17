@@ -52,7 +52,8 @@ $lang = [
     'Subject' => 'Fach',
     'Subjects' => 'Fächer',
     'Create Subject' => 'Fach erstellen',
-    'subject_value' => 'Wertigkeit',
+    'subject_value' => 'Werteinheit',
+    'real_value' => 'Realstunden',
     'sortorder' => 'Reihenfolge',
     'subject_type' => 'Unterrichtstyp',
 
