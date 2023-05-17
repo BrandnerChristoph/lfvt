@@ -321,15 +321,18 @@ class SchoolClassController extends Controller
                                                     ->orderby('teacher asc')
                                                     ->all();
 
+                    $annualValueClass = $model->annual_value;
+
                     $content .= "<div class='col-xs-7'>";
                         foreach($teacherItems as $element){
 
                             //$cntItemEinheit += $element->hours * ($element->value/100);
                             //$strContent .= $element->teacher0->name . " " . $element->teacher0->firstname . " (".$element->teacher.") - " . $element->hours . " Einh. (".Yii::$app->formatter->asDecimal($element->value,1)."%)<br />";
                         
-                            $cntItemEinheit = $element->hours * ($element->value/100);
-                            $cntItemWerteinheit = ($element->hours * ($element->value/100) * $element->subjectItem->value);
-                            $cntItemRealWert = ($element->hours * ($element->value/100) * $element->subjectItem->value_real);
+
+                            $cntItemEinheit = $element->hours * ($element->value/100) * $annualValueClass;
+                            $cntItemWerteinheit = ($element->hours * ($element->value/100) * $element->subjectItem->value) * $annualValueClass;
+                            $cntItemRealWert = ($element->hours * ($element->value/100) * $element->subjectItem->value_real) * $annualValueClass;
                             $prozJahr = ($element->value) == 100 ? "" : "<small> (".$element->value . "%)</small>";
                             
                             $content .= "<div class='col-xs-3' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $element->teacher0->id . $prozJahr . "</div>";
