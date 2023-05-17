@@ -277,6 +277,7 @@ class SchoolClassController extends Controller
     {
         if(is_null($id)){
             $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->orderBy('id asc')->All();
+            ini_set('memory_limit', '1024M');
         } else {
             $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->All();
         }
@@ -404,6 +405,7 @@ class SchoolClassController extends Controller
 
         
         // return the pdf output as per the destination setting
+        ini_set('memory_limit', '256M');
         return $pdf->render(); 
     }
 
