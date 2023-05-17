@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'value_real',
                     'format' => 'raw',
                     'value' => function($model){
-                        return Yii::$app->formatter->asDecimal($model->value, 3);
+                        return Yii::$app->formatter->asDecimal($model->value, 2);
                     },
                     'contentOptions' => ['style'=>'text-align: right;'],
                 ],
@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'value_real',
                 'format' => 'raw',
                 'value' => function($model){
-                    return Yii::$app->formatter->asDecimal($model->value_real, 3);
+                    return Yii::$app->formatter->asDecimal($model->value_real, 2);
                 },
                 'contentOptions' => ['style'=>'text-align: right;'],
             ],
