@@ -45,7 +45,7 @@ $this->registerJs($format, View::POS_HEAD);
                 <?= $form->field($model, 'hours', ['inputOptions' => ['autofocus' => 'autofocus']])->textInput(['maxlength' => true]) ?>
             </div>
 
-            <div class="col-lg-12">
+            <div class="col-lg-6">
                 <?= $form->field($model, 'teacher')->widget(Select2::classname(),[
                                 'data' => TeacherExtended::getAllTeachersArrayMap(),
                                 'options' => [
@@ -61,6 +61,9 @@ $this->registerJs($format, View::POS_HEAD);
                                 ],
                             ])->label("Lehrer")
                 ?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'classroom')->textInput(['maxlength' => true]) ?>
             </div>
 
             <?php //= $form->field($model, 'classroom')->textInput(['maxlength' => true]) ?>

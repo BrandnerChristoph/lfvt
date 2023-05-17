@@ -72,6 +72,7 @@ $lang = [
     'Report.TeacherByClass' => 'Klassenlehrer',
     'Report.TeacherWorkload' => 'Lehrerauslastung',
     'Report.TeacherWorkloadPerDepartment' => 'Lehreauslastung je Abteilung',
+    'Report.AllTeacherWorkload' => 'Lehrer Fächerzuteilung',
 
 ];
 

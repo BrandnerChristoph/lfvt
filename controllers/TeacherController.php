@@ -240,95 +240,109 @@ class TeacherController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionPrintLesson($id, $period = null)
+    public function actionPrintLesson($id = null, $period = null)
     {
-        $model = $this->findModel($id);
-        $isAnnualValueNotOne = false;
-        
-        $lessons = ClassSubject::find()->andFilterWhere(['teacher' => $id])->orderby('class asc')->All();
-        
-        //$content = $this->renderPartial('_reportView');
-    
-        $content = "<div class='container'><div class='row'>";
-        $content .= "<h2>" . $model->name . " " . $model->firstname . "</h2>";
-
-        //$content .= "<br />" . $model->name . " " . $model->firstname . "</h2>";
-        
-        $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Einheiten: " . Yii::$app->formatter->asDecimal($model->hours,3) . "</div>";
-        $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Werteinheiten: " . Yii::$app->formatter->asDecimal($model->teachingHours,3) . "</div>";
-        $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Realstunden: " . Yii::$app->formatter->asDecimal($model->realHours,2) . "</div>";
-        $content .= "<h3>Wunschliste</h3>";
-          
-        if(sizeof($model->teacherWishlists) == 0)
-            $content .= "<div class='col-xs-12' style='padding:0px 0px 0px 0px; margin: 0px !important;'>-</div>";
-
-        foreach($model->teacherWishlists as $wl){
-            $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Minimum: " . Yii::$app->formatter->asDecimal($wl->hours_min,3) . "</div>";
-            $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Maximum: " . Yii::$app->formatter->asDecimal($wl->hours_max,3) . "</div>";
-            $content .= "<div class='col-xs-12' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $wl->info . "</div>";
+        $content = "";
+        if(is_null($id)){
+            $teachers = Teacher::find()->all();
+        } else {
+            $teachers = Teacher::find()->andFilterWhere(['id' => $id])->all();
         }
 
+        foreach ($teachers as $model) {    
+            //$model = $this->findModel($id);
+            $isAnnualValueNotOne = false;
+            
+            $lessons = ClassSubject::find()->andFilterWhere(['teacher' => $id])->orderby('class asc')->All();
+            
+            //$content = $this->renderPartial('_reportView');
+        
+            $content .= "<div class='container'><div class='row'>";
+            $content .= "<h2>" . $model->name . " " . $model->firstname . "</h2>";
 
-        $content .= "<h2 style='border-top: 1px solid #1450A0; padding-top: 10;'>Unterricht</h2>";
+            //$content .= "<br />" . $model->name . " " . $model->firstname . "</h2>";
+            
+            $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Einheiten: " . Yii::$app->formatter->asDecimal($model->hours,3) . "</div>";
+            $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Werteinheiten (WE): " . Yii::$app->formatter->asDecimal($model->teachingHours,3) . "</div>";
+            $content .= "<div class='col-xs-4 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Realstunden (RST): " . Yii::$app->formatter->asDecimal($model->realHours,2) . "</div>";
+            $content .= "<h3>Wunschliste</h3>";
+            
+            if(sizeof($model->teacherWishlists) == 0)
+                $content .= "<div class='col-xs-12' style='padding:0px 0px 0px 0px; margin: 0px !important;'>-</div>";
 
-        $content .= "<div style='border-bottom: 3px solid black;'>" ;
-                $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Klasse</div>";
-                $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Fach</div>";
-                $content .= "<div class='col-xs-1  text-center' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Einh.</div>";
-                $content .= "<div class='col-xs-1 text-right' style=''><b>WE</div>";
-                $content .= "<div class=' text-right' style=' padding:0px 0px 0px 0px; margin: 0px !important;'><b>RST </div>";
-            $content .= "</b></div>";
-        foreach($lessons as $item){
-            $content .= "<div style='border-bottom: 1px solid grey;'>" ;
-                $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'>";
-                empty($item->class) ? $content .= "&nbsp;" : $content .= $item->class;
-                $content .= "</div>";
-                $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $item->subject;
-                    $content .= " <small>(WE: " . Yii::$app->formatter->asDecimal($item->subjectItem->value, 3);
-                    if(!empty($item->subjectItem->value_real))
-                        $content .= " / RST: " . Yii::$app->formatter->asDecimal($item->subjectItem->value_real, 2);
-                    $content .= ")</small>";
-                    $content .= "<br /><small>" . $item->subjectItem->name . "</small>";
+            foreach($model->teacherWishlists as $wl){
+                $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Minimum: " . Yii::$app->formatter->asDecimal($wl->hours_min,3) . "</div>";
+                $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Maximum: " . Yii::$app->formatter->asDecimal($wl->hours_max,3) . "</div>";
+                $content .= "<div class='col-xs-12' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $wl->info . "</div>";
+            }
+
+
+            $content .= "<h2 style='border-top: 1px solid #1450A0; padding-top: 10;'>Unterricht</h2>";
+
+            $content .= "<div style='border-bottom: 3px solid black;'>" ;
+                    $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Klasse</div>";
+                    $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Fach</div>";
+                    $content .= "<div class='col-xs-1  text-center' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Einh.</div>";
+                    $content .= "<div class='col-xs-1 text-right' style=''><b>WE</div>";
+                    $content .= "<div class=' text-right' style=' padding:0px 0px 0px 0px; margin: 0px !important;'><b>RST </div>";
+                $content .= "</b></div>";
+            foreach($lessons as $item){
+                $content .= "<div style='border-bottom: 1px solid grey;'>" ;
+                    $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'>";
+                    empty($item->class) ? $content .= "&nbsp;" : $content .= $item->class;
                     $content .= "</div>";
-                $content .= "<div class='col-xs-1 text-center' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $item->hours . " <br /><small>(" . Yii::$app->formatter->asDecimal($item->value,1) . "%)</small>" . "</div>";
-                
-                $classAnnualValue = 1;
-                $objClass = SchoolClass::findOne($item->class);
-                if(!is_null($objClass)){
-                    $classAnnualValue = $objClass->annual_value;
-                    $isAnnualValueNotOne = True;
-                }
-
-                // Werteinheiten
-                    $itemSum = ($item->hours * $item->value / 100) * $item->subjectItem->value * $classAnnualValue;
-
-                    $content .= "<div class='col-xs-1 text-right' style=''><b>" . Yii::$app->formatter->asDecimal($itemSum,3);
-                    if($classAnnualValue != 1){
-                        $content .= "*";
-                    } else {
-                        $content .= "&nbsp;";
+                    $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $item->subject;
+                        $content .= " <small>(WE: " . Yii::$app->formatter->asDecimal($item->subjectItem->value, 3);
+                        if(!empty($item->subjectItem->value_real))
+                            $content .= " / RST: " . Yii::$app->formatter->asDecimal($item->subjectItem->value_real, 2);
+                        $content .= ")</small>";
+                        $content .= "<br /><small>" . $item->subjectItem->name . "</small>";
+                        $content .= "</div>";
+                    $content .= "<div class='col-xs-1 text-center' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $item->hours . " <br /><small>(" . Yii::$app->formatter->asDecimal($item->value,1) . "%)</small>" . "</div>";
+                    
+                    $classAnnualValue = 1;
+                    $objClass = SchoolClass::findOne($item->class);
+                    if(!is_null($objClass)){
+                        $classAnnualValue = $objClass->annual_value;
+                        if($classAnnualValue != 1)
+                            $isAnnualValueNotOne = True;
                     }
-                    $content .= "</b></div>";
 
-                // Realstunden
-                    $itemRealSum = ($item->hours * $item->value / 100) * $item->subjectItem->value_real * $classAnnualValue;
-                    $content .= "<div class=' text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . Yii::$app->formatter->asDecimal($itemRealSum,2);
-                    if($classAnnualValue != 1){
-                        $content .= "*";
-                    } else {
-                        $content .= "&nbsp;";
-                    }
-                    $content .= "</b></div>";
+                    // Werteinheiten
+                        $itemSum = ($item->hours * $item->value / 100) * $item->subjectItem->value * $classAnnualValue;
 
-            $content .= "</div>";
+                        $content .= "<div class='col-xs-1 text-right' style=''><b>" . Yii::$app->formatter->asDecimal($itemSum,3);
+                        if($classAnnualValue != 1){
+                            $content .= "*";
+                        } else {
+                            $content .= "&nbsp;";
+                        }
+                        $content .= "</b></div>";
+
+                    // Realstunden
+                        $itemRealSum = ($item->hours * $item->value / 100) * $item->subjectItem->value_real * $classAnnualValue;
+                        $content .= "<div class=' text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . Yii::$app->formatter->asDecimal($itemRealSum,2);
+                        if($classAnnualValue != 1){
+                            $content .= "*";
+                        } else {
+                            $content .= "&nbsp;";
+                        }
+                        $content .= "</b></div>";
+
+                $content .= "</div>";
+            }
+            
+            
+            $content .= "</div></div>";
+            if ($isAnnualValueNotOne){
+                $content .= "<div><small><br />* ... für die Klasse werden Jahres-Prozentwerte verwendet</small></div>";
+            }
+            $content .= "<pagebreak></pagebreak>";
         }
-        
-        
-        $content .= "</div></div>";
-        if ($isAnnualValueNotOne){
-            $content .= "<div><small><br />* ... für die Klasse werden Jahres-Prozentwerte verwendet</small></div>";
-        }
-        $content .= "<div><small><br /><i>Legende</i><br />WE  ... Werteinheiten<br />RST ... Realstunden</small></div>";
+        //$content .= "<div><small><br /><i>Legende</i><br />&nbsp;&nbsp;WE &nbsp;... Werteinheiten<br />&nbsp;&nbsp;RST ... Realstunden</small></div>";
+
+        // remove last pagebreak;
+        $content = substr($content, 0, strlen($content)-23);
 
         // setup kartik\mpdf\Pdf component
         $pdf = new Pdf([

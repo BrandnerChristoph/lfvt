@@ -15,6 +15,8 @@ use kartik\editable\Editable;
 //use kartik\widgets\ActiveForm;
 
 use app\models\TeacherExtended;
+use yii\web\UrlManager;
+
 use function PHPSTORM_META\type;
 
 /* @var $this yii\web\View */
@@ -56,6 +58,7 @@ $classList = SchoolClass::getArrayHelperList();
             
             <?= Html::a("alle Lehrer", '#', ['onClick' => 'showAllTeachers();', 'class' =>'btn btn-success']) ?>
             <?= Html::a("Lehrer in der Abteilung", '#', ['onClick' => 'showTeacherInDepartment();', 'class' =>'btn btn-primary']) ?>
+            <?= Html::a(Icon::show('print'), Url::to(["/report-print/department-overview", 'department'=> $department]), ['class' =>'btn btn-primary']) ?>
         </div>
     
         <div class="col-lg-12">
