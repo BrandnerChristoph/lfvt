@@ -312,7 +312,7 @@ class TeacherController extends Controller
     
                         // Realstunden
                             $itemRealSum = ($item->hours * $item->value / 100) * $item->subjectItem->value_real * $classAnnualValue;
-                            $content .= "<div class=' text-right' ><b>" . Yii::$app->formatter->asDecimal($itemRealSum,2);
+                            $content .= "<div class='col-xs-1 text-right' ><b>" . Yii::$app->formatter->asDecimal($itemRealSum,2);
                             if($classAnnualValue != 1){
                                 $content .= "*";
                             } else {
@@ -323,7 +323,7 @@ class TeacherController extends Controller
                         // Werteinheiten
                             $itemSum = ($item->hours * $item->value / 100) * $item->subjectItem->value * $classAnnualValue;
     
-                            $content .= "<div class='col-xs-1 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . Yii::$app->formatter->asDecimal($itemSum,3);
+                            $content .= "<div class=' text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . Yii::$app->formatter->asDecimal($itemSum,3);
                             if($classAnnualValue != 1){
                                 $content .= "*";
                             } else {
