@@ -360,6 +360,10 @@ class TeacherController extends Controller
         $stylesheet = file_get_contents('../vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css'); // external css
         $mpdf->WriteHTML($stylesheet,1);
         $mpdf->WriteHTML($content,2);
+        /*
+        $mpdf->WriteHTML(substr($content, 0, strlen($content)/2),2);
+        $mpdf->WriteHTML(substr($content, strlen($content)/2),2);
+        */
         //$mpdf->render($content); // call mpdf write html
         
         $addInfo = "";

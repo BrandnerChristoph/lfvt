@@ -377,7 +377,7 @@ class SchoolClassController extends Controller
             }
 
             $content = substr($content, 0, strlen($content)-23);
-
+/*
             // setup kartik\mpdf\Pdf component
             $pdf = new Pdf([
                 // set to use core fonts only
@@ -410,6 +410,24 @@ class SchoolClassController extends Controller
             
             // return the pdf output as per the destination setting
             return $pdf->render(); 
+            */
+
+        $pdf = new Pdf();
+        $mpdf = $pdf->api; // fetches mpdf api
+        $mpdf->SetHeader('<img src="img/htl_logo.png" style="height: 30px;">||HTL Waidhofen/Ybbs<br /><small>3340 Waidhofen an der Ybbs, Im Vogelsang 8</small>');
+        $mpdf->SetFooter(strtoupper($id).'||');
+        $stylesheet = file_get_contents('../vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css'); // external css
+        $mpdf->WriteHTML($stylesheet,1);
+        $mpdf->WriteHTML($content,2);
+        /*
+        $mpdf->WriteHTML(substr($content, 0, strlen($content)/2),2);
+        $mpdf->WriteHTML(substr($content, strlen($content)/2),2);
+        */
+        $addInfo = "";
+        if(!empty($id))
+            $addInfo = "_".strtoupper($id);
+            
+        echo $mpdf->Output('Lehrerzuweisung'.$addInfo.'.pdf', 'I');
     }
 
      /**
