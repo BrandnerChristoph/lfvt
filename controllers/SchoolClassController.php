@@ -144,8 +144,7 @@ class SchoolClassController extends Controller
      */
     public function actionPrintList($id, $period = null)
     {
-        $model = $this->findModel($id);
-        
+        $model = $this->findModel($id);        
         
         $content = "<div class='container'><div class='row'>";
         $content .= "<h2>" . $model->id ."<br /><small>".$model->classname."</small></h2>";
@@ -265,6 +264,147 @@ class SchoolClassController extends Controller
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);*/
+    }
+
+    /**
+     * prints classes and their teachers to pdf
+     *
+     * @param  mixed $id
+     * @param  mixed $period
+     * @return void
+     */
+    public function actionPrintSubjectGroup($id = null, $period = null)
+    {
+        if(empty($id)){
+            $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->All();
+        } else {
+            $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->All();
+        }
+
+        foreach ($schoolClasses as $model){
+            $cntEinheit = 0;
+            $cntWerteinheit = 0;
+            $cntRealWert = 0;
+
+            $model = $this->findModel($id);        
+            
+            $content = "<div class='container'><div class='row'>";
+            $content .= "<h2>" . $model->id ."<br /><small>".$model->classname."</small></h2>";
+            
+            $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Klassenvorstand</div> ";
+            $content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . $model->classHead->firstname . " " . $model->classHead->name . " (".$model->class_head.")</b></div>";
+            
+            $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Schüleranzahl</div> ";
+            $content .= "<div class='col-xs-10' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . $model->studentsnumber . "</b></div>";
+            
+            // Stundentafel
+            $content .= "<h3 style='border-top: 1px solid #1450A0; padding-top: 10;'>Gegenstände nach Fach sortiert</h3>";
+            
+            $lessons = ClassSubject::find()->select('subject')->distinct()->orderby('subject asc')->andFilterWhere(['class' => $id])->all(); //->andFilterWhere(['class' => $id])->distinct('subject')->All();
+            
+
+            $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Fach</b></div>";
+            $content .= "<div class='col-xs-7'>";
+                $content .= "<div class='col-xs-3' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Lehrer</b></div>";
+                $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Std.</b></div>";
+                $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>RST</b></div>";
+                $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>WE</b></div>";
+            $content .= "</div>";
+            $content .= "<div class='col-xs-12'>&nbsp;</div>";
+            foreach($lessons as $item){
+                $content .= "<div style='border-bottom: 1px solid grey;'>";
+                
+                    $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>".$item->subject;
+                        $content .= "<br /><small>" . $item->subjectItem->name . "</small>";
+                    $content .= "</div>";
+                    $teacherItems = ClassSubject::find()
+                                                    ->andFilterWhere(['class' => $id])
+                                                    ->andFilterWhere(['subject' => $item->subject])
+                                                    ->orderby('teacher asc')
+                                                    ->all();
+
+                    $content .= "<div class='col-xs-7'>";
+                        foreach($teacherItems as $element){
+
+                            //$cntItemEinheit += $element->hours * ($element->value/100);
+                            //$strContent .= $element->teacher0->name . " " . $element->teacher0->firstname . " (".$element->teacher.") - " . $element->hours . " Einh. (".Yii::$app->formatter->asDecimal($element->value,1)."%)<br />";
+                        
+                            $cntItemEinheit = $element->hours * ($element->value/100);
+                            $cntItemWerteinheit = ($element->hours * ($element->value/100) * $element->subjectItem->value);
+                            $cntItemRealWert = ($element->hours * ($element->value/100) * $element->subjectItem->value_real);
+                            $prozJahr = ($element->value) == 100 ? "" : "<small> (".$element->value . "%)</small>";
+                            
+                            $content .= "<div class='col-xs-3' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $element->teacher0->id . $prozJahr . "</div>";
+                            $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . Yii::$app->formatter->asDecimal($cntItemEinheit,2) . "</div>";
+                            $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . Yii::$app->formatter->asDecimal($cntItemRealWert, 2) . "</div>";
+                            $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . Yii::$app->formatter->asDecimal($cntItemWerteinheit, 3) . "</div>";
+
+                            $cntEinheit += $cntItemEinheit ;
+                            $cntWerteinheit += $cntItemWerteinheit;
+                            $cntRealWert += $cntItemRealWert;
+                        }
+
+                    $content .= "</div>";
+                    //$content .= "<div class='text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>";
+                    //$content .= $cntItemEinheit;
+                    //$content .= "<br /><small>" . Yii::$app->formatter->asDecimal($cntItemWerteinheit,3) . "</small>";
+                    //$content .= "</div>";
+                    
+                    
+
+                $content .= "</div>";                                        
+            }
+
+            $content .= "<div style='font-size: 16px; margin-top: 20px; font-weight: 700;'>";
+                $content .= "<div class='col-xs-7 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Einheiten</div>";
+                $content .= "<div class='col-xs-5 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>".Yii::$app->formatter->asDecimal($cntEinheit, 3)."</div>";
+                
+                $content .= "<div class='col-xs-7 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Werteinheiten</div>";
+                $content .= "<div class='col-xs-5 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>".Yii::$app->formatter->asDecimal($cntWerteinheit,3)."</div>";
+                
+                $content .= "<div class='col-xs-7 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Realeinheiten</div>";
+                $content .= "<div class='col-xs-5 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>".Yii::$app->formatter->asDecimal($cntRealWert, 3) ."</div>";
+            $content .= "</div>";                   
+
+            
+            $content .= "</div></div>";
+            $content .= "<pagebreak></pagebreak>";
+        }
+
+        $content = substr($content, 0, strlen($content)-23);
+
+        // setup kartik\mpdf\Pdf component
+        $pdf = new Pdf([
+            // set to use core fonts only
+            'mode' => Pdf::MODE_CORE, 
+            // A4 paper format
+            'format' => Pdf::FORMAT_A4, 
+            // portrait orientation
+            'orientation' => Pdf::ORIENT_PORTRAIT, 
+            // Margin Top
+            'marginTop' => 25, 
+            // stream to browser inline
+            'destination' => Pdf::DEST_BROWSER, 
+            // your html content input
+            'content' => $content,  
+            // format content from your own css file if needed or use the
+            // enhanced bootstrap css built by Krajee for mPDF formatting 
+            'cssFile' => '@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css',
+            // any css to be embedded if required
+            'cssInline' => '.kv-heading-1{font-size:18px}', 
+            // set mPDF properties on the fly
+            'options' => ['title' => 'Unterricht '],
+            // call mPDF methods on the fly
+            'methods' => [ 
+                'SetHeader'=>['<img src="img/htl_logo.png" style="height: 30px;">||HTL Waidhofen/Ybbs<br /><small>3340 Waidhofen an der Ybbs, Im Vogelsang 8</small>'], 
+                //'SetFooter'=>[$id.'||{PAGENO}'],
+                'SetFooter'=>[$id.'||'],
+            ]
+        ]);
+
+        
+        // return the pdf output as per the destination setting
+        return $pdf->render(); 
     }
 
      /**

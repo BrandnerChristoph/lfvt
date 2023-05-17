@@ -29,6 +29,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'linkOptions' => ['target'=>'_blank'],
                     ],
                     [
+                        'label' => 'Gegenstände', 
+                        'url' => Yii::$app->urlManager->createUrl(['/school-class/print-subject-group', 'id' => $model->id]),
+                        'linkOptions' => ['target'=>'_blank'],
+                    ],
+                    [
                         'label' => 'Lehrerliste', 
                         'url' => Yii::$app->urlManager->createUrl(['/school-class/print-teacher-list', 'id' => $model->id]),
                         'linkOptions' => ['target'=>'_blank'],
