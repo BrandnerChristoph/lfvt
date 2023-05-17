@@ -37,30 +37,31 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
 
-            <!--div class="col-lg-3">
+            <div class="col-lg-3">
                 <div class="box box-body box-success bg-gray-light">
-                    <h4><?= Yii::t("app", "Report.TeacherWorkloadPerDepartment")  ?></h4>
-                    <p>Gesamt-Übersicht der Stunden (Werteinheiten) von Lehrern in einer Abteilung (PDF)</p>
-                        <?= Html::a(Yii::t("app", "Report.TeacherWorkloadPerDepartment") . ' &raquo;', 
-                                    ['#'], 
-                                    [
-                                        'class' => 'btn btn-primary', 
-                                        'target' => '_blank',
-                                        'disabled' => 'disabled',
-                                    ]
+                    <h4><?= Yii::t("app", "Report.AllTeacherWorkload")  ?></h4>
+                    <p>Gesamt-Übersicht aller Lehrer und deren Fächer (PDF)</p>
+                        <?= Html::a(Yii::t("app", "Report.AllTeacherWorkload") . ' &raquo;', 
+                                    ['/teacher/print-lesson'], 
+                                    ['class' => 'btn btn-primary', 'target' => '_blank']
                             ) ?>
                 </div>
-            </div-->
+            </div>
+
+
+        <div class="col-lg-12"></div>
+        
+            
 
         <div class="col-lg-12"></div>
         
             <div class="col-lg-3">
                 <div class="box box-body box-success bg-gray-light">
-                    <h4><?= Yii::t("app", "Report.Teacher")  ?></h4>
+                    <h4><?= Yii::t("app", "Report.Department.OverviewReport")  ?></h4>
                     <p>Gesamt-Übersicht aller Lehrer und deren Fächer (PDF)</p>
-                        <?= Html::a(Yii::t("app", "Report.TeacherByClass") . ' &raquo;', 
-                                    ['/report-print/teacher-subject'], 
-                                    ['class' => 'btn btn-primary', 'target' => '_blank']
+                        <?= Html::a(Yii::t("app", "Report.DepartmentOverviewReport") . ' &raquo;', 
+                                    ['/report-print/department-overview'], 
+                                    ['class' => 'btn btn-warning', 'target' => '_blank']
                             ) ?>
                 </div>
             </div>
