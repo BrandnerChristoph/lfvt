@@ -358,7 +358,14 @@ class SchoolClassController extends Controller
                 
                 $content .= "<div class='col-xs-7 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Realeinheiten</div>";
                 $content .= "<div class='col-xs-5 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>".Yii::$app->formatter->asDecimal($cntRealWert, 3) ."</div>";
-            $content .= "</div>";     
+            $content .= "</div>";  
+            
+            if($annualValueClass != 1){
+                $content .= "<div class='col-xs-12'>";
+                    $content .= "Für die Klasse wird ein Jahres-Prozentwerte von ".$annualValueClass."% verwendet.";
+                $content .= "</div>";  
+
+            }
             
             $content .= "</div></div>";
             $content .= "<pagebreak></pagebreak>";
