@@ -281,7 +281,7 @@ class SchoolClassController extends Controller
             if(!is_null($id)){
                 $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->orderBy('id asc')->All();
                 //ini_set('memory_limit', '1024M');
-            } elseif($schoolClasses == null && !is_null($id)){
+            } elseif(!empty($schoolClasses) && !is_null($id)){
                 $schoolClasses = SchoolClass::find()->andFilterWhere(['department' => $id])->orderBy('id asc')->All();
             } else {
                 $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->All();
