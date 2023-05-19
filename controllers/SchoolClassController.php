@@ -277,16 +277,34 @@ class SchoolClassController extends Controller
      */
     public function actionPrintSubjectGroup($id = null, $period = null)
     {
-        
+        $schoolClasses = null;
             if(is_null($id)){
                 $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->orderBy('id asc')->All();
-                ini_set('memory_limit', '1024M');
+                //ini_set('memory_limit', '1024M');
+            } elseif($schoolClasses == null && !is_null($id)){
+                $schoolClasses = SchoolClass::find()->andFilterWhere(['department' => $id])->orderBy('id asc')->All();
             } else {
                 $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->All();
-                ini_set('memory_limit', '256M');
+                //ini_set('memory_limit', '256M');
             }
-            $content = "";
+
+            $pdf = new Pdf(['marginTop' => 25,]);
+            $mpdf = $pdf->api; // fetches mpdf api
+            $mpdf->SetHeader('<img src="img/htl_logo.png" style="height: 30px;">||HTL Waidhofen/Ybbs<br /><small>3340 Waidhofen an der Ybbs, Im Vogelsang 8</small>');
+            $mpdf->SetFooter(strtoupper($id).'||');
+            $stylesheet = file_get_contents('../vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css'); // external css
+            $mpdf->WriteHTML($stylesheet,1);
+
+            $idx = 0;
             foreach ($schoolClasses as $model){
+                $content = "";
+
+                if(!$idx == 0)
+                    $content .= "<pagebreak></pagebreak>";
+                
+                $idx++;
+
+                $annualValueClass = 1;
                 $cntEinheit = 0;
                 $cntWerteinheit = 0;
                 $cntRealWert = 0;
@@ -304,7 +322,6 @@ class SchoolClassController extends Controller
                 
                 // Stundentafel
                 $content .= "<h3 style='border-top: 1px solid #1450A0; padding-top: 10;'>Gegenstände nach Fach sortiert</h3>";
-                $lessons = ClassSubject::find()->select('subject')->distinct()->orderby('subject asc')->andFilterWhere(['class' => $id])->all(); //->andFilterWhere(['class' => $id])->distinct('subject')->All();
                 
                 $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Fach</b></div>";
                 $content .= "<div class='col-xs-7'>";
@@ -314,14 +331,17 @@ class SchoolClassController extends Controller
                     $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>WE</b></div>";
                 $content .= "</div>";
                 $content .= "<div class='col-xs-12'>&nbsp;</div>";
+                
+                $lessons = ClassSubject::find()->select('subject')->distinct()->orderby('subject asc')->andFilterWhere(['class' => $model->id])->all(); //->andFilterWhere(['class' => $id])->distinct('subject')->All();
+                
                 foreach($lessons as $item){
                     $content .= "<div style='border-bottom: 1px solid grey;'>";
                     
                         $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>".$item->subject;
-                            $content .= "<br /><small>" . $item->subjectItem->name . "</small>";
+                        //    $content .= "<br /><small>" . $item->subjectItem->name . "</small>";
                         $content .= "</div>";
                         $teacherItems = ClassSubject::find()
-                                                        ->andFilterWhere(['class' => $id])
+                                                        ->andFilterWhere(['class' => $model->id])
                                                         ->andFilterWhere(['subject' => $item->subject])
                                                         ->orderby('teacher asc')
                                                         ->all();
@@ -329,6 +349,7 @@ class SchoolClassController extends Controller
                         $annualValueClass = $model->annual_value;
 
                         $content .= "<div class='col-xs-7'>";
+                        
                             foreach($teacherItems as $element){
 
                                 //$cntItemEinheit += $element->hours * ($element->value/100);
@@ -358,11 +379,12 @@ class SchoolClassController extends Controller
                     $content .= "<div class='col-xs-7 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Einheiten</div>";
                     $content .= "<div class='col-xs-5 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>".Yii::$app->formatter->asDecimal($cntEinheit, 3)."</div>";
                     
+                    $content .= "<div class='col-xs-7 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Realeinheiten</div>";
+                    $content .= "<div class='col-xs-5 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>".Yii::$app->formatter->asDecimal($cntRealWert, 3) ."</div>";
+                    
                     $content .= "<div class='col-xs-7 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Werteinheiten</div>";
                     $content .= "<div class='col-xs-5 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>".Yii::$app->formatter->asDecimal($cntWerteinheit,3)."</div>";
                     
-                    $content .= "<div class='col-xs-7 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Realeinheiten</div>";
-                    $content .= "<div class='col-xs-5 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>".Yii::$app->formatter->asDecimal($cntRealWert, 3) ."</div>";
                 $content .= "</div>";  
                 
                 if($annualValueClass != 1){
@@ -373,10 +395,11 @@ class SchoolClassController extends Controller
                 }
                 
                 $content .= "</div></div>";
-                $content .= "<pagebreak></pagebreak>";
+                
+                $mpdf->WriteHTML($content,2);
             }
 
-            $content = substr($content, 0, strlen($content)-23);
+            //$content = substr($content, 0, strlen($content)-23);
 /*
             // setup kartik\mpdf\Pdf component
             $pdf = new Pdf([
@@ -412,13 +435,8 @@ class SchoolClassController extends Controller
             return $pdf->render(); 
             */
 
-        $pdf = new Pdf();
-        $mpdf = $pdf->api; // fetches mpdf api
-        $mpdf->SetHeader('<img src="img/htl_logo.png" style="height: 30px;">||HTL Waidhofen/Ybbs<br /><small>3340 Waidhofen an der Ybbs, Im Vogelsang 8</small>');
-        $mpdf->SetFooter(strtoupper($id).'||');
-        $stylesheet = file_get_contents('../vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css'); // external css
-        $mpdf->WriteHTML($stylesheet,1);
-        $mpdf->WriteHTML($content,2);
+        
+        
         /*
         $mpdf->WriteHTML(substr($content, 0, strlen($content)/2),2);
         $mpdf->WriteHTML(substr($content, strlen($content)/2),2);
@@ -426,7 +444,7 @@ class SchoolClassController extends Controller
         $addInfo = "";
         if(!empty($id))
             $addInfo = "_".strtoupper($id);
-            
+
         echo $mpdf->Output('Lehrerzuweisung'.$addInfo.'.pdf', 'I');
     }
 

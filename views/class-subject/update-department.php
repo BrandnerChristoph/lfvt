@@ -12,6 +12,7 @@ use app\models\SchoolClass;
 use kartik\widgets\Select2;
 use app\models\ClassSubject;
 use kartik\editable\Editable;
+use kartik\bs4dropdown\ButtonDropdown;
 //use kartik\widgets\ActiveForm;
 
 use app\models\TeacherExtended;
@@ -34,6 +35,9 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 $teacherList = Teacher::getAllTeachersArrayMap();
 $subjectList = Subject::getArrayHelperList();
 $classList = SchoolClass::getArrayHelperList();
+?>
+<?php
+    //$this->registerCss(".pull-right { right: 0 !important ; left:auto; }");
 ?>
 
 <div class="class-subject-update">
@@ -58,7 +62,41 @@ $classList = SchoolClass::getArrayHelperList();
             
             <?= Html::a("alle Lehrer", '#', ['onClick' => 'showAllTeachers();', 'class' =>'btn btn-success']) ?>
             <?= Html::a("Lehrer in der Abteilung", '#', ['onClick' => 'showTeacherInDepartment();', 'class' =>'btn btn-primary']) ?>
-            <?= Html::a(Icon::show('print'), Url::to(["/report-print/department-overview", 'department'=> $department]), ['class' =>'btn btn-primary']) ?>
+            <?php //Html::a(Icon::show('print'), Url::to(["/report-print/department-overview", 'department'=> $department]), ['class' =>'btn btn-primary']) ?>
+            <?= 
+                ButtonDropdown::widget([
+                    'label' => Icon::show('print'), 
+                    'encodeLabel' => false,
+                    'dropdown' => [
+                        'items' => [
+                            [
+                                'label' => 'Lehrfächerverteilung', 
+                                'url' => Url::to(["/report-print/department-overview", 'department'=> $department]),
+                                'linkOptions' => [
+                                    'target'=>'_blank', 
+                                //    'class' => 'text-right'
+                                ]
+                                
+                            ],
+                            [
+                                'label' => 'Gegenstände je Klassse', 
+                                'url' => Url::to(["/school-class/print-subject-group", 'id'=> $department]),
+                                'linkOptions' => [
+                                    'target'=>'_blank', 
+                                //    'class' => 'text-right'
+                                ]
+                            ],
+                        ],
+                        'options' => [                            
+                            //'class' => 'align-items-right',
+                        ],
+                    ],
+                    
+                    'buttonOptions' => [
+                        'class' => 'btn-outline-secondary',
+                    ]
+                ]);
+            ?>
         </div>
     
         <div class="col-lg-12">

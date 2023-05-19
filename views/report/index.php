@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
 
-            <div class="col-lg-3">
+            <!--div class="col-lg-3">
                 <div class="box box-body box-success bg-gray-light">
                     <h4><?= Yii::t("app", "Report.AllTeacherWorkload")  ?></h4>
                     <p>Gesamt-Übersicht aller Lehrer und deren Fächer (PDF)</p>
@@ -46,14 +46,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ['class' => 'btn btn-primary', 'target' => '_blank']
                             ) ?>
                 </div>
-            </div>
+            </div-->
 
 
         <div class="col-lg-12"></div>
         
             
 
-        <div class="col-lg-12"></div>
+        <!--div class="col-lg-12"></div>
         
             <div class="col-lg-3">
                 <div class="box box-body box-success bg-gray-light">
@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ['class' => 'btn btn-warning', 'target' => '_blank']
                             ) ?>
                 </div>
-            </div>
+            </div-->
 
             
         
