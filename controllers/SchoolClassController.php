@@ -279,14 +279,15 @@ class SchoolClassController extends Controller
     {
         $schoolClasses = null;
             if(!is_null($id)){
-                $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->orderBy('id asc')->All();
-                //ini_set('memory_limit', '1024M');
-            } elseif(empty($schoolClasses) && !is_null($id)){
-                $schoolClasses = SchoolClass::find()->andFilterWhere(['department' => $id])->orderBy('id asc')->All();
-            } else {
                 $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->All();
-                //ini_set('memory_limit', '256M');
+            } 
+            if(empty($schoolClasses) && !is_null($id)){
+                $schoolClasses = SchoolClass::find()->andFilterWhere(['department' => $id])->orderBy('id asc')->All();
+            } 
+            if(empty($schoolClasses) && is_null($id)){
+                $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->All();
             }
+           
 
             $pdf = new Pdf(['marginTop' => 25,]);
             $mpdf = $pdf->api; // fetches mpdf api
