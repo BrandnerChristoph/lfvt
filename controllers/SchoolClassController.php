@@ -278,7 +278,7 @@ class SchoolClassController extends Controller
     public function actionPrintSubjectGroup($id = null, $period = null)
     {
         $schoolClasses = null;
-            if(is_null($id)){
+            if(!is_null($id)){
                 $schoolClasses = SchoolClass::find()->andFilterWhere(['id' => $id])->orderBy('id asc')->All();
                 //ini_set('memory_limit', '1024M');
             } elseif($schoolClasses == null && !is_null($id)){
