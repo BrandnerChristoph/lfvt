@@ -48,7 +48,8 @@ class ClassSubject extends \yii\db\ActiveRecord
             [['id'], 'unique'],
             [['class'], 'exist', 'skipOnError' => true, 'targetClass' => SchoolClass::className(), 'targetAttribute' => ['class' => 'id']],
             [['subject'], 'exist', 'skipOnError' => true, 'targetClass' => Subject::className(), 'targetAttribute' => ['subject' => 'id']],
-           // [['teacher'], 'exist', 'skipOnError' => true, 'targetClass' => Teacher::className(), 'targetAttribute' => ['teacher' => 'id']],
+            [['teacher'], 'exist', 'skipOnError' => false, 'targetClass' => Teacher::className(), 'targetAttribute' => ['teacher' => 'id']],
+            [['teacher'], 'required', 'message' => 'Gib einen Lehrer an!'],
         ];
     }
 

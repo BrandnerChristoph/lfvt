@@ -14,6 +14,7 @@ $lang = [
     'Print Overview (PDF)' => 'Übersicht drucken (PDF)',
 
     // Lehrer 
+    'Teacher' => 'Lehrer',
     'Teachers' => 'Lehrer',
     'Create Teacher' => 'Lehrer erstellen',
     'Initial' => 'Initialien',

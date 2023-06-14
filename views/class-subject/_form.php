@@ -1,11 +1,14 @@
 <?php
 
-use yii\helpers\Html;
-use app\models\TeacherExtended;
-use kartik\select2\Select2;
-use kartik\widgets\ActiveForm;
-use yii\web\JsExpression;
 use yii\web\View;
+use yii\helpers\Url;
+use yii\helpers\Html;
+use app\models\Teacher;
+use yii\web\JsExpression;
+use kartik\select2\Select2;
+use kartik\widgets\Typeahead;
+use kartik\widgets\ActiveForm;
+use app\models\TeacherExtended;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\ClassSubject */
@@ -26,7 +29,7 @@ $this->registerJs($format, View::POS_HEAD);
 ?>
 
 <div class="class-subject-form" id="class-subject-form">
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'update-form',]); ?>
     <div class="container">
         <div class="row">
             <?php // $form->field($model, 'id')->textInput(['maxlength' => true]) ?>
@@ -42,26 +45,58 @@ $this->registerJs($format, View::POS_HEAD);
                 <?= $form->field($model, 'value')->textInput(['maxlength' => true]) ?>
             </div>
             <div class="col-lg-6">
-                <?= $form->field($model, 'hours', ['inputOptions' => ['autofocus' => 'autofocus']])->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'hours')->textInput(['maxlength' => true]) ?>
             </div>
 
             <div class="col-lg-6">
-                <?= $form->field($model, 'teacher')->widget(Select2::classname(),[
-                                'data' => TeacherExtended::getAllTeachersArrayMap(),
-                                'options' => [
-                                    'placeholder' => 'Lehrer',
-                                    'appendTo' => '#myModal',
-                                ],
-                                'pluginOptions' => [
-                                    'allowClear' => false,
-                                    'multiple' => false,
-                                    'templateResult' => new JsExpression('format'),
-                                    'templateSelection' => new JsExpression('format'),
-                                    'escapeMarkup' => $escape,
-                                ],
-                            ])->label("Lehrer")
+
+            <?php
+                //$data = Teacher::getAllTeachersArray();
+                //print_r($data)
+                /*
+                $template = '<div><p class="repo-language">{{value}}</p>' .
+                                '<p style="border-bottom:1px solid grey;"><small>{{display}}</small></p></div>';
+                */
+
+                $template = '<div><p class="repo-language">{{display}}</p></div>';
+            ?>
+                <?= $form->field($model, 'teacher', ['enableAjaxValidation' => true])->widget(Typeahead::classname(), [
+                    'options' => ['placeholder' => 'Lehrerkürzel ...'],
+                    'pluginOptions' => ['highlight'=>true],
+                    /*
+                    'dataset' => [
+                        [
+                            'local' => Teacher::getAllTeachersArray(),
+                            'limit' => 20,
+                        ]
+                    ]
+                    */
+                    'dataset' => [
+                        [
+                            'display' => 'value',
+                            'remote' => [
+                                //'url' => Url::to(['teacher/teacher-list-typeahead', 'q' => '%QUERY', ]) . '?q=%QUERY',
+                                'url' => Url::to(['teacher/teacher-list-typeahead']) . '&q=%QUERY',
+                                'wildcard' => '%QUERY'
+                            ],
+                            'templates' => [
+                                'notFound' => '<div class="text-danger" style="padding:0 8px">keine Daten</div>',
+                                'suggestion' => new JsExpression("Handlebars.compile('{$template}')")
+                            ],
+                            'limit' => 15,
+                        ]
+                    ],
+                    'pluginEvents' =>  [
+                        'typeahead:change' => 'function(e, d) { 
+                            console.log("done");
+                        }',
+                        //'typeahead:selected' => 'function(e, d) { console.log("done selected");}'
+                    ],
+                ])
+
                 ?>
             </div>
+            
             <div class="col-lg-6">
                 <?= $form->field($model, 'classroom')->textInput(['maxlength' => true]) ?>
             </div>
@@ -77,3 +112,9 @@ $this->registerJs($format, View::POS_HEAD);
     </div>
     <?php ActiveForm::end(); ?>
 </div>
+
+<script>
+    $( document ).ready(function() {
+        $("#classsubject-teacher").focus();
+    });
+</script>

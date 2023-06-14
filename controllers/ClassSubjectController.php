@@ -3,18 +3,20 @@
 namespace app\controllers;
 
 use Yii;
+use Exception;
+use yii\web\Response;
+use app\models\Subject;
 use yii\web\Controller;
+use app\models\Department;
+use app\models\TeacherFav;
+use mdm\admin\models\User;
 use app\models\SchoolClass;
 use yii\filters\VerbFilter;
+use yii\widgets\ActiveForm;
 use app\models\ClassSubject;
-use app\models\Department;
 use app\models\DepartmentExtended;
 use yii\web\NotFoundHttpException;
 use app\models\search\ClassSubjectSearch;
-use app\models\Subject;
-use app\models\TeacherFav;
-use mdm\admin\models\User;
-use Exception;
 
 /**
  * ClassSubjectController implements the CRUD actions for ClassSubject model.
@@ -177,11 +179,20 @@ class ClassSubjectController extends Controller
     {
         try{
             $model = $this->findModel($id);
+
+            if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+                // Validierung 
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+            }
             
-            if ($this->request->isPost && $model->load($this->request->post()) && $model->save(false)) {
-                Yii::$app->session->setFlash('success', "Aktualisierung für die ".$model->class." wurde gespeichert.");
-                $anchorLink = !empty($model->subject) ? $model->subject : "";
-                return $this->redirect(Yii::$app->request->referrer. "#". $anchorLink);
+            if ($this->request->isPost && $model->load($this->request->post()) ) {
+                $model->teacher = strtoupper($model->teacher);
+                if($model->save(false)){
+                    Yii::$app->session->setFlash('success', "Aktualisierung für die ".$model->class." wurde gespeichert.");
+                    $anchorLink = !empty($model->subject) ? $model->subject : "";
+                    return $this->redirect(Yii::$app->request->referrer. "#". $anchorLink);
+                }
             }
 
             return $this->renderAjax('_form', [
@@ -256,7 +267,10 @@ class ClassSubjectController extends Controller
             else {
                 return ['output'=>'', 'message'=>''];
             }
+            
         }
+
+        
 
         /////////////////////////////////////////////////////
 

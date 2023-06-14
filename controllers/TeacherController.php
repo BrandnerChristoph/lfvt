@@ -372,4 +372,35 @@ class TeacherController extends Controller
 
         echo $mpdf->Output('Lehrerzuweisung'.$addInfo.'.pdf', 'I');
     }
+
+
+    public function actionTeacherListTypeahead($q = null) {
+        
+        $query = new \yii\db\Query;
+        
+        $query->select(["id as id", "name as name", "firstname as firstname"])
+            ->from('teacher')
+            ->distinct('id')
+            ->where('id LIKE "%'.$q.'%" OR name LIKE "%'.$q.'%" OR firstname LIKE "%'.$q.'%"')
+            ->orderBy('id asc')
+            ->limit(20);
+                
+        $command = $query->createCommand();
+        $data = $command->queryAll();
+        $out = [];
+        foreach ($data as $d) {
+            $strDisplayAdditional = "";
+            
+            $strDisplayAdditional .=  $d['id'];
+            
+            
+            if(!empty($d['name']) || !empty($d['firstname'])){
+                $strDisplayAdditional .=  " (" . trim($d['firstname']) . " " . $d['name'] . ")";
+            }            
+
+            $out[] = ['value' => $d['id'], 'display' => $strDisplayAdditional];
+            
+        }
+        echo \yii\helpers\Json::encode($out);
+    }
 }
