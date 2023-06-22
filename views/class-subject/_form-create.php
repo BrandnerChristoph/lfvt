@@ -132,6 +132,10 @@ $this->registerJs($format, View::POS_HEAD);
             <div class="col-lg-6">
                 <?= $form->field($model, 'classroom')->textInput(['maxlength' => true]) ?>
             </div>
+            
+            <div class="col-lg-12">
+                <?= $form->field($model, 'info')->textInput(['maxlength' => true]) ?>
+            </div>
 
             <?php //= $form->field($model, 'classroom')->textInput(['maxlength' => true]) ?>
 
