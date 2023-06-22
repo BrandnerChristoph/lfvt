@@ -2,12 +2,14 @@
 
 use app\models\SchoolClass;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use app\models\TeacherExtended;
 use app\models\Subject;
 use kartik\select2\Select2;
 use kartik\widgets\ActiveForm;
 use yii\web\JsExpression;
 use yii\web\View;
+use kartik\widgets\Typeahead;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\ClassSubject */
@@ -77,8 +79,9 @@ $this->registerJs($format, View::POS_HEAD);
                 <?= $form->field($model, 'hours', ['inputOptions' => ['autofocus' => 'autofocus']])->textInput(['maxlength' => true]) ?>
             </div>
 
-            <div class="col-lg-12">
-                <?= $form->field($model, 'teacher')->widget(Select2::classname(),[
+            <div class="col-lg-6">
+                <?php 
+                /* $form->field($model, 'teacher')->widget(Select2::classname(),[
                                 'data' => TeacherExtended::getAllTeachersArrayMap(),
                                 'options' => [
                                     'placeholder' => 'Lehrer',
@@ -92,7 +95,42 @@ $this->registerJs($format, View::POS_HEAD);
                                     'escapeMarkup' => $escape,
                                 ],
                             ])->label("Lehrer")
+                            */
                 ?>
+                <?php
+                    $template = '<div><p class="repo-language">{{display}}</p></div>';
+                ?>
+                <?= $form->field($model, 'teacher', ['enableAjaxValidation' => true])->widget(Typeahead::classname(), [
+                    'options' => ['placeholder' => 'Lehrerkürzel ...'],
+                    'pluginOptions' => ['highlight'=>true],
+                    'dataset' => [
+                        [
+                            'display' => 'value',
+                            'remote' => [
+                                //'url' => Url::to(['teacher/teacher-list-typeahead', 'q' => '%QUERY', ]) . '?q=%QUERY',
+                                'url' => Url::to(['teacher/teacher-list-typeahead']) . '&q=%QUERY',
+                                'wildcard' => '%QUERY'
+                            ],
+                            'templates' => [
+                                'notFound' => '<div class="text-danger" style="padding:0 8px">keine Daten</div>',
+                                'suggestion' => new JsExpression("Handlebars.compile('{$template}')")
+                            ],
+                            'limit' => 15,
+                        ]
+                    ],
+                    'pluginEvents' =>  [
+                        'typeahead:change' => 'function(e, d) { 
+                            console.log("done");
+                        }',
+                        //'typeahead:selected' => 'function(e, d) { console.log("done selected");}'
+                    ],
+                ])
+
+                ?>
+            </div>
+
+            <div class="col-lg-6">
+                <?= $form->field($model, 'classroom')->textInput(['maxlength' => true]) ?>
             </div>
 
             <?php //= $form->field($model, 'classroom')->textInput(['maxlength' => true]) ?>

@@ -29,7 +29,13 @@ $this->registerJs($format, View::POS_HEAD);
 ?>
 
 <div class="class-subject-form" id="class-subject-form">
-    <?php $form = ActiveForm::begin(['id' => 'update-form',]); ?>
+    <?php $form = ActiveForm::begin(['id' => 'update-form', 
+                                        'fieldConfig' => [
+                                            'inputOptions' => [
+                                                'autocomplete' => 'off'
+                                            ]
+                                        ]
+                                    ]); ?>
     <div class="container">
         <div class="row">
             <?php // $form->field($model, 'id')->textInput(['maxlength' => true]) ?>
@@ -50,27 +56,12 @@ $this->registerJs($format, View::POS_HEAD);
 
             <div class="col-lg-6">
 
-            <?php
-                //$data = Teacher::getAllTeachersArray();
-                //print_r($data)
-                /*
-                $template = '<div><p class="repo-language">{{value}}</p>' .
-                                '<p style="border-bottom:1px solid grey;"><small>{{display}}</small></p></div>';
-                */
-
-                $template = '<div><p class="repo-language">{{display}}</p></div>';
-            ?>
-                <?= $form->field($model, 'teacher', ['enableAjaxValidation' => true])->widget(Typeahead::classname(), [
+                <?php
+                    $template = '<div><p class="repo-language">{{display}}</p></div>';
+                ?>
+                <?= $form->field($model, 'teacher', ['enableAjaxValidation' => true, ])->widget(Typeahead::classname(), [
                     'options' => ['placeholder' => 'Lehrerkürzel ...'],
                     'pluginOptions' => ['highlight'=>true],
-                    /*
-                    'dataset' => [
-                        [
-                            'local' => Teacher::getAllTeachersArray(),
-                            'limit' => 20,
-                        ]
-                    ]
-                    */
                     'dataset' => [
                         [
                             'display' => 'value',
@@ -83,7 +74,7 @@ $this->registerJs($format, View::POS_HEAD);
                                 'notFound' => '<div class="text-danger" style="padding:0 8px">keine Daten</div>',
                                 'suggestion' => new JsExpression("Handlebars.compile('{$template}')")
                             ],
-                            'limit' => 15,
+                            'limit' => 20,
                         ]
                     ],
                     'pluginEvents' =>  [
@@ -116,5 +107,6 @@ $this->registerJs($format, View::POS_HEAD);
 <script>
     $( document ).ready(function() {
         $("#classsubject-teacher").focus();
+        $("#classsubject-teacher").select();
     });
 </script>

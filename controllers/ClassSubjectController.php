@@ -186,7 +186,7 @@ class ClassSubjectController extends Controller
                 return ActiveForm::validate($model);
             }
             
-            if ($this->request->isPost && $model->load($this->request->post()) ) {
+            elseif ($this->request->isPost && $model->load($this->request->post()) ) {
                 $model->teacher = strtoupper($model->teacher);
                 if($model->save(false)){
                     Yii::$app->session->setFlash('success', "Aktualisierung für die ".$model->class." wurde gespeichert.");

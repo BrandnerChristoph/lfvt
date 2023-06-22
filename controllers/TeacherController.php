@@ -381,7 +381,8 @@ class TeacherController extends Controller
         $query->select(["id as id", "name as name", "firstname as firstname"])
             ->from('teacher')
             ->distinct('id')
-            ->where('id LIKE "%'.$q.'%" OR name LIKE "%'.$q.'%" OR firstname LIKE "%'.$q.'%"')
+            //->where('id LIKE "%'.$q.'%" OR name LIKE "%'.$q.'%" OR firstname LIKE "%'.$q.'%"')
+            ->where('id LIKE "%'.$q.'%"')
             ->orderBy('id asc')
             ->limit(20);
                 
