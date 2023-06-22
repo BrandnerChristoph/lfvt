@@ -36,8 +36,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'value',
             'teacher',
             'classroom',
-            //'updated_at:datetime',
-            //'created_at:datetime',
+            'info',
+            'updated_at:datetime',
+            'created_at:datetime',
         ],
     ]) ?>
 

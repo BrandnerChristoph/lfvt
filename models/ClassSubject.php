@@ -45,6 +45,7 @@ class ClassSubject extends \yii\db\ActiveRecord
             [['updated_at', 'created_at'], 'integer'],
             [['teacher', 'id', 'class', 'classroom'], 'string', 'max' => 50],
             [['subject', 'group'], 'string', 'max' => 10],
+            [['info'], 'string'],
             [['id'], 'unique'],
             [['class'], 'exist', 'skipOnError' => true, 'targetClass' => SchoolClass::className(), 'targetAttribute' => ['class' => 'id']],
             [['subject'], 'exist', 'skipOnError' => true, 'targetClass' => Subject::className(), 'targetAttribute' => ['subject' => 'id']],
@@ -66,7 +67,8 @@ class ClassSubject extends \yii\db\ActiveRecord
             'value' => Yii::t('app', 'Value'),
             'hours' => Yii::t('app', 'Hours'),
             'teacher' => Yii::t('app', 'Teacher'),
-            'classroom' => Yii::t('app', 'Classroom'),
+            'classroom' => Yii::t('app', 'Classroom'),            
+            'info' => Yii::t('app', 'classSubject.info'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'created_at' => Yii::t('app', 'Created At'),
         ];

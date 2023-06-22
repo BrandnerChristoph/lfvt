@@ -168,9 +168,11 @@ $classList = SchoolClass::getArrayHelperList();
 
                         echo "<td ".$style.">";
                             echo "<center>";
-                                echo $classSubject->subject;
+                                echo "<div class='' title='".$classSubject->subjectItem->info. "' >";
+                                    echo $classSubject->subject;
+                                echo "</div>";
                                 if (!empty($classSubject->subjectItem->value))
-                                    echo "<br /><small>".Yii::$app->formatter->asDecimal($classSubject->subjectItem->value,3) ."<br /></small>";
+                                    echo "<small>".Yii::$app->formatter->asDecimal($classSubject->subjectItem->value,3) ."<br /></small>";
                             echo "</center>";
                             echo "<div id='".$classSubject->subject."' style='margin-top: -190px;'></div>";
                         echo "</td>";
@@ -203,7 +205,10 @@ $classList = SchoolClass::getArrayHelperList();
 
                                                 if(!is_null($obj)){
                                                     echo "<strong>";
-                                                    echo "<div class='' title='".$obj->teacher0->name." ".$obj->teacher0->firstname."' >";
+                                                    $strTitleAdditionalInfo = "";
+                                                    if(!empty($obj->info))
+                                                        $strTitleAdditionalInfo .= " | " . $obj->info;
+                                                    echo "<div class='' title='".$obj->teacher0->name." ".$obj->teacher0->firstname."".$strTitleAdditionalInfo. "' >";
                                                             if($obj->teacher == "?"){
                                                                 //echo "<b>";
                                                                 echo "<span style='color: red;'>";

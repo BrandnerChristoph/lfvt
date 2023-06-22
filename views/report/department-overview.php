@@ -45,7 +45,7 @@ $classList = SchoolClass::getArrayHelperList();
     <table class="table table-striped" style="margin-top: 10px; table-layout:fixed;" >
         <thead style="position: sticky; top: 55px; background-color:  <?= $objDepartment->default_color ?>; z-index:900;">
             <tr>
-                <th><center>Fach</center></th>
+                <th style="width: 60px"><center>Fach</center></th>
                 <?php
                     $col_id = 0;
                     foreach($classes as $class){
@@ -78,8 +78,10 @@ $classList = SchoolClass::getArrayHelperList();
                         echo "<td ".$style.">";
                             echo "<center>";
                                 echo $classSubject->subject;
+                                /*
                                 if (!empty($classSubject->subjectItem->value))
                                     echo "<br /><small>".Yii::$app->formatter->asDecimal($classSubject->subjectItem->value,3) ."<br /></small>";
+                                */
                             echo "</center>";
                             echo "<div id='".$classSubject->subject."' style='margin-top: -190px;'></div>";
                         echo "</td>";

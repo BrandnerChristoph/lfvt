@@ -57,6 +57,7 @@ $lang = [
     'real_value' => 'Realstunden',
     'sortorder' => 'Reihenfolge',
     'subject_type' => 'Unterrichtstyp',
+    'subject.info' => 'Fach-Info',
 
     // Fächerzuteilng
     'Class Subject' => 'Fächerzuweisung',
@@ -68,6 +69,7 @@ $lang = [
     'Value' => 'Prozent',
     'Hours' => 'Stunden',
     'Classroom' => 'Raum',
+    'classSubject.info' => 'Info',
 
     // Report
     'Report.TeacherByClass' => 'Klassenlehrer',

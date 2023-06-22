@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'value_real:decimal',
             'type',
             'sortorder',
+            'info',
             'updated_at:datetime',
             'created_at:datetime',
         ],

@@ -52,6 +52,11 @@ use yii\widgets\ActiveForm;
                 <?= $form->field($model, 'sortorder')->textInput(['maxlength' => true]) ?>
             </div>
 
+            <div class="col-lg-12">
+                <?= $form->field($model, 'info')->textInput(['maxlength' => true]) ?>
+            </div>
+
+
             
 
             <div class="form-group col-lg-12 text-center">
