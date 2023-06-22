@@ -109,17 +109,22 @@ class ClassSubjectController extends Controller
             $model->created_at = time();
             $model->updated_at = time();
 
-            if ($this->request->isPost && $model->load($this->request->post())){
-                if($model->save(false)) {
+            if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+                // Validierung 
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+            }
+            
+            elseif ($this->request->isPost && $model->load($this->request->post()) ) {
+                $model->teacher = strtoupper($model->teacher);
+                if($model->save(false)){
                     Yii::$app->session->setFlash('success', "Erstellung für die ".$model->class." wurde gespeichert.");
-                    
                     $anchorLink = !empty($model->subject) ? $model->subject : "";
                     return $this->redirect(Yii::$app->request->referrer. "#". $anchorLink);
-                    //return $this->redirect(Yii::$app->request->referrer);
-
                 }
-            } 
+            }
 
+            
             return $this->renderAjax('_form', [
                 'model' => $model,
             ]);
@@ -188,6 +193,7 @@ class ClassSubjectController extends Controller
             
             elseif ($this->request->isPost && $model->load($this->request->post()) ) {
                 $model->teacher = strtoupper($model->teacher);
+                $model->updated_at = time();
                 if($model->save(false)){
                     Yii::$app->session->setFlash('success', "Aktualisierung für die ".$model->class." wurde gespeichert.");
                     $anchorLink = !empty($model->subject) ? $model->subject : "";
@@ -219,9 +225,29 @@ class ClassSubjectController extends Controller
             $model->created_at = time();
         $model->updated_at = time();
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            // Validierung 
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+        
+        elseif ($this->request->isPost && $model->load($this->request->post()) ) {
+            $model->teacher = strtoupper($model->teacher);
+            $model->updated_at = time();
+            if($model->save(false)){
+                Yii::$app->session->setFlash('success', "Aktualisierung für die ".$model->class." wurde gespeichert.");
+                $anchorLink = !empty($model->subject) ? $model->subject : "";
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+        /*
+
+        if ($this->request->isPost && $model->load($this->request->post())){
+            $model->updated_at = time();
+            $model->save(false);
             return $this->redirect(['view', 'id' => $model->id]);
         }
+        */
 
         return $this->render('update', [
             'model' => $model,

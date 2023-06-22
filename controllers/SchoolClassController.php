@@ -98,7 +98,9 @@ class SchoolClassController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save(false)) {
+        if ($this->request->isPost && $model->load($this->request->post())){
+            $model->updated_at = time();
+            $model->save(false);
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -166,8 +168,11 @@ class SchoolClassController extends Controller
         foreach($lessons as $item){
             $content .= "<div style='border-bottom: 1px solid grey;'>";
             
-                $content .= "<div class='col-xs-3' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>".$item->subject;
-                    $content .= "<br /><small>" . $item->subjectItem->name . "</small>";
+                $content .= "<div class='col-xs-3' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>".$item->subject."</b>";
+                    $content .=  "<br /><span style='font-size: 10px'>";
+                    $content .= $item->subjectItem->info;   // Info des Schulfachs
+                    $content .= "</span>";
+                    
                 $content .= "</div>";
                 $teacherItems = ClassSubject::find()
                                                 ->andFilterWhere(['class' => $id])
@@ -178,10 +183,23 @@ class SchoolClassController extends Controller
                     $strContent = "";
                     $cntItemEinheit = 0;
                     $cntItemWerteinheit = 0;
+                    $useLinebreakBefore = false;
                     foreach($teacherItems as $element){
                         $cntItemEinheit += $element->hours * ($element->value/100);
                         $cntItemWerteinheit += ($element->hours * ($element->value/100) * $element->subjectItem->value);
+                        if($useLinebreakBefore)
+                            $strContent .= "<br />";
                         $strContent .= $element->teacher0->name . " " . $element->teacher0->firstname . " (".$element->teacher.") - " . $element->hours . " Einh. (".Yii::$app->formatter->asDecimal($element->value,1)."%)<br />";
+                        $strContent .= "<span style='font-size: 10px'>";                        
+                            if(!empty($element->classroom)){
+                                $strContent .= "<small>Raum: " . $element->classroom . "; </small>";
+                                $useLinebreakBefore = true;
+                            }
+                            if(!empty($element->info)){
+                                $strContent .= "<small>" . $element->info . " </small>";
+                                $useLinebreakBefore = true;
+                            }
+                        $strContent .= "</span>";
                     }
 
                     $content .= $strContent;

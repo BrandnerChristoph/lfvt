@@ -96,7 +96,9 @@ class TeacherWishlistController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post())){
+            $model->updated_at = time();
+            $model->save(false);
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

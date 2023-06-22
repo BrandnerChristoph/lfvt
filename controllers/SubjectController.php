@@ -98,7 +98,9 @@ class SubjectController extends Controller
         $model = $this->findModel($id);
         $model->value_real = empty($model->value_real) ? 1 : $model->value_real;
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save(false)) {
+        if ($this->request->isPost && $model->load($this->request->post())){
+            $model->updated_at = time();
+            $model->save(false);
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
