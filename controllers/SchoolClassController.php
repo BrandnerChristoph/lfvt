@@ -346,8 +346,8 @@ class SchoolClassController extends Controller
                 $content .= "<div class='col-xs-7'>";
                     $content .= "<div class='col-xs-3' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Lehrer</b></div>";
                     $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Std.</b></div>";
-                    $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>RST</b></div>";
-                    $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>WE</b></div>";
+                    $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>WE_PD</b></div>";
+                    $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>WE_alt</b></div>";
                 $content .= "</div>";
                 $content .= "<div class='col-xs-12'>&nbsp;</div>";
                 
@@ -375,7 +375,9 @@ class SchoolClassController extends Controller
                                 //$strContent .= $element->teacher0->name . " " . $element->teacher0->firstname . " (".$element->teacher.") - " . $element->hours . " Einh. (".Yii::$app->formatter->asDecimal($element->value,1)."%)<br />";
                             
 
-                                $cntItemEinheit = $element->hours * ($element->value/100) * $annualValueClass;
+                                //$cntItemEinheit = $element->hours * ($element->value/100) * $annualValueClass;
+                                $cntItemEinheit = $element->hours * $annualValueClass;
+                                
                                 $cntItemWerteinheit = ($element->hours * ($element->value/100) * $element->subjectItem->value) * $annualValueClass;
                                 $cntItemRealWert = ($element->hours * ($element->value/100) * $element->subjectItem->value_real) * $annualValueClass;
                                 $prozJahr = ($element->value) == 100 ? "" : "<small> (".$element->value . "%)</small>";
