@@ -376,7 +376,7 @@ class SchoolClassController extends Controller
                             
 
                                 //$cntItemEinheit = $element->hours * ($element->value/100) * $annualValueClass;
-                                $cntItemEinheit = $element->hours * $annualValueClass;
+                                $cntItemEinheit = $element->hours; // * $annualValueClass;
                                 
                                 $cntItemWerteinheit = ($element->hours * ($element->value/100) * $element->subjectItem->value) * $annualValueClass;
                                 $cntItemRealWert = ($element->hours * ($element->value/100) * $element->subjectItem->value_real) * $annualValueClass;
