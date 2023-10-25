@@ -87,8 +87,8 @@ $classList = SchoolClass::getArrayHelperList();
                                 ]
                             ],
                         ],
-                        'options' => [                            
-                            //'class' => 'align-items-right',
+                        'options' => [
+                            'class' => 'dropdown-menu-right', // right dropdown
                         ],
                     ],
                     
