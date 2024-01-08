@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     //return trim("<b>" . $model->initial . "</b>" . $strName);
 
                     
-                    return Html::a(trim("<b>" . $model->initial . "</b>" . $strName), '#', ['onClick' => 'showTeacherOverview("'.$model->id.'");']);
+                    return Html::a(trim("<b>" . strtoupper($model->initial) . "</b>" . $strName), '#', ['onClick' => 'showTeacherOverview("'.$model->id.'");']);
                 }
             ],
             //'initial',            

@@ -19,7 +19,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
         $cols = [
-            'initial', 
+            //'initial',
+            [
+                'attribute' => 'initial',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return strtoupper($model->initial);
+                }
+            ], 
             'name',
             'firstname',
             'is_active',
