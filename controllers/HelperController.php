@@ -103,11 +103,11 @@ class HelperController extends Controller
 
                 Yii::$app->db->createCommand("INSERT INTO school_class (`id`, `classname`, `department`, `period`, `class_head`, `info`, `updated_at`, `created_at`) 
                                                 VALUES ('1AFME', '1. FS-Mechatronik Fussball', 'ME', '', '?', '', unix_timestamp(), unix_timestamp());")->execute();
-                Yii::$app->db->createCommand("INSERT INTO school_class (`id`, `classname`, `department`, `period`, `class_head`, `info`, `updated_at`, `created_at`) 
-                                                VALUES ('3AKME', '1. FS-Mechatronik Fussball', 'ME', '', '?', '', unix_timestamp(), unix_timestamp());")->execute();
                                                 
-                Yii::$app->db->createCommand("INSERT INTO school_class (`id`, `classname`, `department`, `period`, `class_head`, `info`, `updated_at`, `created_at`) 
-                                                VALUES ('2AAME', '2. Sem. Aufbaulehrgang', 'AUF', '', '?', '', unix_timestamp(), unix_timestamp());")->execute();
+                Yii::$app->db->createCommand("INSERT INTO school_class (`id`, `classname`, `department`, `period`, `annual_value`, `class_head`, `info`, `updated_at`, `created_at`) 
+                                                VALUES ('2AAME', '2. Sem. Aufbaulehrgang', 'AUF', '', '0.5', '?', '', unix_timestamp(), unix_timestamp());")->execute();
+                Yii::$app->db->createCommand("INSERT INTO school_class (`id`, `classname`, `department`, `period`, `annual_value`, `class_head`, `info`, `updated_at`, `created_at`) 
+                                                VALUES ('3AKME', '3. Sem. Kolleg Mechatronik', 'AUF', '', '0.5', '?', '', unix_timestamp(), unix_timestamp());")->execute();
 
             /*************************************************************
                 Fächer bereinigen
