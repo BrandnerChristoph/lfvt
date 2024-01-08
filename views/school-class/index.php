@@ -1,8 +1,11 @@
 <?php
 
+use app\models\Department;
 use yii\helpers\Html;
-use yii\grid\GridView;
+//use yii\grid\GridView;
 use yii\widgets\Pjax;
+use kartik\grid\GridView;
+use yii\helpers\ArrayHelper;
 use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\SchoolClassSearch */
@@ -53,7 +56,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'classname',
-            'department',
+            //'department',
+            [
+                'attribute' => 'department',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return $model->department;
+                },
+    
+                'filter' => ArrayHelper::map(Department::find()->asArray()->all(), 'id', 'id'),
+                'filterType' => GridView::FILTER_SELECT2,
+                'filterWidgetOptions' => [
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'multiple' => false,
+                        'placeholder' => 'Abteilung',
+                    ],
+                ],
+            ],
             //'period',
             'annual_value',
             'class_head',

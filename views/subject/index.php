@@ -1,7 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+//use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
@@ -46,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'contentOptions' => ['style'=>'text-align: right;'],
                 ],
+                'type',
                 'sortorder',
                 'updated_at:datetime',
                 'created_at:datetime',
@@ -79,6 +81,28 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->asDecimal($model->value_real, 2);
                 },
                 'contentOptions' => ['style'=>'text-align: right;'],
+            ],
+            [
+                'attribute' => 'type',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return $model->type;
+                },
+                /*
+                'filter' => [
+                    'Allgemeinbildenden Gegenstände' => 'Allgemeinbildenden Gegenstände', 
+                    'Fachtheorie' => 'Fachtheorie',
+                    'Werkstatt' => 'Werkstatt',
+                ],
+                'filterType' => GridView::FILTER_SELECT2,
+                'filterWidgetOptions' => [
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'multiple' => false,
+                        //'placeholder' => '',
+                    ],
+                ],
+                */
             ],
             'sortorder',
             'updated_at:datetime',
