@@ -97,7 +97,8 @@ class BackupController extends Controller
 
                 foreach ($tables as $table) {
 
-                    $result = Yii::$app->db->createCommand('SELECT * FROM ' . $table)->query();        
+                    $result = Yii::$app->db->createCommand('SELECT * FROM ' . $table)->query();    
+                    $return.= "DELETE FROM " . $table . ";\n";            
                     foreach ($result as $row) {        
                         $return.= 'REPLACE INTO ' . $table . ' VALUES(';        
                         foreach ($row as $data) {        
