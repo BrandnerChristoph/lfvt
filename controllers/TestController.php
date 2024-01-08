@@ -51,33 +51,10 @@ class TestController extends Controller
         
     }
 
-    public function actionDbElmis()
-    {
-        $servername = "192.168.8.13";
-        $username = "usrdb";
-        $password = "myPassword!20";
-        $dbname = "elmis";
-
-        // Create connection
-        $conn = new \mysqli($servername, $username, $password, $dbname);
-        // Check connection
-        if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-        }
-
-        $sql = "SELECT id, Kontakt_id, PLZ, Strasse FROM kontakt_adresse";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-        // output data of each row
-        while($row = $result->fetch_assoc()) {
-            echo $row["PLZ"]. " " . $row["Strasse"] . " (" . $row["Kontakt_id"] . ")<br />";
-        }
-        } else {
-        echo "0 results";
-        }
-        $conn->close();
-        
+    public function actionShowCalendar(){
+        return $this->render('show-calendar', [
+            
+        ]);
     }
 
 }
