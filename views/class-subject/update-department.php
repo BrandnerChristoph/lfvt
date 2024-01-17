@@ -236,8 +236,14 @@ $classList = SchoolClass::getArrayHelperList();
                                                             }
                                                             echo "</strong>";
                                                             echo "<small>";
+                                                                if($obj->hours <= 0)
+                                                                    echo "<span style='color: red;'>";
+                                                                
                                                                 echo " <strong>" . Yii::$app->formatter->asDecimal($obj->hours, 1) . "</strong>";
                                                                 
+                                                                if($obj->hours <= 0)
+                                                                    echo "</span>";
+
                                                                 if($obj->value != 100)
                                                                     echo " (" . Yii::$app->formatter->asDecimal($obj->value, 0) . "%)";
                                                             echo "</small>";
