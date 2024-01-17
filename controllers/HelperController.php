@@ -125,7 +125,7 @@ class HelperController extends Controller
                 Yii::$app->db->createCommand("DELETE class_subject from class_subject 
                                                 JOIN school_class on class_subject.class = school_class.id 
                                                 WHERE  
-                                                    (class_subject.class != '5AHIT' || class_subject.class != '4AHET')
+                                                    (class_subject.class != '5AHIT' OR class_subject.class != '4AHET')
                                                     AND concat(LEFT(class, 1), 'x', SUBSTRING(class,3), subject) NOT IN (SELECT concat(temp_subjectPerYear.class, temp_subjectPerYear.subject) FROM temp_subjectPerYear);")->execute();
 
             // Fächer hinzufügen, die im neuen Schuljahr HINZUKOMMEN
