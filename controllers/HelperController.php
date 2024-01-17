@@ -36,7 +36,56 @@ class HelperController extends Controller
         );
     }
 
+    private function createFullbackup(){
+        try{
+            $backupname="Gesamtbackup-Jahreswechsel";
+            
+            $filepath = Yii::$app->params["backupDirectory"] . "full/". date("Ymd-His", time())  . "_" . $backupname . "_" . Yii::$app->user->id . ".sql";
+            $tables = array();
+            $tables = Yii::$app->db->schema->getTableNames();
+            $return = '';
+
+            foreach ($tables as $table) {
+
+                $result = Yii::$app->db->createCommand('SELECT * FROM ' . $table)->query();    
+                $return.= "DELETE FROM " . $table . ";\n";            
+                foreach ($result as $row) {        
+                    $return.= 'REPLACE INTO ' . $table . ' VALUES(';        
+                    foreach ($row as $data) {        
+                        $data = addslashes($data);        
+                        // Updated to preg_replace to suit PHP5.3 +        
+                        $data = preg_replace("/\n/", "\\n", $data);
+
+                        if (isset($data)) {    
+                            $return.= '"' . $data . '"';    
+                        } else {    
+                            $return.= '""';    
+                        }        
+                        $return.= ',';    
+                    }
+        
+                    $return = substr($return, 0, strlen($return) - 1);    
+                    $return.= ");\n";    
+                }    
+                $return.="\n\n\n";    
+            }
+        
+            //save file    
+            $handle = fopen($filepath, 'w+');    
+            fwrite($handle, $return);    
+            fclose($handle);
+
+            Yii::$app->session->setFlash('success', "Voll-Backup wurde erfolgreich vorgenommen.");
+        } catch(Exception $ex){
+            Yii::$app->session->setFlash('error', "Voll-Backup fehlgeschlagen. " . $ex->getMessage() . " (Line: " . $ex->getLine() . ")");
+        }
+    }
+
     public function actionProcessToNextYear(){
+
+        // Full-Backup
+        $this->createFullbackup();
+
         $transaction = Yii::$app->db->beginTransaction();
         try{
             echo "Verarbeitung starten";
