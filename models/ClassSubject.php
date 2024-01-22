@@ -39,7 +39,7 @@ class ClassSubject extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'class', 'subject', 'value', 'updated_at', 'created_at'], 'required'],
+            [['id', 'class', 'subject', 'value', 'updated_at', 'created_at', 'hours'], 'required'],
             [['value', 'hours'], 'number'],
             [['value'], 'number', 'min' => 0, 'max' => 300],
             [['updated_at', 'created_at'], 'integer'],

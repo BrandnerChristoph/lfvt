@@ -114,3 +114,11 @@ $this->registerJs($format, View::POS_HEAD);
         $("#classsubject-teacher").select();
     });
 </script>
+
+<?php
+
+    $this->RegisterJs ( "
+        setTimeout(function() { $('#classsubject-teacher').focus() }, 500);
+        
+    ", View::POS_END);
+?>

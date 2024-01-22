@@ -176,6 +176,7 @@ class HelperController extends Controller
                                                 WHERE  
                                                     (class_subject.class != '5AHIT')
                                                     AND (class_subject.class != '4AHET')
+                                                    AND (class_subject.class not in (select id from school_class where department='TEMP'))
                                                     AND concat(LEFT(class, 1), 'x', SUBSTRING(class,3), subject) NOT IN (SELECT concat(temp_subjectPerYear.class, temp_subjectPerYear.subject) FROM temp_subjectPerYear);")->execute();
 
             // Fächer hinzufügen, die im neuen Schuljahr HINZUKOMMEN
