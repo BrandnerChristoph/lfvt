@@ -91,6 +91,7 @@ class TeacherController extends Controller
         return $this->renderAjax('index-preview', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'department' => $department,
         ]);
         
     }

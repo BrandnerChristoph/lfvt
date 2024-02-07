@@ -119,6 +119,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->teachingHours;
                 },
             ],
+            [
+                'attribute' => 'Stunden',
+                'label' => 'Std. in Abt.',
+                'format' => 'raw',
+                'value' => function ($model) use($department) {                    
+                    return "<center>".$model->fetchHoursByDepartment($department) .
+                                    " (<small>" . $model->fetchTeachingHoursByDepartment($department) . ")</small></center>";
+                      
+                },
+            ],
             /*
             'name',
             'firstname',

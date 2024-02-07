@@ -218,4 +218,46 @@ class Teacher extends \yii\db\ActiveRecord
                                             }
                                 );
     }
+
+    public function fetchHoursByDepartment($department)
+    {
+        $listClassSub = ClassSubject::find()
+                            ->andFilterWhere(['teacher'=> $this->id])
+                            ->andFilterWhere(['class' => SchoolClass::find()->select('id')->andFilterWhere(['department' => $department])])
+                            ->all();
+
+        $sum = 0;
+        foreach($listClassSub as $classSubItem)
+        {
+            $objClass = SchoolClass::findOne($classSubItem->class);
+            $valAnnual=1;
+            if(!is_null($objClass))
+                $valAnnual = $objClass->annual_value;
+
+            //$sum = $sum + ($classSubItem->hours * ($classSubItem->value/100));
+            $sum = $sum + (($classSubItem->hours * ($classSubItem->value/100)) * $valAnnual);
+        }
+        return round($sum, 2);
+    }
+    /**
+     * return the sum of teaching-hours (with value of class)
+     */
+    public function fetchTeachingHoursByDepartment($department)
+    {
+        $listClassSub = ClassSubject::find()
+                        ->andFilterWhere(['teacher'=> $this->id])
+                        ->andFilterWhere(['class' => SchoolClass::find()->select('id')->andFilterWhere(['department' => $department])])
+                        ->all();
+
+        $sum = 0;
+        foreach($listClassSub as $classSubItem)
+        {
+            $objSubject = Subject::findOne($classSubItem->subject);
+            $objClass  = SchoolClass::findOne($classSubItem->class);
+
+            if(!is_null($objSubject) && !is_null($objClass))
+                $sum = $sum + (($classSubItem->hours * ($classSubItem->value/100))*$objSubject->value * $objClass->annual_value);
+        }
+        return round($sum, 3);
+    }
 }
