@@ -125,7 +125,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function ($model) use($department) {                    
                     return "<center>".$model->fetchHoursByDepartment($department) .
-                                    " (<small>" . $model->fetchTeachingHoursByDepartment($department) . ")</small></center>";
+                                    " <span style='color:grey'><small>(" . $model->fetchTeachingHoursByDepartment($department) . ")</small></span></center>";
                       
                 },
             ],
