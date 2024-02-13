@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\ClassSubject;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -56,5 +57,37 @@ class TestController extends Controller
             
         ]);
     }
+
+    public function actionJsoncalendar($start=NULL,$end=NULL,$_=NULL){
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        
+            $times = ClassSubject::find()->limit(2)->all();
+        
+            $events = array();
+        
+            foreach ($times AS $time){
+              //Testing
+              $Event = new \yii2fullcalendar\models\Event();
+              $Event->id = $time->id;
+              $Event->title = $time->subject . " (".$time->class.")";
+              $Event->start = date('Y-m-d\TH:i:s\Z',strtotime('today 7am')); //date('Y-m-d\TH:i:s\Z',strtotime($time->dadata));
+              $Event->end = date('Y-m-d\TH:i:s\Z',strtotime('today 8am')); // date('Y-m-d\TH:i:s\Z',strtotime($time->adata));
+              $Event->overlap=true;
+              $Event->startEditable = true;
+              $Event->durationEditable = true;
+              $Event->color = 'green';
+              $Event->nonstandard = [
+                'room' => 'LIT',
+                'info' => 'additional Info',
+              ];
+              $Event->editable = true;
+              $Event->startEditable = true;
+              $Event->durationEditable = true;
+
+              $events[] = $Event;
+            }
+        \Yii::warning($events);
+            return $events;
+          }
 
 }

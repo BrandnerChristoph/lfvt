@@ -1,10 +1,12 @@
 <?php
 
-use yii\helpers\Html;
+use yii\helpers\Url;
 //use yii\grid\GridView;
+use yii\helpers\Html;
 use yii\widgets\Pjax;
-use kartik\grid\GridView;
 
+use kartik\icons\Icon;
+use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
 use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
@@ -79,6 +81,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             [
+                // Textueller Wunsch
+                'attribute' => 'Lehrerwunsch',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $strInfo = "";
+                    foreach($model->teacherWishlists as $listItem){                        
+                        $strInfo = $listItem['info'];
+                    }
+                    return $strInfo; 
+                },
+            ],
+            [
                 'attribute' => 'Minimumstunden',
                 'format' => 'raw',
                 'value' => function($model){
@@ -139,7 +153,10 @@ $this->params['breadcrumbs'][] = $this->title;
             //['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'initial',            
+            [
+                'attribute' => 'initial', 
+                'contentOptions' => ['style'=>'text-align: center; width: 10px;'],
+            ],                       
             [
                 'attribute' => 'Stunden',
                 'format' => 'raw',
@@ -173,12 +190,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     
                     return $strReturn ;
                 },
+                'contentOptions' => ['style'=>'text-align: center; width: 100px;'],
             ],
             [
                 'attribute' => 'Wert',
                 'value' => function($model){
                     return $model->teachingHours;
-                },
+                },                
+                'contentOptions' => ['style'=>'text-align: center; width: 100px;'],
             ],
             'name',
             'firstname',
@@ -194,15 +213,32 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function ($model) {
                     $strHours = "";
-                    foreach($model->teacherWishlists as $listItem){
-                        if(!empty($listItem['hours_min']))
-                            $strHours = $listItem['hours_min'];
-                        if(!empty($listItem['hours_max']) && ($listItem['hours_min'] != $listItem['hours_max']))
-                            $strHours .= " - " . $listItem['hours_max'];
+                    $objWish = $model->teacherWishlist;
+                    if(!is_null($objWish)){
+                        $strHours = $objWish->hours_min;
+                        if(!empty($objWish->hours_max) && ($objWish->hours_min != $objWish->hours_max))
+                            $strHours .= " - " . $objWish->hours_max;
+
+                        return $strHours . '<a class="showModalButton btn btn-sm" '
+                                            . 'style="font-size: 0.85rem; color:orange; padding: 0.2rem 0.3rem;" '
+                                            . 'value="' . Url::to(['teacher-wishlist/update', 'id' => $objWish->id]) . '" href="#" title="Lehrerwunsch">'
+                                            . Icon::show('edit')        
+                                            . '</a>'; 
                         
-                        $list[] = $listItem['info'];
                     }
-                    return $strHours; 
+                    return '<a class="showModalButton btn btn-sm" '
+                            . 'style="font-size: 0.85rem; color:orange; padding: 0.2rem 0.3rem;" '
+                            . 'value="' . Url::to(['teacher-wishlist/create-for-teacher', 'teacher_id' => $model->id]) . '" href="#" title="neuer Lehrerwunsch">'
+                            . Icon::show('plus')        
+                            . '</a>';; 
+                },
+            ],
+            [
+                'attribute' => 'Lehrerwunsch',
+                'format' => 'raw',
+                'value' => function ($model) {
+
+                    return !is_null($model->teacherWishlist) ? $model->teacherWishlist->info : null;
                 },
             ],
             [

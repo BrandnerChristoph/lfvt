@@ -99,6 +99,11 @@ class Teacher extends \yii\db\ActiveRecord
         return $this->hasMany(TeacherWishlist::className(), ['teacher_id' => 'id']);
     }
 
+    public function getTeacherWishlist()
+    {
+        return $this->hasOne(TeacherWishlist::className(), ['teacher_id' => 'id']);
+    }
+
     
     /**
      * Gets query for [[ClassSubjects]].

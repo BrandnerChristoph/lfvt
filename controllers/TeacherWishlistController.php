@@ -86,6 +86,35 @@ class TeacherWishlistController extends Controller
     }
 
     /**
+     * Creates a new TeacherWishlist model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreateForTeacher($teacher_id)
+    {
+        $model = new TeacherWishlist();
+        $model->id = uniqid();
+        $model->teacher_id = $teacher_id;
+        $model->created_at = time();
+        $model->updated_at = time();
+        $model->save(false);
+        $model = TeacherWishlist::findOne($model->id);
+
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        } else {
+            $model->loadDefaultValues();
+        }
+
+        return $this->renderAjax('_form', [
+            'model' => $model,
+            'disableTeacher' => true,
+        ]);
+    }
+
+    /**
      * Updates an existing TeacherWishlist model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id ID
@@ -99,12 +128,20 @@ class TeacherWishlistController extends Controller
         if ($this->request->isPost && $model->load($this->request->post())){
             $model->updated_at = time();
             $model->save(false);
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(Yii::$app->request->referrer);
+            //return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('_form', [
+                'model' => $model,
+            ]);
+        } else {
+
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
     }
 
     /**
