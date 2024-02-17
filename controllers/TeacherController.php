@@ -306,7 +306,7 @@ class TeacherController extends Controller
             $content .= "<div class='col-xs-4 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Werteinheiten (WE): " . Yii::$app->formatter->asDecimal($model->teachingHours,3) . "</div>";
             
             $content .= "<h3>Wunschliste</h3>";
-            
+            /*
             if(sizeof($model->teacherWishlists) == 0)
                 $content .= "<div class='col-xs-12' style='padding:0px 0px 0px 0px; margin: 0px !important;'>-</div>";
 
@@ -314,6 +314,14 @@ class TeacherController extends Controller
                 $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Minimum: " . Yii::$app->formatter->asDecimal($wl->hours_min,3) . "</div>";
                 $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Maximum: " . Yii::$app->formatter->asDecimal($wl->hours_max,3) . "</div>";
                 $content .= "<div class='col-xs-12' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $wl->info . "</div>";
+            }
+            */
+            if(is_null($model->teacherWishlist)){
+                $content .= "<div class='col-xs-12' style='padding:0px 0px 0px 0px; margin: 0px !important;'>-</div>";
+            } else {
+                $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Minimum: " . Yii::$app->formatter->asDecimal($model->teacherWishlist->hours_min,3) . "</div>";
+                $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Maximum: " . Yii::$app->formatter->asDecimal($model->teacherWishlist->hours_max,3) . "</div>";
+                $content .= "<div class='col-xs-12' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $model->teacherWishlist->info . "</div>";
             }
             
             $content .= "<h2 style='border-top: 1px solid #1450A0; padding-top: 10;'>Unterricht</h2>";

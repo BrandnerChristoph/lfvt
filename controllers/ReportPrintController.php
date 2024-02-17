@@ -178,25 +178,28 @@ class ReportPrintController extends Controller
                     $content .= Yii::$app->formatter->asDecimal($item->hours, 0);
                 $content .= "</div>";
                 $content .= "<div class='col-xs-3' style='padding:0px 0px 0px 0px; margin: 0px !important; text-align: center;'>";
-                    $wish = $item->getWishHoursAsArray();
-                    if(isset($wish['min']) && isset($wish['max'])){
-                        $fontColor = "red";
-                        if($wish['max'] < $item->hours){
+                    if(!is_null($item->teacherWishlist)){
+
+                        if(isset($item->teacherWishlist->hours_min) && isset($item->teacherWishlist->hours_max)){
                             $fontColor = "red";
-                        } else if($wish['min'] > $item->hours){
-                            $fontColor = "red";
-                        } else if($wish['min'] <= $item->hours && $wish['max'] >= $item->hours){
-                            $fontColor = "green";
+                            if($item->teacherWishlist->hours_max < $item->hours){
+                                $fontColor = "red";
+                            } else if($item->teacherWishlist->hours_min > $item->hours){
+                                $fontColor = "red";
+                            } else if($item->teacherWishlist->hours_min <= $item->hours && $item->teacherWishlist->hours_max >= $item->hours){
+                                $fontColor = "green";
+                            }
+    
+    
+                            $content .=  "<span style='color:".$fontColor.";'>";
+                                $content .= $item->teacherWishlist->hours_min . " - " . $item->teacherWishlist->hours_max;
+                            $content .=  "</span>";
                         }
-
-
-                        $content .=  "<span style='color:".$fontColor.";'>";
-                            $content .= $wish['min'] . " - " . $wish['max'];
-                        $content .=  "</span>";
+                        else {
+                            $content .= "&nbsp;";
+                        }
                     }
-                    else {
-                        $content .= "&nbsp;";
-                    }
+
                 $content .= "</div>";
                 
             $content .= "</div>";                                        

@@ -182,10 +182,12 @@ class Teacher extends \yii\db\ActiveRecord
     
     /**
      * return an array with 
+     * NOT IN USE (seit nur 1 Wunsch gespeichert wird)
      */
     public function getWishHoursAsArray()
     {
         $returnArray = array();
+
         foreach($this->teacherWishlists as $listItem){
             if(!empty($listItem['hours_min']))
                 $returnArray['min'] = $listItem['hours_min'];
