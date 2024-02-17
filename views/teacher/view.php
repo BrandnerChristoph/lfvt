@@ -42,17 +42,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'Wunschliste',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    $list = array();
+                    $objWish = $model->teacherWishlist;
                     $strHours = "";
-                    foreach($model->teacherWishlists as $listItem){
-                        if(!empty($listItem['hours_min']))
-                            $strHours = "Minimum: " . $listItem['hours_min'] . "<br />";
-                        if(!empty($listItem['hours_max']))
-                            $strHours .= "Maximum: " . $listItem['hours_max'] . "<br />";
+                    if(!is_null($objWish)){
+                        if(!empty($objWish->hours_min))
+                            $strHours = "Minimum: " . $objWish->hours_min . "<br />";
+                        if(!empty($objWish->hours_max))
+                            $strHours .= "Maximum: " . $objWish->hours_max . "<br />";
                         
-                        $list[] = $listItem['info'];
+                        $strHours .= $objWish->info;
                     }
-                    return $strHours  . implode(', ', $list) . "<br /><a href='" . Url::to(['teacher-wishlist/index', 'TeacherWishlistSearch[teacher_id]' => $model->id]) . "'>zur Wunschliste</a>";; 
+                    return $strHours;
+                    
                 },
             ],
             [

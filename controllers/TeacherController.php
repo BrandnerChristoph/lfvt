@@ -14,6 +14,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use app\models\search\TeacherSearch;
 use app\models\search\ClassSubjectSearch;
+use app\models\TeacherWishlist;
 
 /**
  * TeacherController implements the CRUD actions for Teacher model.
@@ -174,15 +175,51 @@ class TeacherController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if(is_null($model->teacherWishlist)) {
+            $objWishlist = new TeacherWishlist();
+            $objWishlist->id = uniqid();
+            $objWishlist->teacher_id = $id;
+            $objWishlist->created_at = time();
+            $objWishlist->updated_at = time();
+            $objWishlist->save(false);
+        }
+
 
         if ($this->request->isPost && $model->load($this->request->post())){
+            $modelWishlist = TeacherWishlist::find()->andFilterWhere(['teacher_id' => $model->id])->One();
+            $modelWishlist->load($this->request->post());
+            
             $model->updated_at = time();
+            $modelWishlist->updated_at = time();
             $model->save(false);
+            $modelWishlist->save(false);
+
+            if(isset($_POST['prevTeacher'])){
+                if($_POST['prevTeacher'] != "")
+                    return $this->redirect(['update', 'id' => $_POST['prevTeacher']]);
+            }
+            elseif(isset($_POST['nextTeacher'])){
+                if($_POST['nextTeacher'] != "")
+                    return $this->redirect(['update', 'id' => $_POST['nextTeacher']]);
+            }
+            
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $curTeacherIdx = -1;
+        $arrTeacherList = Teacher::find()->asArray()->orderby('name asc, firstname asc')->All();
+        for($i = 0; $i < sizeof($arrTeacherList); $i++){
+            if($arrTeacherList[$i]['id'] == $model->id)
+                $curTeacherIdx = $i;
+        }
+
+
+
         return $this->render('update', [
             'model' => $model,
+            'prevTeacher' => ($curTeacherIdx - 1 < 0) ? -1 : $arrTeacherList[$curTeacherIdx - 1]['id'],
+            'nextTeacher' => ($curTeacherIdx + 1 >= sizeof($arrTeacherList)) ? -1 : $arrTeacherList[$curTeacherIdx + 1]['id'],
+
         ]);
     }
 

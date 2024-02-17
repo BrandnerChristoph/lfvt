@@ -167,15 +167,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     $strReturn = "";
                     //$curHours = $model->hours;
                     //$curTeachingHours = $model->teachingHours;
+                    
                     $min = -1;
                     $max = -1;
+
+                    if(!is_null($model->teacherWishlist)){
+                        $min = !empty($model->teacherWishlist->hours_min) ? $model->teacherWishlist->hours_min : $min;
+                        $max = !empty($model->teacherWishlist->hours_max) ? $model->teacherWishlist->hours_max : $max;
+                    }
+
+/*
                     foreach($model->teacherWishlists as $listItem){
                         if(!empty($listItem['hours_min']))
                             $min = $listItem['hours_min'];
                         if(!empty($listItem['hours_max']) && ($listItem['hours_min'] != $listItem['hours_max']))
                             $max = $listItem['hours_max'];
                     }
+                    */
 
+                    
                     if($min >= 0 && $max >=0){
                         if($max < $curHours){
                             $strReturn = "<center><div class='btn-sm btn-danger'>".$curHours."</div></center>";
