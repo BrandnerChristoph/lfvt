@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use Exception;
 use kartik\mpdf\Pdf;
 use app\models\Teacher;
 use yii\web\Controller;
@@ -10,11 +11,11 @@ use app\models\SchoolClass;
 use kartik\form\ActiveForm;
 use yii\filters\VerbFilter;
 use app\models\ClassSubject;
+use app\models\TeacherWishlist;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use app\models\search\TeacherSearch;
 use app\models\search\ClassSubjectSearch;
-use app\models\TeacherWishlist;
 
 /**
  * TeacherController implements the CRUD actions for Teacher model.
@@ -242,7 +243,19 @@ class TeacherController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $transaction = Yii::$app->db->beginTransaction();
+        try{
+            TeacherWishlist::deleteAll(['teacher_id' => $id]);
+            $this->findModel($id)->delete();
+            $transaction->commit();
+            Yii::$app->session->setFlash('success', "Lehrer (".$id.") konnte erfolgreich gelöscht werden.");
+        }
+
+        catch(Exception $e){
+            Yii::$app->session->setFlash('error', "<b>Lehrer konnte nicht gelöscht werden!</b><br />Vergewissern Sie sich, dass dem Lehrer keine Stunden mehr zugewiesen sind.<br /><small>" . $e->getMessage() . " (Line: " . $e->getLine() . ")</small>");
+            $transaction->rollBack();
+        }
+
 
         return $this->redirect(['index']);
     }
