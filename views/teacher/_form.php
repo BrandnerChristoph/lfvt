@@ -64,32 +64,40 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'mobile')->textInput(['maxlength' => true]) ?>
         </div>
 
-        <!-- Wishlist -->
-        <div class="col-lg-12"><hr />
-            <h2>Leherwunsch</h2>
-        </div>
+        <?php
+            if(!is_null($model->teacherWishlist)){
+        ?>
+            <!-- Wishlist -->
+            <div class="col-lg-12"><hr />
+                <h2>Leherwunsch</h2>
+            </div>
 
-        <div class="col-lg-6">
-            <?= $form->field($model->teacherWishlist, 'hours_min')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-lg-6">
-            <?= $form->field($model->teacherWishlist, 'hours_max')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-lg-12">
-            <?= $form->field($model->teacherWishlist, 'info')->textInput(['maxlength' => true]) ?>
-        </div>
+            <div class="col-lg-6">
+                <?= $form->field($model->teacherWishlist, 'hours_min')->textInput(['maxlength' => true]) ?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model->teacherWishlist, 'hours_max')->textInput(['maxlength' => true]) ?>
+            </div>
+            <div class="col-lg-12">
+                <?= $form->field($model->teacherWishlist, 'info')->textInput(['maxlength' => true]) ?>
+            </div>
+        <?php
+            }
+        ?>
 
-        <div class="col-lg-12 text-center" style="margin: 5px">
-            
-                <?= Html::submitButton(Yii::t('app', '<< speichern & voriger Lehrer ('.$prevTeacher.')'), ['class' => 'btn btn-primary text-center', 'name' => 'prevTeacher', 'value' => $prevTeacher]) ?>
-                <?= Html::submitButton(Yii::t('app', 'speichern & nächster Lehrer ('.$nextTeacher.') >>'), ['class' => 'btn btn-primary text-center', 'name' => 'nextTeacher', 'value' => $nextTeacher]) ?>
-            
-        </div>
+        <?php
+            if(!$model->isNewRecord){
+        ?>
+                <div class="col-lg-12 text-center" style="margin: 5px">
+                        <?= Html::submitButton(Yii::t('app', '<< speichern & voriger Lehrer ('.$prevTeacher.')'), ['class' => 'btn btn-primary text-center', 'name' => 'prevTeacher', 'value' => $prevTeacher]) ?>
+                        <?= Html::submitButton(Yii::t('app', 'speichern & nächster Lehrer ('.$nextTeacher.') >>'), ['class' => 'btn btn-primary text-center', 'name' => 'nextTeacher', 'value' => $nextTeacher]) ?>
+                </div>
+        <?php
+            }
+        ?>
 
-        <div class="col-lg-12 text-center">
-            
-                <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success text-center',]) ?>
-            
+        <div class="col-lg-12 text-center">            
+                <?= Html::submitButton(!$model->isNewRecord ? Yii::t('app', 'Save') : Yii::t('app', 'Create'), ['class' => 'btn btn-success text-center',]) ?>            
         </div>
     </div>
     

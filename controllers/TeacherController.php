@@ -46,7 +46,10 @@ class TeacherController extends Controller
     public function actionIndex()
     {
         $searchModel = new TeacherSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $params = $this->request->queryParams;
+        if(!isset($params))
+            $params['TeacherSearch']['is_active'] = 1;
+        $dataProvider = $searchModel->search($params);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -154,6 +157,13 @@ class TeacherController extends Controller
                 $model->created_at = time();
                 $model->updated_at = time();
                 if($model->save(false)) {
+                    $modelWishlist = new TeacherWishlist();
+                    $modelWishlist->id = uniqid();
+                    $modelWishlist->teacher_id = $model->initial;
+                    $modelWishlist->created_at = time();
+                    $modelWishlist->updated_at = time();
+                    $modelWishlist->save(false);
+
                     return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
