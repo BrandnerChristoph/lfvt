@@ -91,11 +91,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     $curTeachingHours = $model->teachingHours;
                     $min = -1;
                     $max = -1;
-                    foreach($model->teacherWishlists as $listItem){
-                        if(!empty($listItem['hours_min']))
-                            $min = $listItem['hours_min'];
-                        if(!empty($listItem['hours_max']) && ($listItem['hours_min'] != $listItem['hours_max']))
-                            $max = $listItem['hours_max'];
+                    if(!is_null($model->teacherWishlist)){
+                        $min = !empty($model->teacherWishlist->hours_min) ? $model->teacherWishlist->hours_min : $min;
+                        $max = !empty($model->teacherWishlist->hours_max) ? $model->teacherWishlist->hours_max : $max;
                     }
 
                     if($min >= 0 && $max >=0){
@@ -144,16 +142,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'Stundenwunsch',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    $strHours = "";
-                    foreach($model->teacherWishlists as $listItem){
-                        if(!empty($listItem['hours_min']))
-                            $strHours = $listItem['hours_min'];
-                        if(!empty($listItem['hours_max']) && ($listItem['hours_min'] != $listItem['hours_max']))
-                            $strHours .= " - " . $listItem['hours_max'];
-                        
-                        $list[] = $listItem['info'];
+
+                    $strReturn = "";
+                    $min = -1;
+                    $max = -1;
+
+                    if(!is_null($model->teacherWishlist)){
+                        if(!empty($model->teacherWishlist->hours_min))
+                            $strReturn .= $model->teacherWishlist->hours_min . " - ";
+
+                        if(!empty($model->teacherWishlist->hours_max))
+                            $strReturn .= $model->teacherWishlist->hours_max;
                     }
-                    return $strHours; 
+                    
+                    return $strReturn ;
                 },
             ],
 

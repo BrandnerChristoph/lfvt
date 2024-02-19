@@ -42,11 +42,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     $curTeachingHours = $model->teachingHours;
                     $min = -1;
                     $max = -1;
-                    foreach($model->teacherWishlists as $listItem){
-                        if(!empty($listItem['hours_min']))
-                            $min = $listItem['hours_min'];
-                        if(!empty($listItem['hours_max']) && ($listItem['hours_min'] != $listItem['hours_max']))
-                            $max = $listItem['hours_max'];
+
+                    if(!is_null($model->teacherWishlist)){
+                        $min = !empty($model->teacherWishlist->hours_min) ? $model->teacherWishlist->hours_min : $min;
+                        $max = !empty($model->teacherWishlist->hours_max) ? $model->teacherWishlist->hours_max : $max;
                     }
 
                     if($min >= 0 && $max >=0){
@@ -65,54 +64,29 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             [
-                'attribute' => 'Stundenwunsch',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    $strHours = "";
-                    foreach($model->teacherWishlists as $listItem){
-                        if(!empty($listItem['hours_min']))
-                            $strHours = $listItem['hours_min'];
-                        if(!empty($listItem['hours_max']) && ($listItem['hours_min'] != $listItem['hours_max']))
-                            $strHours .= " - " . $listItem['hours_max'];
-                        
-                        $list[] = $listItem['info'];
-                    }
-                    return $strHours; 
-                },
-            ],
-            [
                 // Textueller Wunsch
                 'attribute' => 'Lehrerwunsch',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    $strInfo = "";
-                    foreach($model->teacherWishlists as $listItem){                        
-                        $strInfo = $listItem['info'];
-                    }
-                    return $strInfo; 
+                    if(!is_null($model->teacherWishlist))
+                        return $model->teacherWishlist->info;
                 },
             ],
             [
                 'attribute' => 'Minimumstunden',
                 'format' => 'raw',
                 'value' => function($model){
-                    foreach($model->teacherWishlists as $listItem){
-                        if(!empty($listItem['hours_min']))
-                            return $listItem['hours_min'];
-                    }
-                    return "";
+                    if(!is_null($model->teacherWishlist))
+                        return $model->teacherWishlist->hours_min;
                 }
             ],
             [
                 'attribute' => 'Maximumstunden',
                 'format' => 'raw',
                 'value' => function($model){
-                    foreach($model->teacherWishlists as $listItem){
-                        if(!empty($listItem['hours_max']))
-                            return $listItem['hours_max'];
+                    if(!is_null($model->teacherWishlist))
+                        return $model->teacherWishlist->hours_max;
                     }
-                    return "";
-                }
             ],
             [
                 'attribute' => 'Klasse/Fächer',
@@ -212,11 +186,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'firstname',
             'email_1:email',
-            //'email_2:email',
-            //'phone',
-            //'mobile',
-            //'created_at',
-            //'updated_at',
             
             [
                 'attribute' => 'Stundenwunsch',
@@ -253,20 +222,23 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'is_active',
-                'format' => "html",
-                'value' => function($model) {
+                'format' => 'raw',
+                'value' => function ($model) {
                     if($model->is_active == 1)
                         return "Ja";
-                    return "<span style='color: red;'>nein</span>";                    
+                    return "<span style='color: red;'>nein</span>";
                 },
+    
                 'filter' => [1 => 'ja', 0 => 'nein'],
                 'filterType' => GridView::FILTER_SELECT2,
                 'filterWidgetOptions' => [
-                    'options' => ['prompt' => ''],
-                    'pluginOptions' => ['allowClear' => true],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'multiple' => false,
+                        'placeholder' => 'Aktiv?',
+                    ],
                 ],
             ],
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
