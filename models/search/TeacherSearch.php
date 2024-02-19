@@ -20,7 +20,7 @@ class TeacherSearch extends Teacher
     {
         return [
             [['id', 'created_at', 'updated_at'], 'integer'],
-            [['initial', 'name', 'firstname', 'email_1', 'email_2', 'phone', 'mobile', 'teacherListPreset'], 'safe'],
+            [['initial', 'name', 'firstname', 'email_1', 'email_2', 'phone', 'mobile', 'teacherListPreset', 'is_active'], 'safe'],
         ];
     }
 
@@ -63,6 +63,7 @@ class TeacherSearch extends Teacher
         $query->andFilterWhere([
             'id' => $this->id,
             'created_at' => $this->created_at,
+            'is_active' => $this->is_active,
             'updated_at' => $this->updated_at,
             //'initial'=> $this->initial,
         ]);

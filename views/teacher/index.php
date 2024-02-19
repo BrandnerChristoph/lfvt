@@ -1,16 +1,13 @@
 <?php
 
 use yii\helpers\Url;
-//use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
-
+use yii\helpers\ArrayHelper;
 use kartik\icons\Icon;
 use kartik\grid\GridView;
-use yii\helpers\ArrayHelper;
 use kartik\export\ExportMenu;
-/* @var $this yii\web\View */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+
 
 $this->title = Yii::t('app', 'Teachers');
 $this->params['breadcrumbs'][] = $this->title;

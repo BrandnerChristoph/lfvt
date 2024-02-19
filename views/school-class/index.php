@@ -2,7 +2,6 @@
 
 use app\models\Department;
 use yii\helpers\Html;
-//use yii\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;

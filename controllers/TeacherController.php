@@ -48,7 +48,7 @@ class TeacherController extends Controller
     {
         $searchModel = new TeacherSearch();
         $params = $this->request->queryParams;
-        if(!isset($params))
+        if(!isset($params['TeacherSearch']))
             $params['TeacherSearch']['is_active'] = 1;
         $dataProvider = $searchModel->search($params);
 
