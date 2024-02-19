@@ -11,7 +11,6 @@ use yii\widgets\ActiveForm;
 
 <div class="teacher-form">
 
-
     <?php // $form = ActiveForm::begin(['id' => 'routingForm', 'enableClientValidation' => true, 'enableAjaxValidation' => true]); ?>
     <?php $form = ActiveForm::begin(['id' => 'routingForm',]); ?>
 
@@ -22,7 +21,7 @@ use yii\widgets\ActiveForm;
         </div-->
 
         <div class="col-lg-6">
-            <?= $form->field($model, 'initial')->textInput(['maxlength' => true, 'readonly' => !$model->isNewRecord, 'value' => strtoupper($model->id)]) ?>
+            <?= $form->field($model, 'initial', ['enableAjaxValidation' => true])->textInput(['maxlength' => true, 'readonly' => !$model->isNewRecord, 'value' => strtoupper($model->id)]) ?>
         </div>
 
         <div class="col-lg-6">
@@ -87,6 +86,7 @@ use yii\widgets\ActiveForm;
 
         <?php
             if(!$model->isNewRecord){
+                // only for existing models
         ?>
                 <div class="col-lg-12 text-center" style="margin: 5px">
                         <?= Html::submitButton(Yii::t('app', '<< speichern & voriger Lehrer ('.$prevTeacher.')'), ['class' => 'btn btn-primary text-center', 'name' => 'prevTeacher', 'value' => $prevTeacher]) ?>
