@@ -18,11 +18,11 @@ use yii\widgets\ActiveForm;
     <div class="row">
 
         <!--div class="col-lg-6">
-            <?= $form->field($model, 'id')->textInput(['readonly' => !$model->isNewRecord]) ?>
+            <?= $form->field($model, 'id')->textInput(['readonly' => !$model->isNewRecord, 'value' => strtoupper($model->id)]) ?>
         </div-->
 
         <div class="col-lg-6">
-            <?= $form->field($model, 'initial')->textInput(['maxlength' => true, 'readonly' => !$model->isNewRecord]) ?>
+            <?= $form->field($model, 'initial')->textInput(['maxlength' => true, 'readonly' => !$model->isNewRecord, 'value' => strtoupper($model->id)]) ?>
         </div>
 
         <div class="col-lg-6">
@@ -41,7 +41,7 @@ use yii\widgets\ActiveForm;
         </div>
         
         <div class="col-lg-6">
-            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'value' => strtoupper($model->name)]) ?>
         </div>
 
         <div class="col-lg-6">

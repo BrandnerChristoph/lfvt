@@ -127,6 +127,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'initial', 
                 'contentOptions' => ['style'=>'text-align: center; width: 10px;'],
+                'value' => function ($model){
+                    return strtoupper($model->initial);
+                }
             ],                       
             [
                 'attribute' => 'Stunden',
@@ -180,7 +183,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 },                
                 'contentOptions' => ['style'=>'text-align: center; width: 100px;'],
             ],
-            'name',
+            //'name',
+            [
+                'attribute' => 'name',
+                'value' => function($model){
+                    return strtoupper($model->name);
+                },                
+            ],
             'firstname',
             'email_1:email',
             

@@ -21,8 +21,21 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php 
         $cols = [
             //'id',
-            'initial',
-            'name',
+            //'initial',
+            [
+                'attribute' => 'initial',
+                'value' => function ($model) {
+                    return strtoupper($model->initial);                    
+                },
+            ],
+            //'name',
+            [
+                'attribute' => 'name',
+                'value' => function ($model) {
+                    return strtoupper($model->name);                    
+                },
+            ],
+            
             'firstname',
             [
                 'attribute' => 'is_active',
