@@ -71,6 +71,9 @@ $lang = [
     'Classroom' => 'Raum',
     'classSubject.info' => 'Info',
 
+    // Lehrer
+    'initial' => 'Initialien',
+
     // Report
     'Report.TeacherByClass' => 'Klassenlehrer',
     'Report.TeacherWorkload' => 'Lehrerauslastung',

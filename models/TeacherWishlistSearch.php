@@ -47,6 +47,7 @@ class TeacherWishlistSearch extends TeacherWishlist
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => ['defaultOrder'=> ['teacher_id' => SORT_ASC]]
         ]);
 
         $this->load($params);
