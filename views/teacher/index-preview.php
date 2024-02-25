@@ -1,7 +1,9 @@
 <?php
 
+use app\models\Department;
 use yii\helpers\Html;
-use yii\grid\GridView;
+//use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 use yii\helpers\Url;
@@ -65,6 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'showFooter' => true,
         'columns' => [
             //['class' => 'yii\grid\SerialColumn'],
 
@@ -126,6 +129,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     " <span style='color:grey'><small>(" . $model->fetchTeachingHoursByDepartment($department) . ")</small></span></center>";
                       
                 },
+                'footer' => "<center>" . Yii::$app->formatter->asDecimal(Department::fetchHours($department)) . " <small>(" .Yii::$app->formatter->asDecimal(Department::fetchTeachingHoursByDepartment($department)) . ")</small></center>" ,   
+
             ],
             /*
             'name',
