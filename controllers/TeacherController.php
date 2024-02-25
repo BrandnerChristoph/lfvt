@@ -89,6 +89,7 @@ class TeacherController extends Controller
             $params["TeacherSearch"]["teacherListPreset"] = $teacherList;
         }
 
+        $params["TeacherSearch"]["is_active"] = "1";    // Teacher has to have status "active"
         $dataProvider = $searchModel->searchWithPreset($params);
 
         $dataProvider->pagination->pageSize = 500;

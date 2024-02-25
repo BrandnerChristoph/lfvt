@@ -112,6 +112,7 @@ class TeacherSearch extends Teacher
         $query->andFilterWhere([
             'id' => $this->id,
             'created_at' => $this->created_at,
+            'is_active' => $this->is_active,
             'updated_at' => $this->updated_at,
             //'initial'=> $this->initial,
         ]);
