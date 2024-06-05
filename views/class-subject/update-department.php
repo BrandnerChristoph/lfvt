@@ -11,6 +11,7 @@ use app\models\Department;
 use app\models\SchoolClass;
 use kartik\widgets\Select2;
 use app\models\ClassSubject;
+use app\models\SubjectType;
 use kartik\editable\Editable;
 use kartik\bs4dropdown\ButtonDropdown;
 //use kartik\widgets\ActiveForm;
@@ -158,13 +159,25 @@ $classList = SchoolClass::getArrayHelperList();
                 $index = 0;
                 $btnIndex = 1000;
 
+                $subjectTypeList = SubjectType::find()->select('id, name, color')->asArray()->All();
+
                 foreach($subjects as $classSubject){
                     echo "<tr style='height: 65px !important;'>";
                         $style = "";
-                        
+
                         $classSubject->subjectItem->type == "Allgemeinbildenden Gegenstände" ? $style = "style='border-left: 3px solid green' title='".$classSubject->subjectItem->name." - ".$classSubject->subjectItem->type."'" : null;
                         $classSubject->subjectItem->type == "Fachtheorie" ? $style = "style='border-left: 3px solid red' title='Fachtheorie'" : null;
                         $classSubject->subjectItem->type == "Werkstatt" ? $style = "style='border-left: 3px solid blue' title='Werkstatt'" : null;
+
+                        /*
+
+                        foreach($subjectTypeList as $item){
+                            if($classSubject->subjectItem->type == $item['id']){
+                                if(!empty($item['color']))
+                                    $style = "style='border-left: 3px solid " . $item['color'] . "' title='" . $classSubject->subjectItem->name . " - " . $item['name'] . "'";
+                            }
+                        }
+                        */
 
                         echo "<td ".$style.">";
                             echo "<center>";
@@ -208,7 +221,14 @@ $classList = SchoolClass::getArrayHelperList();
                                                     $strTitleAdditionalInfo = "";
                                                     if(!empty($obj->info))
                                                         $strTitleAdditionalInfo .= " | " . $obj->info;
-                                                    echo "<div class='' title='".$obj->teacher0->name." ".$obj->teacher0->firstname."".$strTitleAdditionalInfo. "' >";
+
+                                                        if(is_null($obj->teacher0))
+                                                            echo "<div class='' title='' >";
+                                                    
+                                                        else
+                                                            echo "<div class='' title='".$obj->teacher0->name." ".$obj->teacher0->firstname."".$strTitleAdditionalInfo. "' >";
+                                                    
+
                                                             if($obj->teacher == "?"){
                                                                 //echo "<b>";
                                                                 echo "<span style='color: red;'>";
