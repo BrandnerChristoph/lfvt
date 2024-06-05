@@ -159,8 +159,7 @@ $classList = SchoolClass::getArrayHelperList();
                 $index = 0;
                 $btnIndex = 1000;
 
-                $subjectTypeList = SubjectType::find()->select('id, name, color')->asArray()->All();
-
+                
                 foreach($subjects as $classSubject){
                     echo "<tr style='height: 65px !important;'>";
                         $style = "";
@@ -170,6 +169,8 @@ $classList = SchoolClass::getArrayHelperList();
                         $classSubject->subjectItem->type == "Werkstatt" ? $style = "style='border-left: 3px solid blue' title='Werkstatt'" : null;
 
                         /*
+
+                        $subjectTypeList = SubjectType::find()->select('id, name, color')->asArray()->All();
 
                         foreach($subjectTypeList as $item){
                             if($classSubject->subjectItem->type == $item['id']){
