@@ -488,7 +488,7 @@ class TeacherController extends Controller
             $counter = 0; 
             $teachers = Teacher::find()
                             ->andFilterWhere(['is_active' => "1"])
-                            ->andWhere('Initial in ("BN", "SL")')
+                            ->andWhere('Initial in ("BN", "SL", "SM")')
                             ->all();
 
             echo "Teacher cnt: " . count($teachers);
@@ -509,7 +509,7 @@ class TeacherController extends Controller
                         ->setReplyTo('rh@htlwy.at')
                         ->setSubject('LFV-Schuljahr 2024/25')
                         ->setHtmlBody('<p>Liebe Kolleginnen und Kollegen,</p><p>in der Anlage senden wir euch eure vorläufige persönliche Übersicht über den Unterricht im kommenden Schuljahr. Bei Fehlern oder Fragen bitten wir um Rückmeldungen.</p><p>Schöne Ferien wünschen<br />Direktor, Abteilungsvorstände und Werkstättenleiter</p>')
-                        ->attachContent($path, ['fileName' => 'LFVT_' . strtoupper($model->initial) . '.pdf', 'contentType' => 'application/pdf'])
+                        ->attachContent($path, ['fileName' => 'Lehrerzuweisung_' . strtoupper($model->initial) . '.pdf', 'contentType' => 'application/pdf'])
                         ->send();
 
                         $counter++;
