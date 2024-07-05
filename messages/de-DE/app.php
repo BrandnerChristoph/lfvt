@@ -12,6 +12,7 @@ $lang = [
     'Are you sure you want to restore this item?' => 'Sind Sie sicher diesen Datensatz in der Datenbank wiederherzustellen?',
     
     'Print Overview (PDF)' => 'Übersicht drucken (PDF)',
+    'color' => 'Farbe',
 
     // Lehrer 
     'Teacher' => 'Lehrer',
@@ -58,6 +59,10 @@ $lang = [
     'sortorder' => 'Reihenfolge',
     'subject_type' => 'Unterrichtstyp',
     'subject.info' => 'Fach-Info',
+
+    // Fächertypen
+    'SubjectTypes' => 'Fächertypen',
+    'SubjectType' => 'Fächertyp',
 
     // Fächerzuteilng
     'Class Subject' => 'Fächerzuweisung',

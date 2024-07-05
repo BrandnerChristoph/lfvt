@@ -16,6 +16,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use app\models\search\TeacherSearch;
 use app\models\search\ClassSubjectSearch;
+use Mpdf\Mpdf;
 
 /**
  * TeacherController implements the CRUD actions for Teacher model.
@@ -475,5 +476,176 @@ class TeacherController extends Controller
             
         }
         echo \yii\helpers\Json::encode($out);
+    }
+
+    /**
+     * Lists all Classes by Teacher.
+     * @return mixed
+     */
+    public function actionSendLesson()
+    {
+        try {
+            $counter = 0; 
+            $teachers = Teacher::find()
+                            ->andFilterWhere(['is_active' => "1"])
+                            ->andWhere('Initial in ("BN")')
+                            ->all();
+
+            echo "Teacher cnt: " . count($teachers);
+            echo "<br /><br /><br />";
+            print_r($teachers);
+            //exit(0);
+
+            foreach ($teachers as $model) {
+
+                if($model->hours > 0) {
+
+                    $mpdf = new Mpdf();
+                    $path = $this->renderTeacherLessons($model->initial); 
+
+                    Yii::$app->mailer->compose()
+                        ->setFrom(['bn@htlwy.at' => "HTL Waidhofen/Ybbs - Lehrfächerverteilung"])
+                        ->setTo($model->initial . '@htlwy.at')
+                        ->setReplyTo('rh@htlwy.at')
+                        ->setSubject('LFV-Schuljahr 2024/25')
+                        ->setHtmlBody('<p>Liebe Kolleginnen und Kollegen,</p><p>in der Anlage senden wir euch eure vorläufige persönliche Übersicht über den Unterricht im kommenden Schuljahr. Bei Fehlern oder Fragen bitten wir um Rückmeldungen.</p><p>Schöne Ferien wünschen<br />Direktor, Abteilungsvorstände und Werkstättenleiter</p>')
+                        ->attachContent($path, ['fileName' => 'LFVT_' . strtoupper($model->initial) . '.pdf', 'contentType' => 'application/pdf'])
+                        ->send();
+
+                        $counter++;
+                }
+                    
+            }
+            echo $counter . " Mails sent";
+        }
+        catch(Exception $ex){
+            Yii::error($ex->getMessage(), "BrCh");
+        }        
+    }
+
+    private function renderTeacherLessons($id){
+        ini_set('pcre.backtrack_limit', 5000000);
+        $content = "";
+        if(is_null($id)){
+            $teachers = Teacher::find()->andWhere('length(id) > 1')->all();
+            ini_set('memory_limit', '1024M');
+        } else {
+            $teachers = Teacher::find()->andFilterWhere(['id' => $id])->limit(20)->all();
+            ini_set('memory_limit', '256M');
+        }
+        //$content .= "<link rel='stylesheet' href='@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css'>";
+        foreach ($teachers as $model) {
+            $isAnnualValueNotOne = false;
+            
+            $content .= "<div class='container'><div class='row'><br />";
+            $content .= "<h2>" . $model->name . " " . $model->firstname . "</h2>";
+
+            //$content .= "<br />" . $model->name . " " . $model->firstname . "</h2>";
+            
+            $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Einheiten: " . Yii::$app->formatter->asDecimal($model->hours,3) . "</div>";
+            $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Realstunden (RST): " . Yii::$app->formatter->asDecimal($model->realHours,2) . "</div>";
+            $content .= "<div class='col-xs-4 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Werteinheiten (WE): " . Yii::$app->formatter->asDecimal($model->teachingHours,3) . "</div>";
+            
+            $content .= "<h3>Wunschliste</h3>";
+            
+            if(is_null($model->teacherWishlist)){
+                $content .= "<div class='col-xs-12' style='padding:0px 0px 0px 0px; margin: 0px !important;'>-</div>";
+            } else {
+                $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Minimum: " . Yii::$app->formatter->asDecimal($model->teacherWishlist->hours_min,3) . "</div>";
+                $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Maximum: " . Yii::$app->formatter->asDecimal($model->teacherWishlist->hours_max,3) . "</div>";
+                $content .= "<div class='col-xs-12' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $model->teacherWishlist->info . "</div>";
+            }
+            
+            $content .= "<h2 style='border-top: 1px solid #1450A0; padding-top: 10;'>Unterricht</h2>";
+                $content .= "<div style='border-bottom: 3px solid black;'>" ;
+                    $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Klasse</b></div>";
+                    $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Fach</b></div>";
+                    $content .= "<div class='col-xs-1  text-center' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Einh.</b></div>";
+                    $content .= "<div class='col-xs-1 text-right' style=''><b>RST</b></div>";
+                    $content .= "<div class=' text-right' style=' padding:0px 0px 0px 0px; margin: 0px !important;'><b>WE</b></div>";
+                $content .= "</b></div>";
+
+                // Unterrichtseinheiten
+                foreach(ClassSubject::find()->andFilterWhere(['teacher' => $model->id])->orderby('class asc')->All() as $item){
+                    $content .= "<div style='border-bottom: 1px solid grey;'>" ;
+                        $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'>";
+                        empty($item->class) ? $content .= "&nbsp;" : $content .= $item->class;
+                        $content .= "</div>";
+                        
+                        $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $item->subject;
+                            $content .= " <small>(WE: " . Yii::$app->formatter->asDecimal($item->subjectItem->value, 3);
+                            if(!empty($item->subjectItem->value_real))
+                                $content .= " / RST: " . Yii::$app->formatter->asDecimal($item->subjectItem->value_real, 2);
+                            $content .= ")</small>";
+                            $content .= "<br /><small>" . $item->subjectItem->name . "</small>";
+                            $content .= "</div>";
+
+                        $classAnnualValue = 1;
+                        $objClass = SchoolClass::findOne($item->class);
+                        if(!is_null($objClass)){
+                            $classAnnualValue = $objClass->annual_value;
+                            if($classAnnualValue != 1)
+                                $isAnnualValueNotOne = True;
+                        }
+
+                            $content .= "<div class='col-xs-1 text-center' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $item->hours * $classAnnualValue . " <br /><small>(" . Yii::$app->formatter->asDecimal($item->value,1) . "%)</small>" . "</div>";
+                        
+                        
+    
+                        // Realstunden
+                            $itemRealSum = ($item->hours * $item->value / 100) * $item->subjectItem->value_real * $classAnnualValue;
+                            $content .= "<div class='col-xs-1 text-right' ><b>" . Yii::$app->formatter->asDecimal($itemRealSum,2);
+                            if($classAnnualValue != 1){
+                                $content .= "*";
+                            } else {
+                                $content .= "&nbsp;";
+                            }
+                            $content .= "</b></div>";
+
+                        // Werteinheiten
+                            $itemSum = ($item->hours * $item->value / 100) * $item->subjectItem->value * $classAnnualValue;
+    
+                            $content .= "<div class=' text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>" . Yii::$app->formatter->asDecimal($itemSum,3);
+                            if($classAnnualValue != 1){
+                                $content .= "*";
+                            } else {
+                                $content .= "&nbsp;";
+                            }
+                            $content .= "</b></div>";
+                            
+                    $content .= "</div>";
+                }
+
+                $content .= "</div></div>";
+            
+
+            if ($isAnnualValueNotOne){
+                $content .= "<div><small><br />* ... für die Klasse werden Jahres-Prozentwerte verwendet</small></div>";
+            }
+            $content .= "<pagebreak></pagebreak>";            
+        }
+        ob_clean();
+
+        // remove last pagebreak;
+        $content = substr($content, 0, strlen($content)-23);
+
+        /*
+        echo $content;
+        exit(0);
+        */
+        $pdf = new Pdf();
+        $mpdf = $pdf->api; // fetches mpdf api
+        $mpdf->SetHeader('<img src="img/htl_logo.png" style="height: 30px;">||HTL Waidhofen/Ybbs<br /><small>3340 Waidhofen an der Ybbs, Im Vogelsang 8</small>');
+        $mpdf->SetFooter(strtoupper($id).'||');
+        $stylesheet = file_get_contents('../vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css'); // external css
+        $mpdf->WriteHTML($stylesheet,1);
+        $mpdf->WriteHTML($content,2);
+        
+        $addInfo = "";
+        if(!empty($id))
+            $addInfo = "_".strtoupper($id);
+
+        return $mpdf->Output('', 'S');
+
     }
 }
