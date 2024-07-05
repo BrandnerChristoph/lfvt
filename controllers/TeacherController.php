@@ -488,7 +488,7 @@ class TeacherController extends Controller
             $counter = 0; 
             $teachers = Teacher::find()
                             ->andFilterWhere(['is_active' => "1"])
-                            ->andWhere('Initial in ("BN", "SL", "SM")')
+                            //->andWhere('Initial in ("BN", "SL", "SM")')
                             ->all();
 
             echo "Teacher cnt: " . count($teachers);
