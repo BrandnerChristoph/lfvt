@@ -8,7 +8,6 @@ use kartik\icons\Icon;
 use kartik\grid\GridView;
 use kartik\export\ExportMenu;
 
-
 $this->title = Yii::t('app', 'Teachers');
 $this->params['breadcrumbs'][] = $this->title;
 ?>

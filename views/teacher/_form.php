@@ -17,7 +17,10 @@ use yii\widgets\ActiveForm;
     <div class="row">
 
         <!--div class="col-lg-6">
-            <?= $form->field($model, 'id')->textInput(['readonly' => !$model->isNewRecord, 'value' => strtoupper($model->id)]) ?>
+            <?= $form->field($model, 'id', ['enableAjaxValidation' => true])->textInput([
+                                                                            'maxlength' => true,
+                                                                            'readonly' => !$model->isNewRecord, 
+                                                                            'value' => strtoupper($model->id)])->label(Yii::t('app', 'initial')) ?>
         </div-->
 
         <div class="col-lg-6">

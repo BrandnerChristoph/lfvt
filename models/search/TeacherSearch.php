@@ -2,9 +2,12 @@
 
 namespace app\models\search;
 
+use Yii;
 use yii\base\Model;
-use yii\data\ActiveDataProvider;
 use app\models\Teacher;
+use app\models\TeacherFav;
+use yii\data\ActiveDataProvider;
+use mdm\admin\models\User;
 
 /**
  * TeacherSearch represents the model behind the search form of `app\models\Teacher`.
@@ -13,6 +16,10 @@ class TeacherSearch extends Teacher
 {
 
     public $teacherListPreset;
+    public $teacherListFavorites;
+    
+    public $sortOrder;
+    
     /**
      * {@inheritdoc}
      */
@@ -20,7 +27,7 @@ class TeacherSearch extends Teacher
     {
         return [
             [['id', 'created_at', 'updated_at'], 'integer'],
-            [['initial', 'name', 'firstname', 'email_1', 'email_2', 'phone', 'mobile', 'teacherListPreset', 'is_active'], 'safe'],
+            [['initial', 'name', 'firstname', 'email_1', 'email_2', 'phone', 'mobile', 'teacherListPreset', 'is_active', 'sortOrder'], 'safe'],
         ];
     }
 
@@ -87,15 +94,13 @@ class TeacherSearch extends Teacher
      * @return ActiveDataProvider
      */
     public function searchWithPreset($params)
-    {
+    {   
         $query = Teacher::find();
-
         
         // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'sort' => ['defaultOrder'=> ['name' => SORT_ASC, 'firstname' => SORT_ASC, 'initial' => SORT_ASC]]
+            'query' => $query
+            //'sort' => ['defaultOrder'=> ['sortOrder' => SORT_DESC, 'name' => SORT_ASC, 'firstname' => SORT_ASC, 'initial' => SORT_ASC]]
         ]);
 
         $this->load($params);
@@ -105,7 +110,22 @@ class TeacherSearch extends Teacher
             // $query->where('0=1');
             return $dataProvider;
         }
+        $objUser = User::findOne(Yii::$app->user->id);
+        $teacherListFavorites = TeacherFav::find()
+                                    ->andFilterWhere(['type' => "teacher_myFavorites"])                                
+                                    ->andFilterWhere(['user_id' => $objUser->username])
+                                    ->All();
+        $favItems = array();
+        foreach($teacherListFavorites as $item)
+            $favItems[]=$item->value;
 
+        //$ids = implode('", "', array("BN", "SL"));
+        $ids = implode('", "', $favItems);
+        $query->addSelect((['*', 'CASE WHEN initial in ("'.$ids.'") then 1 else 0 END as sortOrder']));
+
+        
+
+        $query->andFilterWhere(['initial' => $this->teacherListFavorites]);
         $query->andFilterWhere(['initial' => $this->teacherListPreset]);
 
         // grid filtering conditions
@@ -124,6 +144,8 @@ class TeacherSearch extends Teacher
             ->andFilterWhere(['like', 'email_2', $this->email_2])
             ->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'mobile', $this->mobile]);
+
+        $query->orderBy('sortOrder desc, name asc');
 
         return $dataProvider;
     }

@@ -26,6 +26,8 @@ use yii\helpers\ArrayHelper;
  */
 class Teacher extends \yii\db\ActiveRecord
 {
+    public $sortOrder; // ist Favorit
+
     /**
      * {@inheritdoc}
      */
@@ -46,6 +48,7 @@ class Teacher extends \yii\db\ActiveRecord
             [['name', 'firstname', 'email_1', 'email_2'], 'string', 'max' => 225],
             [['phone', 'mobile'], 'string', 'max' => 25],
             [['id', 'initial'], 'unique'],
+            [['sortOrder'], 'safe'],
         ];
     }
 
@@ -64,6 +67,7 @@ class Teacher extends \yii\db\ActiveRecord
             'phone' => Yii::t('app', 'Phone'),
             'mobile' => Yii::t('app', 'Mobile'),
             'is_active' => Yii::t('app', 'Is Active'),
+            'isFav' => Yii::t('app', 'Is Favorite'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
         ];
@@ -210,6 +214,17 @@ class Teacher extends \yii\db\ActiveRecord
     {
         return new TeacherQuery(get_called_class());
     }
+
+    /*
+    public function afterFind(){
+        $this->isFav = 0;
+
+        if($this->id == "BN")
+            $this->isFav = 1;
+
+        parent::afterFind();        
+    }
+    */
 
     /**
      * getArrayMap

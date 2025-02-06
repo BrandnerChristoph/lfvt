@@ -80,8 +80,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     !empty($strName) ? $strName = " <small>(" . $strName . ")</small>" : $strName = "";
                     //return trim("<b>" . $model->initial . "</b>" . $strName);
 
+                    $addInfo = "";
+                    if($model->sortOrder == "1")
+                        $addInfo = "<i style='color: #ffc107;' class='glyphicon glyphicon-star' title='persönlicher Favorit'> ★</i>";
+
+
                     
-                    return Html::a(trim("<b>" . strtoupper($model->initial) . "</b>" . $strName), '#', ['onClick' => 'showTeacherOverview("'.$model->id.'");']);
+                    return Html::a(trim("<b>" . strtoupper($model->initial) . "</b>" . $strName . $addInfo), '#', ['onClick' => 'showTeacherOverview("'.$model->id.'");']);
                 }
             ],
             //'initial',            

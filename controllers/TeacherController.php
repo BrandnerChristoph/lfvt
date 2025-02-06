@@ -4,25 +4,28 @@ namespace app\controllers;
 
 use Yii;
 use Exception;
+use Mpdf\Mpdf;
 use kartik\mpdf\Pdf;
 use app\models\Teacher;
 use yii\web\Controller;
+use app\models\TeacherFav;
+use mdm\admin\models\User;
 use app\models\SchoolClass;
 use kartik\form\ActiveForm;
 use yii\filters\VerbFilter;
 use app\models\ClassSubject;
 use app\models\TeacherWishlist;
-use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use app\models\search\TeacherSearch;
 use app\models\search\ClassSubjectSearch;
-use Mpdf\Mpdf;
 
 /**
  * TeacherController implements the CRUD actions for Teacher model.
  */
 class TeacherController extends Controller
 {
+
+
     /**
      * @inheritDoc
      */
@@ -86,14 +89,30 @@ class TeacherController extends Controller
                                 ->andFilterWhere(['subject.type' => $type]);
         } 
 
+        $params["TeacherSearch"]["is_active"] = "1";    // Teacher has to have status "active"
+
         if(!empty($teacherList)){
             $params["TeacherSearch"]["teacherListPreset"] = $teacherList;
         }
 
-        $params["TeacherSearch"]["is_active"] = "1";    // Teacher has to have status "active"
+        /////////////////////////////////////////
+        // Favoriten laden
+            $objUser = User::findOne(Yii::$app->user->id);
+            $teacherListFavorites = TeacherFav::find()
+                                        ->select('value')
+                                        ->andFilterWhere(['type' => "teacher_myFavorites"])                                
+                                        ->andFilterWhere(['user_id' => $objUser->username]);
+
+            if(!empty($teacherListFavorites)){
+                $params["TeacherSearch"]["teacherListFavorites"] = $teacherListFavorites;
+            }
+
         $dataProvider = $searchModel->searchWithPreset($params);
 
+
+        //$dataProvider->sort->defaultOrder = ['sortOrder' => SORT_DESC, 'name' => SORT_ASC, 'firstname' => SORT_ASC, 'initial' => SORT_ASC];
         $dataProvider->pagination->pageSize = 500;
+
 
         return $this->renderAjax('index-preview', [
             'dataProvider' => $dataProvider,
