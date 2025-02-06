@@ -63,6 +63,7 @@ $lang = [
     // Fächertypen
     'SubjectTypes' => 'Fächertypen',
     'SubjectType' => 'Fächertyp',
+    'Create SubjectType' => 'Fächertyp erstellen',
 
     // Fächerzuteilng
     'Class Subject' => 'Fächerzuweisung',
