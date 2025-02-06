@@ -8,6 +8,7 @@ $config = [
     'id' => 'LFV-PreProd',
     'language' => 'de-DE',
     'basePath' => dirname(__DIR__),
+    
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -17,6 +18,7 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '4FcHbc1q2GPzCgyWcVJuov5uVMSGGvwp',
+            //'scriptUrl' => '/web/index-preprod.php', // Base Script to process requests
         ],
         
         'cache' => [
@@ -84,6 +86,7 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => false, // BN: true does not work on production server
             'showScriptName' => false,
+            'scriptUrl' => "index-preprod.php",
             'enableStrictParsing' => false,
             'rules' => [
                 // ...

@@ -90,7 +90,7 @@ class BackupController extends Controller
                     $backupname = $this->request->Post("backup_name");
                 }
                 
-                $filepath = Yii::$app->params["backupDirectory"] . "full/". date("Ymd-His", time())  . "_" . self::cleanFilename(empty($backupname) ? "Gesamtbackup" : $backupname) . "_" . Yii::$app->user->id . ".sql";
+                $filepath = Yii::$app->params["backupDirectory"] . "full/". date("Ymd-His", time()) . "_" . Yii::$app->name . "_" . self::cleanFilename(empty($backupname) ? "Gesamtbackup" : $backupname) . "_" . Yii::$app->user->id . ".sql";
                 $tables = array();
                 $tables = Yii::$app->db->schema->getTableNames();
                 $return = '';
@@ -205,7 +205,7 @@ class BackupController extends Controller
     public function actionCreateFull()
     {
         try{
-            $filepath = Yii::$app->params["backupDirectory"] . "full/". date("Ymd-His", time()) . "_" . Yii::$app->user->id . ".sql";
+            $filepath = Yii::$app->params["backupDirectory"] . "full/". date("Ymd-His", time()) . "_" . Yii::$app->name . "_" . Yii::$app->user->id . ".sql";
             $tables = array();
             $tables = Yii::$app->db->schema->getTableNames();
             $return = '';
@@ -301,7 +301,7 @@ class BackupController extends Controller
     {
         try{
 
-            $filepath = Yii::$app->params["backupDirectory"] . "part/". date("Ymd-His", time()) . "_" . $backupname . "_" . Yii::$app->user->id . "_". implode('-', $arrDepartment) . ".sql";
+            $filepath = Yii::$app->params["backupDirectory"] . "part/". date("Ymd-His", time()) . "_" . Yii::$app->name . "_" . $backupname . "_" . Yii::$app->user->id . "_". implode('-', $arrDepartment) . ".sql";
             $return = '';
 
             // Class Subject Table

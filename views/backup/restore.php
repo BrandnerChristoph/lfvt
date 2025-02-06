@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 $dateTime = substr($entry, 0, 4) . "-" . substr($entry, 4, 2) . "-" . substr($entry, 6, 2) . " " . substr($entry, 9, 2) . ":" . substr($entry, 11, 2) . ":" . substr($entry, 13, 2);
                 $posStartName = strpos($entry, "_")+1;
                 $partFilename = substr($entry, $posStartName);
-                $backup_name = substr($partFilename, 0, strpos($partFilename, "_"));
+                $backup_name = substr($partFilename, 0, strpos($partFilename, ".sql"));
 
                 $arrFullBackups[$i]["date"] = $dateTime . ": " . $backup_name;
                 $arrFullBackups[$i]["filename"] = $entry;                
