@@ -39,7 +39,7 @@ class TeacherWishlist extends \yii\db\ActiveRecord
             [['id'], 'string', 'max' => 50],
             [['period'], 'string', 'max' => 10],            
             [['hours_min', 'hours_max'], 'number', 'min' => 0, 'max' => 100],
-            [['id'], 'unique'],
+            [['id', 'teacher_id'], 'unique'],
             [['teacher_id'], 'exist', 'skipOnError' => true, 'targetClass' => Teacher::className(), 'targetAttribute' => ['teacher_id' => 'id']],
         ];
     }
