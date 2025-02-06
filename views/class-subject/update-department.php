@@ -159,14 +159,23 @@ $classList = SchoolClass::getArrayHelperList();
                 $index = 0;
                 $btnIndex = 1000;
 
+                $listSubjectType = SubjectType::find()->All();
+
                 
                 foreach($subjects as $classSubject){
                     echo "<tr style='height: 65px !important;'>";
                         $style = "";
 
+                        foreach($listSubjectType as $subTypeItem){
+                            if($subTypeItem->id == $classSubject->subjectItem->type)
+                                $style = "style='border-left: 3px solid " . $subTypeItem->color . "' title='" . $subTypeItem->name . "'";
+                        }
+                        /*
+
                         $classSubject->subjectItem->type == "Allgemeinbildenden Gegenstände" ? $style = "style='border-left: 3px solid green' title='".$classSubject->subjectItem->name." - ".$classSubject->subjectItem->type."'" : null;
                         $classSubject->subjectItem->type == "Fachtheorie" ? $style = "style='border-left: 3px solid red' title='Fachtheorie'" : null;
                         $classSubject->subjectItem->type == "Werkstatt" ? $style = "style='border-left: 3px solid blue' title='Werkstatt'" : null;
+                        */
 
                         /*
 

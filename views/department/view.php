@@ -33,7 +33,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'head_of_department',
-            'default_color',
+            //'default_color',
+            [
+                'label' => Yii::t('app', 'default_color'),
+                'format' => 'raw',
+                'value' => call_user_func(function ($data) {
+                    if(!empty($data->default_color))
+                        return "<b><span style='color: ".$data->default_color."'>" . $data->default_color . "</span></b>";
+                }, $model),
+                
+            ],
             //'updated_at:datetime',
             //'created_at:datetime',
         ],

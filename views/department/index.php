@@ -31,7 +31,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'head_of_department',
-            'default_color',
+            //'default_color',
+            [
+                'attribute' => 'default_color',
+                'format' => 'raw',
+                'value' => function ($model){
+                    if(!empty($model->default_color))
+                        return "<b><span style='color: ".$model->default_color."'>" . $model->default_color . "</span></b>";
+                }
+            ],
             [
                 'attribute' => 'Schüler',
                 'format' => 'raw',
