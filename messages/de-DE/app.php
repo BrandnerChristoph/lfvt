@@ -85,7 +85,8 @@ $lang = [
     'Report.TeacherWorkload' => 'Lehrerauslastung',
     'Report.TeacherWorkloadPerDepartment' => 'Lehreauslastung je Abteilung',
     'Report.AllTeacherWorkload' => 'Lehrer Fächerzuteilung',
-
+    "Report.TeacherPerClassAndSubject" => 'Lehrer-Einheiten je Klasse und Fach',
+    "Report.SubjectsWithTeacherAndUnit" => 'Klassenübersicht zu Gegenständen und Lehrern inkl. Stunden',
 ];
 
 // load custom language-infos to overwrite default
