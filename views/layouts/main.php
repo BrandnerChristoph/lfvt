@@ -7,13 +7,18 @@ use yii\helpers\Url;
 use app\widgets\Alert;
 use yii\bootstrap4\Nav;
 use app\assets\AppAsset;
+use app\assets\AppPreprodAsset;
 use yii\bootstrap4\Html;
 use yii\bootstrap\Modal;
 use yii\bootstrap4\NavBar;
 use yii\bootstrap4\Breadcrumbs;
 use mdm\admin\components\MenuHelper;
 
-AppAsset::register($this);
+if(Yii::$app->name == "LFV-PreProd")
+    AppPreprodAsset::register($this);
+else
+    AppAsset::register($this);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
