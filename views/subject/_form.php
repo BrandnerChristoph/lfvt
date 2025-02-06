@@ -1,5 +1,6 @@
 <?php
 
+use app\models\SubjectType;
 use yii\helpers\Html;
 use kartik\select2\Select2;
 use yii\widgets\ActiveForm;
@@ -32,16 +33,12 @@ use yii\widgets\ActiveForm;
 
             <div class="col-lg-8">
                 <?= $form->field($model, 'type')->widget(Select2::classname(),[
-                                    'data' => [
-                                                'Allgemeinbildenden Gegenstände' => 'Allgemeinbildenden Gegenstände', 
-                                                'Fachtheorie' => 'Fachtheorie',
-                                                'Werkstatt' => 'Werkstatt',
-                                            ],
+                                    'data' => SubjectType::getArrayHelperList(),
                                     'options' => [
                                         'placeholder' => 'Unterrichtstyp',                            
                                     ],
                                     'pluginOptions' => [
-                                        'allowClear' => false,
+                                        'allowClear' => true,
                                         'multiple' => false,
                                     ]
                                 ]) 

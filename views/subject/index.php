@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'Fachtheorie' => 'Fachtheorie',
                     'Werkstatt' => 'Werkstatt',
                 ],
-                'filterType' => GridView::FILTER_SELECT2,
+                'filterType' => ,
                 'filterWidgetOptions' => [
                     'pluginOptions' => [
                         'allowClear' => true,

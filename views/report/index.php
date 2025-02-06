@@ -37,6 +37,31 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
 
+            
+            <div class="col-lg-3">
+                <div class="box box-body box-success bg-gray-light">
+                    <h4><?= Yii::t("app", "Report.TeacherPerClassAndSubject")  ?></h4>
+                    <p>Lehrer je Klasse  der Stunden (Werteinheiten) von Lehrern (PDF)</p>
+                        <?= Html::a(Yii::t("app", "Report.TeacherPerClassAndSubject") . ' &raquo;', 
+                                    ['/teacher/print-lesson'], 
+                                    ['class' => 'btn btn-primary', 'target' => '_blank']
+                            ) ?>
+                </div>
+            </div>
+
+            
+            
+            <div class="col-lg-3">
+                <div class="box box-body box-success bg-gray-light">
+                    <h4><?= Yii::t("app", "Report.SubjectsWithTeacherAndUnit")  ?></h4>
+                    <p>Gegenstände aller Klassen mit Lehrern und Stunden (PDF)</p>
+                        <?= Html::a(Yii::t("app", "Report.SubjectsWithTeacherAndUnit") . ' &raquo;', 
+                                    ['/school-class/print-subject-group'], 
+                                    ['class' => 'btn btn-primary', 'target' => '_blank']
+                            ) ?>
+                </div>
+            </div>
+
             <!--div class="col-lg-3">
                 <div class="box box-body box-success bg-gray-light">
                     <h4><?= Yii::t("app", "Report.AllTeacherWorkload")  ?></h4>
