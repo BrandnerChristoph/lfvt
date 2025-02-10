@@ -99,8 +99,8 @@ class TeacherSearch extends Teacher
         
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
-            'query' => $query
-            //'sort' => ['defaultOrder'=> ['sortOrder' => SORT_DESC, 'name' => SORT_ASC, 'firstname' => SORT_ASC, 'initial' => SORT_ASC]]
+            'query' => $query,
+            'sort' => ['defaultOrder'=> ['name' => SORT_ASC, 'firstname' => SORT_ASC, 'initial' => SORT_ASC]]
         ]);
 
         $this->load($params);
@@ -145,7 +145,7 @@ class TeacherSearch extends Teacher
             ->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'mobile', $this->mobile]);
 
-        $query->orderBy('sortOrder desc, name asc');
+        //$query->orderBy('sortOrder desc, name asc');
 
         return $dataProvider;
     }

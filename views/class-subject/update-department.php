@@ -59,8 +59,15 @@ $classList = SchoolClass::getArrayHelperList();
                                 "Lehrerauslastung (alle Lehrer)",
                                 "directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no,width=700,height=900");
                 }
+                function showFavTeachers(){
+                    window.open("<?= Url::to(['/teacher/index-favorite', 
+                                                ])?>",
+                                "Lehrerauslastung (Favoriten-Lehrer)",
+                                "directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no,width=700,height=900");
+                }
             </script>
             
+            <?= Html::a("Favoriten-Lehrer", '#', ['onClick' => 'showFavTeachers();', 'class' =>'btn btn-warning']) ?>
             <?= Html::a("alle Lehrer", '#', ['onClick' => 'showAllTeachers();', 'class' =>'btn btn-success']) ?>
             <?= Html::a("Lehrer in der Abteilung", '#', ['onClick' => 'showTeacherInDepartment();', 'class' =>'btn btn-primary']) ?>
             <?php //Html::a(Icon::show('print'), Url::to(["/report-print/department-overview", 'department'=> $department]), ['class' =>'btn btn-primary']) ?>

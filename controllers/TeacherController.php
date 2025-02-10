@@ -118,8 +118,67 @@ class TeacherController extends Controller
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'department' => $department,
-        ]);
-        
+        ]);        
+    }
+
+    /**
+     * Lists all favorite Teacher models.
+     * @return mixed
+     */
+    public function actionIndexFavorite($department = null, $class = null, $type = null)
+    {
+        $searchModel = new TeacherSearch();
+        $params = $this->request->queryParams;
+        /*
+        if(!empty($class)){
+            $teacherList = ClassSubject::find()
+                                ->select('teacher')
+                                ->distinct('teacher')
+                                ->join('left join', "subject", "class_subject.subject = subject.id")
+                                ->andFilterWhere(['class_subject.class' => $class])                                
+                                ->andFilterWhere(['subject.type' => $type]);
+            
+        } else if(!empty($department)){
+            $classes = SchoolClass::find()->andFilterWhere(['department' => $department])->select('id')->distinct();
+            $teacherList = ClassSubject::find()
+                                ->select('teacher')
+                                ->distinct('teacher')
+                                ->join('left join', "subject", "class_subject.subject = subject.id")
+                                ->andFilterWhere(['class' => $classes])                                
+                                ->andFilterWhere(['subject.type' => $type]);
+        } 
+
+        $params["TeacherSearch"]["is_active"] = "1";    // Teacher has to have status "active"
+
+        if(!empty($teacherList)){
+            $params["TeacherSearch"]["teacherListPreset"] = $teacherList;
+        }
+        */
+
+        /////////////////////////////////////////
+        // Favoriten laden
+            $objUser = User::findOne(Yii::$app->user->id);
+            $teacherListFavorites = TeacherFav::find()
+                                        ->select('value')
+                                        ->andFilterWhere(['type' => "teacher_myFavorites"])                                
+                                        ->andFilterWhere(['user_id' => $objUser->username]);
+
+            if(!empty($teacherListFavorites)){
+                $params["TeacherSearch"]["teacherListPreset"] = $teacherListFavorites;
+            }
+
+        $dataProvider = $searchModel->searchWithPreset($params);
+
+
+        //$dataProvider->sort->defaultOrder = ['sortOrder' => SORT_DESC, 'name' => SORT_ASC, 'firstname' => SORT_ASC, 'initial' => SORT_ASC];
+        $dataProvider->pagination->pageSize = 500;
+
+
+        return $this->renderAjax('index-preview', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'department' => $department,
+        ]);        
     }
 
     /**
@@ -246,7 +305,6 @@ class TeacherController extends Controller
         }
 
 
-
         return $this->render('update', [
             'model' => $model,
             'prevTeacher' => ($curTeacherIdx - 1 < 0) ? -1 : $arrTeacherList[$curTeacherIdx - 1]['id'],
@@ -278,7 +336,10 @@ class TeacherController extends Controller
         }
 
 
-        return $this->redirect(['index']);
+        if(strpos(Yii::$app->request->referrer, "view") == false)
+            return $this->redirect(Yii::$app->request->referrer);
+        else    
+            return $this->redirect(['index']);
     }
 
     /**
