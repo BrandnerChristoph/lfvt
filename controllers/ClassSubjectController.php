@@ -105,6 +105,7 @@ class ClassSubjectController extends Controller
             $model->id = empty($id) ? uniqid() : $id;
             $model->class = empty($class) ? null : $class;
             $model->subject = empty($subject) ? null : $subject;
+            $model->teacher = empty($model->teacher) ? "?" : $model->teacher;
             $model->value = 100;
             $model->created_at = time();
             $model->updated_at = time();
@@ -150,6 +151,7 @@ class ClassSubjectController extends Controller
             $model->class = empty($class) ? null : $class;
             $model->subject = empty($subject) ? null : $subject;
             $model->value = 100;
+            $model->teacher = empty($model->teacher) ? "?" : $model->teacher;
             $model->created_at = time();
             $model->updated_at = time();
 
