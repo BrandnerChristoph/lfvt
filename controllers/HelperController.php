@@ -127,6 +127,12 @@ class HelperController extends Controller
                                                 AND department not in ('TEMP') 
                                                 ORDER BY id desc;")->execute();
                 echo "<br /> - Klassen und Einheiten aktualisiert (ins neue Schuljahr übernommen).";
+
+                
+            // Abschlussklassen der höheren Abteilungen löschen
+                Yii::$app->db->createCommand("UPDATE school_class set annual_value = 0 WHERE id REGEXP '^5[A-Z]H'; ")->execute();
+                echo "<br /> - 5. Klassen der höheren Abteilungen mit einem Jahreswert von 0 setzen";
+
             // Abschlussklassen der höheren Abteilungen löschen
                 Yii::$app->db->createCommand("DELETE from school_class WHERE id REGEXP '^6[A-Z]H'; ")->execute();
             // Abschlussklassen der Fachschulen löschen
@@ -170,7 +176,8 @@ class HelperController extends Controller
             */
 
             // Fächer löschen, die im neuen Schuljahr nicht mehr unterrichtet werden.
-
+                /*
+                Script für 2024
                 Yii::$app->db->createCommand("DELETE class_subject from class_subject 
                                                 JOIN school_class on class_subject.class = school_class.id 
                                                 WHERE  
@@ -178,6 +185,13 @@ class HelperController extends Controller
                                                     AND (class_subject.class != '4AHET')
                                                     AND (class_subject.class not in (select id from school_class where department='TEMP'))
                                                     AND concat(LEFT(class, 1), 'x', SUBSTRING(class,3), subject) NOT IN (SELECT concat(temp_subjectPerYear.class, temp_subjectPerYear.subject) FROM temp_subjectPerYear);")->execute();
+                                                    */
+                Yii::$app->db->createCommand("DELETE class_subject from class_subject 
+                    JOIN school_class on class_subject.class = school_class.id 
+                    WHERE  
+                        (class_subject.class not in (select id from school_class where department='TEMP'))
+                        AND concat(LEFT(class, 1), 'x', SUBSTRING(class,3), subject) NOT IN (SELECT concat(temp_subjectPerYear.class, temp_subjectPerYear.subject) FROM temp_subjectPerYear);")->execute();
+
 
             // Fächer hinzufügen, die im neuen Schuljahr HINZUKOMMEN
                 Yii::$app->db->createCommand("INSERT INTO `class_subject` (`id`, `class`, `subject`, `group`, `hours`, `teacher`, `classroom`, `updated_at`, `created_at`) 
