@@ -407,8 +407,8 @@ class TeacherController extends Controller
             //$content .= "<br />" . $model->name . " " . $model->firstname . "</h2>";
             
             $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Einheiten: " . Yii::$app->formatter->asDecimal($model->hours,3) . "</div>";
-            $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Realstunden (RST): " . Yii::$app->formatter->asDecimal($model->realHours,2) . "</div>";
-            $content .= "<div class='col-xs-4 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Werteinheiten (WE): " . Yii::$app->formatter->asDecimal($model->teachingHours,3) . "</div>";
+            $content .= "<div class='col-xs-4' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Werteinheiten PD: " . Yii::$app->formatter->asDecimal($model->realHours,2) . "</div>";
+            $content .= "<div class='col-xs-4 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Werteinheiten alt: " . Yii::$app->formatter->asDecimal($model->teachingHours,3) . "</div>";
             
             $content .= "<h3>Wunschliste</h3>";
             /*
@@ -434,8 +434,8 @@ class TeacherController extends Controller
                     $content .= "<div class='col-xs-2' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Klasse</b></div>";
                     $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Fach</b></div>";
                     $content .= "<div class='col-xs-1  text-center' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Einh.</b></div>";
-                    $content .= "<div class='col-xs-1 text-right' style=''><b>RST</b></div>";
-                    $content .= "<div class=' text-right' style=' padding:0px 0px 0px 0px; margin: 0px !important;'><b>WE</b></div>";
+                    $content .= "<div class='col-xs-1 text-right' style=''><b>WE-PD</b></div>";
+                    $content .= "<div class=' text-right' style=' padding:0px 0px 0px 0px; margin: 0px !important;'><b>WE-alt</b></div>";
                 $content .= "</b></div>";
 
                 // Unterrichtseinheiten
@@ -446,9 +446,9 @@ class TeacherController extends Controller
                         $content .= "</div>";
                         
                         $content .= "<div class='col-xs-6' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $item->subject;
-                            $content .= " <small>(WE: " . Yii::$app->formatter->asDecimal($item->subjectItem->value, 3);
+                            $content .= " <small>(WE-alt: " . Yii::$app->formatter->asDecimal($item->subjectItem->value, 3);
                             if(!empty($item->subjectItem->value_real))
-                                $content .= " / RST: " . Yii::$app->formatter->asDecimal($item->subjectItem->value_real, 2);
+                                $content .= " / WE-PD: " . Yii::$app->formatter->asDecimal($item->subjectItem->value_real, 2);
                             $content .= ")</small>";
                             $content .= "<br /><small>" . $item->subjectItem->name . "</small>";
                             $content .= "</div>";
