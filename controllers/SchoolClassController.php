@@ -347,8 +347,8 @@ class SchoolClassController extends Controller
                 $content .= "<div class='col-xs-7'>";
                     $content .= "<div class='col-xs-3' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Lehrer</b></div>";
                     $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>Std.</b></div>";
-                    $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>WE_PD</b></div>";
-                    $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>WE_alt</b></div>";
+                    $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>WE-PD</b></div>";
+                    $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'><b>WE-alt</b></div>";
                 $content .= "</div>";
                 $content .= "<div class='col-xs-12'>&nbsp;</div>";
                 
@@ -383,7 +383,7 @@ class SchoolClassController extends Controller
                                 $cntItemRealWert = ($element->hours * ($element->value/100) * $element->subjectItem->value_real) * $annualValueClass;
                                 $prozJahr = ($element->value) == 100 ? "" : "<small> (".$element->value . "%)</small>";
                                 
-                                $content .= "<div class='col-xs-3' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . $element->teacher0->id . $prozJahr . "</div>";
+                                $content .= "<div class='col-xs-3' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . strtoupper($element->teacher0->id) . $prozJahr . "</div>";
                                 $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . Yii::$app->formatter->asDecimal($cntItemEinheit,2) . "</div>";
                                 $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . Yii::$app->formatter->asDecimal($cntItemRealWert, 2) . "</div>";
                                 $content .= "<div class='col-xs-3 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>" . Yii::$app->formatter->asDecimal($cntItemWerteinheit, 3) . "</div>";
@@ -401,10 +401,10 @@ class SchoolClassController extends Controller
                     $content .= "<div class='col-xs-7 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Einheiten</div>";
                     $content .= "<div class='col-xs-5 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>".Yii::$app->formatter->asDecimal($cntEinheit, 3)."</div>";
                     
-                    $content .= "<div class='col-xs-7 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Realeinheiten</div>";
+                    $content .= "<div class='col-xs-7 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Werteinheiten PD</div>";
                     $content .= "<div class='col-xs-5 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>".Yii::$app->formatter->asDecimal($cntRealWert, 3) ."</div>";
                     
-                    $content .= "<div class='col-xs-7 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Werteinheiten</div>";
+                    $content .= "<div class='col-xs-7 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>Werteinheiten alt</div>";
                     $content .= "<div class='col-xs-5 text-right' style='padding:0px 0px 0px 0px; margin: 0px !important;'>".Yii::$app->formatter->asDecimal($cntWerteinheit,3)."</div>";
                     
                 $content .= "</div>";  
