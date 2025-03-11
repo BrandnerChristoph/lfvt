@@ -161,7 +161,10 @@ class TeacherFavController extends Controller
 
         $objDel->delete();
 
-        return $this->redirect(['index']);
+        if(strpos(Yii::$app->request->referrer, "view") == false)
+            return $this->redirect(Yii::$app->request->referrer);
+        else    
+            return $this->redirect(['index']);
     }
 
     /**

@@ -133,7 +133,10 @@ class SubjectTypeController extends Controller
             $transaction->rollBack();
         }
 
-        return $this->redirect(['index']);
+        if(strpos(Yii::$app->request->referrer, "view") == false)
+            return $this->redirect(Yii::$app->request->referrer);
+        else    
+            return $this->redirect(['index']);
     }
 
     /**
