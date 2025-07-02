@@ -389,10 +389,14 @@ class TeacherController extends Controller
     {
 
         ini_set('pcre.backtrack_limit', 5000000);
+        ini_set('max_execution_time ', 45);
         $content = "";
         if(is_null($id)){
             $teachers = Teacher::find()->andWhere('length(id) > 1')->all();
             ini_set('memory_limit', '1024M');
+            set_time_limit(90);
+            ini_set('max_execution_time ', 120);
+            //ini_set('memory_limit', '1024M');
         } else {
             $teachers = Teacher::find()->andFilterWhere(['id' => $id])->limit(20)->all();
             ini_set('memory_limit', '256M');
@@ -568,13 +572,15 @@ class TeacherController extends Controller
             $counter = 0; 
             $teachers = Teacher::find()
                             ->andFilterWhere(['is_active' => "1"])
-                            //->andWhere('Initial in ("BN", "SL", "SM")')
+                            ->andWhere('Initial in ("BN")')
                             ->all();
 
             echo "Teacher cnt: " . count($teachers);
             echo "<br /><br /><br />";
-            //print_r($teachers);
-            //exit(0);
+            /*
+            print_r($teachers);
+            exit(0);
+            */
 
             foreach ($teachers as $model) {
 
@@ -584,12 +590,12 @@ class TeacherController extends Controller
                     $path = $this->renderTeacherLessons($model->initial); 
 
                     Yii::$app->mailer->compose()
-                        ->setFrom(['bn@htlwy.at' => "HTL Waidhofen/Ybbs - Lehrfächerverteilung"])
+                        ->setFrom(['lehrfaecherverteilung@htlwy.at' => "HTL Waidhofen/Ybbs - Lehrfächerverteilung"])
                         ->setTo($model->initial . '@htlwy.at')
                         ->setReplyTo('rh@htlwy.at')
-                        ->setSubject('LFV-Schuljahr 2024/25')
+                        ->setSubject('LFV-Schuljahr 2025/26 - ' . strtoupper($model->initial))
                         ->setHtmlBody('<p>Liebe Kolleginnen und Kollegen,</p><p>in der Anlage senden wir euch eure vorläufige persönliche Übersicht über den Unterricht im kommenden Schuljahr. Bei Fehlern oder Fragen bitten wir um Rückmeldungen.</p><p>Schöne Ferien wünschen<br />Direktor, Abteilungsvorstände und Werkstättenleiter</p>')
-                        ->attachContent($path, ['fileName' => 'Lehrerzuweisung_' . strtoupper($model->initial) . '.pdf', 'contentType' => 'application/pdf'])
+                        ->attachContent($path, ['fileName' => 'Lehrfaecher_' . strtoupper($model->initial) . '.pdf', 'contentType' => 'application/pdf'])
                         ->send();
 
                         $counter++;
