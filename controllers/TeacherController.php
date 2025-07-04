@@ -572,7 +572,7 @@ class TeacherController extends Controller
             $counter = 0; 
             $teachers = Teacher::find()
                             ->andFilterWhere(['is_active' => "1"])
-                            ->andWhere('Initial in ("BN")')     // Ausdruck nur für Brandner Christoph
+                            //->andWhere('Initial in ("BN")')     // Ausdruck nur für Brandner Christoph
                             ->andWhere('sent_lfvt_timestamp is null')     // Ausdruck nur für Brandner Christoph
                             ->all();
 
