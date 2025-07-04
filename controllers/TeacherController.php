@@ -574,6 +574,7 @@ class TeacherController extends Controller
                             ->andFilterWhere(['is_active' => "1"])
                             //->andWhere('Initial in ("BN")')     // Ausdruck nur für Brandner Christoph
                             ->andWhere('sent_lfvt_timestamp is null')     // Ausdruck nur für Brandner Christoph
+                            ->limit(20)
                             ->all();
 
             echo "Teacher cnt: " . count($teachers);
@@ -592,19 +593,20 @@ class TeacherController extends Controller
 
                     $path = $this->renderTeacherLessons($model->initial); 
 
-                    Yii::$app->mailer->compose()
+                    if(Yii::$app->mailer->compose()
                         ->setFrom(['bn@htlwy.at' => "HTL Waidhofen/Ybbs - Lehrfächerverteilung"])
                         ->setTo($model->initial . '@htlwy.at')
                         ->setReplyTo('rh@htlwy.at')
                         ->setSubject('LFV-Schuljahr 2025/26 - ' . strtoupper($model->initial))
                         ->setHtmlBody('<p>Liebe Kolleginnen und Kollegen,</p><p>in der Anlage senden wir euch eure vorläufige persönliche Übersicht über den Unterricht im kommenden Schuljahr. Bei Fehlern oder Fragen bitten wir um Rückmeldungen.</p><p>Schöne Ferien wünschen<br />Direktor, Abteilungsvorstände und Werkstättenleiter</p>')
                         ->attachContent($path, ['fileName' => 'Lehrfaecher_' . strtoupper($model->initial) . '.pdf', 'contentType' => 'application/pdf'])
-                        ->send();
+                        ->send()) {
 
-                        $counter++;
+                            $counter++;
 
-                        $model->sent_lfvt_timestamp = time();
-                        $model->save(false);
+                            $model->sent_lfvt_timestamp = time();
+                            $model->save(false);
+                    }
                 }
                     
             }
