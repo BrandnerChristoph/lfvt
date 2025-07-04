@@ -49,6 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'email_2:email',
             'phone',
             'mobile',
+            'sent_lfvt_timestamp:datetime',
             'created_at:datetime',
             'updated_at:datetime',
             [

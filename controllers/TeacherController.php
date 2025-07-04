@@ -573,20 +573,23 @@ class TeacherController extends Controller
             $teachers = Teacher::find()
                             ->andFilterWhere(['is_active' => "1"])
                             ->andWhere('Initial in ("BN")')     // Ausdruck nur für Brandner Christoph
+                            ->andWhere('sent_lfvt_timestamp is null')     // Ausdruck nur für Brandner Christoph
                             ->all();
 
             echo "Teacher cnt: " . count($teachers);
             echo "<br /><br /><br />";
             
+            /*
             print_r($teachers);
             exit(0);
+            */
+            
             
 
             foreach ($teachers as $model) {
 
                 if($model->hours > 0) {
 
-                    $mpdf = new Mpdf();
                     $path = $this->renderTeacherLessons($model->initial); 
 
                     Yii::$app->mailer->compose()
@@ -599,6 +602,9 @@ class TeacherController extends Controller
                         ->send();
 
                         $counter++;
+
+                        $model->sent_lfvt_timestamp = time();
+                        $model->save(false);
                 }
                     
             }

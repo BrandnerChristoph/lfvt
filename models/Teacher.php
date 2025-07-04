@@ -43,12 +43,12 @@ class Teacher extends \yii\db\ActiveRecord
     {
         return [
             [['id', 'initial', 'created_at', 'updated_at'], 'required'],
-            [['is_active', 'created_at', 'updated_at'], 'integer'],
+            [['is_active', 'created_at', 'updated_at', 'sent_lfvt_timestamp'], 'integer'],
             [['initial'], 'string', 'max' => 5],
             [['name', 'firstname', 'email_1', 'email_2'], 'string', 'max' => 225],
             [['phone', 'mobile'], 'string', 'max' => 25],
             [['id', 'initial'], 'unique'],
-            [['sortOrder'], 'safe'],
+            [['sortOrder', 'sent_lfvt_timestamp'], 'safe'],
         ];
     }
 
@@ -68,6 +68,7 @@ class Teacher extends \yii\db\ActiveRecord
             'mobile' => Yii::t('app', 'Mobile'),
             'is_active' => Yii::t('app', 'Is Active'),
             'isFav' => Yii::t('app', 'Is Favorite'),
+            'sent_lfvt_timestamp' => Yii::t('app', 'Sent LFVT Timestamp'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
         ];

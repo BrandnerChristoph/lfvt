@@ -27,6 +27,7 @@ $lang = [
     'Mobile' => 'Mobilnummer',
     'Update Teacher: ' => 'Lehrer aktualisieren:',
     'Is Active' => 'Aktiv?',
+    'Sent LFVT Timestamp' => 'Versandzeitpunkt LFVT',
 
     // Lehrer Favoriten
     'Teacher Fav' => 'Lehrer-Favoriten',
