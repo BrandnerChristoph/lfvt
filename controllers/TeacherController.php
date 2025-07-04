@@ -574,7 +574,7 @@ class TeacherController extends Controller
                             ->andFilterWhere(['is_active' => "1"])
                             //->andWhere('Initial in ("BN")')     // Ausdruck nur für Brandner Christoph
                             ->andWhere('sent_lfvt_timestamp is null')     // Ausdruck nur für Brandner Christoph
-                            ->limit(20)
+                            ->limit(30)
                             ->all();
 
             echo "Teacher cnt: " . count($teachers);
