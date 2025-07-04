@@ -572,15 +572,15 @@ class TeacherController extends Controller
             $counter = 0; 
             $teachers = Teacher::find()
                             ->andFilterWhere(['is_active' => "1"])
-                            ->andWhere('Initial in ("BN")')
+                            ->andWhere('Initial in ("BN")')     // Ausdruck nur für Brandner Christoph
                             ->all();
 
             echo "Teacher cnt: " . count($teachers);
             echo "<br /><br /><br />";
-            /*
+            
             print_r($teachers);
             exit(0);
-            */
+            
 
             foreach ($teachers as $model) {
 
@@ -590,7 +590,7 @@ class TeacherController extends Controller
                     $path = $this->renderTeacherLessons($model->initial); 
 
                     Yii::$app->mailer->compose()
-                        ->setFrom(['lehrfaecherverteilung@htlwy.at' => "HTL Waidhofen/Ybbs - Lehrfächerverteilung"])
+                        ->setFrom(['bn@htlwy.at' => "HTL Waidhofen/Ybbs - Lehrfächerverteilung"])
                         ->setTo($model->initial . '@htlwy.at')
                         ->setReplyTo('rh@htlwy.at')
                         ->setSubject('LFV-Schuljahr 2025/26 - ' . strtoupper($model->initial))
