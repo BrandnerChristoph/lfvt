@@ -143,6 +143,7 @@ class TeacherSearch extends Teacher
             ->andFilterWhere(['like', 'email_1', $this->email_1])
             ->andFilterWhere(['like', 'email_2', $this->email_2])
             ->andFilterWhere(['like', 'phone', $this->phone])
+            ->andFilterWhere(['like', 'sent_lfvt_timestamp', $this->sent_lfvt_timestamp])
             ->andFilterWhere(['like', 'mobile', $this->mobile]);
 
         //$query->orderBy('sortOrder desc, name asc');

@@ -244,6 +244,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ],
             ],
+            [
+                'attribute' => 'sent_lfvt_timestamp',
+                'format' => 'datetime',
+                'label' => 'LFVT Versand',
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
