@@ -45,11 +45,12 @@ $config = [
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
             'useFileTransport' => false,
+            
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.office365.com',
                 'username' => 'bn@htlwy.at',
-                'password' => 'DHbsi3340V.',
+                'password' => 'xxPassw0rdxx',
                 'port' => '587',
                 'encryption' => 'tls',
             ],

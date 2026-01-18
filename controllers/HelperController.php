@@ -210,7 +210,7 @@ class HelperController extends Controller
                                             concat(temp_subjectPerYear.class, temp_subjectPerYear.subject) not IN (select concat(LEFT(class, 1), 'x', SUBSTRING(class,3), subject)  FROM class_subject);")->execute();
 
                 // Update Stundenausmaß (Input aus dem Vorjahr)
-                //$this->actionUpdateHours();
+                $this->actionUpdateHours();
 
             $transaction->commit();
         } catch(Exception $e){
