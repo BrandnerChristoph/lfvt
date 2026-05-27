@@ -52,7 +52,8 @@ $this->params['breadcrumbs'][] = $this->title;
             //alert(inTeacherId);
             //var callUrl = <?= Url::to(['/teacher/print-lesson'])?>;
             //var fullUrl = callUrl + "?id=" + inTeacherId;
-            var fullUrl = "index.php?r=teacher/print-lesson&id=" + inTeacherId;
+            
+            var fullUrl = "<?= Yii::$app->homeUrl ?>" + "?r=teacher/print-lesson&id=" + inTeacherId;
                                     
             //alert(fullUrl)
             window.open(fullUrl,

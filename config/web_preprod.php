@@ -9,6 +9,7 @@ $config = [
     'language' => 'de-DE',
     'basePath' => dirname(__DIR__),
     
+    
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -105,7 +106,7 @@ $config = [
     ],
     'on beforeRequest' => function () {
         // Home Url anpassen damit die Index-preprod PHP Datei geladen wird !!!!!
-        Yii::$app->homeUrl = 'index-preprod.php';        
+        Yii::$app->homeUrl = 'index-preprod.php';
     },
     'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
