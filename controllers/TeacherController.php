@@ -573,7 +573,7 @@ class TeacherController extends Controller
             $teachers = Teacher::find()
                             ->andFilterWhere(['is_active' => "1"])
                             ->andWhere('Initial in ("BN")')     // Ausdruck nur für Brandner Christoph
-                            ->andWhere('sent_lfvt_timestamp is null')     
+                            ->andWhere('((sent_lfvt_timestamp < UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 11 MONTH))) OR (sent_lfvt_timestamp is null))')     
                             ->limit(30)
                             ->all();
 
@@ -583,8 +583,6 @@ class TeacherController extends Controller
             // Wird abgebrochen !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             print_r($teachers);
             exit(0);
-            
-            
             
 
             foreach ($teachers as $model) {
@@ -597,7 +595,7 @@ class TeacherController extends Controller
                         ->setFrom(['bn@htlwy.at' => "HTL Waidhofen/Ybbs - Lehrfächerverteilung"])
                         ->setTo($model->initial . '@htlwy.at')
                         ->setReplyTo('rh@htlwy.at')
-                        ->setSubject('LFV-Schuljahr 2025/26 - ' . strtoupper($model->initial))
+                        ->setSubject('LFV-Schuljahr 2026/27 - ' . strtoupper($model->initial))
                         ->setHtmlBody('<p>Liebe Kolleginnen und Kollegen,</p><p>in der Anlage senden wir euch eure vorläufige persönliche Übersicht über den Unterricht im kommenden Schuljahr. Bei Fehlern oder Fragen bitten wir um Rückmeldungen.</p><p>Schöne Ferien wünschen<br />Direktor, Abteilungsvorstände und Werkstättenleiter</p>')
                         ->attachContent($path, ['fileName' => 'Lehrfaecher_' . strtoupper($model->initial) . '.pdf', 'contentType' => 'application/pdf'])
                         ->send()) {
