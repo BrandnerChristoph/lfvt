@@ -157,10 +157,11 @@ class BackupController extends Controller
                 $lines = file($restoreData);
                 $countItems = 0;
                 Yii::$app->db->createCommand("SET FOREIGN_KEY_CHECKS = 0;")->execute();
+                Yii::$app->db->createCommand("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'STRICT_TRANS_TABLES',''));")->execute();
+                
                 foreach($lines as $line) {
                     if(!empty(trim($line))){
                         //  vw_teacher_fav  teacher_wishlist    migration   menu
-
                         
                         if(strpos($line, " menu") == false &&
                             strpos($line, " migration") == false &&
