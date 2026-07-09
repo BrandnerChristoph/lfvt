@@ -580,10 +580,11 @@ class TeacherController extends Controller
             echo "Teacher cnt: " . count($teachers);
             echo "<br /><br /><br />";
             
-            
+            /*
             // Wird abgebrochen !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             print_r($teachers);
             exit(0);
+            */
             
 
             foreach ($teachers as $model) {
@@ -597,7 +598,7 @@ class TeacherController extends Controller
                         ->setTo($model->initial . '@htlwy.at')
                         ->setReplyTo('rh@htlwy.at')
                         ->setSubject('LFV-Schuljahr 2026/27 - ' . strtoupper($model->initial))
-                        ->setHtmlBody('<p>Liebe Kolleginnen und Kollegen,</p><p>in der Anlage senden wir euch eure vorläufige persönliche Übersicht über den Unterricht im kommenden Schuljahr. Bei Fehlern oder Fragen bitten wir um Rückmeldungen.</p><p>Schöne Ferien wünschen<br />Direktor, Abteilungsvorstände und Werkstättenleiter</p>')
+                        ->setHtmlBody('<p>Liebe Kolleginnen und Kollegen,</p><p>in der Anlage senden wir euch eure vorläufige persönliche Übersicht über den Unterricht im kommenden Schuljahr. Bei Fehlern oder Fragen bitten wir um Rückmeldungen an den zuständigen Abteilungsvorstand.</p><p>Schöne Ferien wünschen<br />Direktor, Abteilungsvorstände und Werkstättenleiter</p>')
                         ->attachContent($path, ['fileName' => 'Lehrfaecher_' . strtoupper($model->initial) . '.pdf', 'contentType' => 'application/pdf'])
                         ->send()) {
 
