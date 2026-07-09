@@ -580,10 +580,11 @@ class TeacherController extends Controller
             echo "Teacher cnt: " . count($teachers);
             echo "<br /><br /><br />";
             
+            /*
             // Wird abgebrochen !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             print_r($teachers);
             exit(0);
-            
+            */
 
             foreach ($teachers as $model) {
 
